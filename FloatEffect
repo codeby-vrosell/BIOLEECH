@@ -1,0 +1,34 @@
+using UnityEngine;
+
+public class FloatEffect : MonoBehaviour {
+
+    // ============================================================
+    // Movement Settings
+    // ============================================================
+
+    [SerializeField] private float speed;       // Speed of the floating motion
+    [SerializeField] private float distance;    // Distance of the vertical movement
+
+    // ============================================================
+    // Internal Variables
+    // ============================================================
+
+    private Vector3 initialPosition;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        initialPosition = transform.position;
+
+    }
+
+    void Update() {
+
+        float displacementY = Mathf.Sin(Time.time * speed) * distance;
+        transform.position = new Vector3(initialPosition.x, initialPosition.y + displacementY, initialPosition.z);
+
+    }
+}
