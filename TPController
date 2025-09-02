@@ -10,11 +10,11 @@ public class TPController : MonoBehaviour {
     // ============================================================
 
     public stimsController stimsControllerScript;
-    private gameManager gameManagerScript;
+    private GameManager gameManagerScript;
     private FPS_Controller fpsControllerScript;
     private FPControllerGun fpControllerGunScript;
-    private HealthSystem playerHealthScript;
-    private MejorasManager upgradesManagerScript;
+    private HealthSystem healthSystemScript;
+    private UpgradesManager upgradesManagerScript;
     private HideMisions hideMissionsScript;
 
     // ============================================================
@@ -89,8 +89,8 @@ public class TPController : MonoBehaviour {
 
     [SerializeField] private Animator glitchFullScreenAnimator;
     [SerializeField] private fullScreenGlitchEvents glitchFullScreenEvents;
-    public Animator doorsAnimator;
-    public Animator planetDoorsAnimator;
+    public Animator animatorDoorShip;
+    public Animator animatorDoorCapsule;
 
     // ============================================================
     // Audio
@@ -129,9 +129,9 @@ public class TPController : MonoBehaviour {
         fpsControllerScript = playerObj.GetComponent<FPS_Controller>();
         fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
 
-        gameManagerScript = FindFirstObjectByType<gameManager>();
+        gameManagerScript = FindFirstObjectByType<GameManager>();
         hideMissionsScript = FindFirstObjectByType<HideMisions>();
-        upgradesManagerScript = FindFirstObjectByType<MejorasManager>();
+        upgradesManagerScript = FindFirstObjectByType<UpgradesManager>();
         stimsControllerScript = Object.FindFirstObjectByType<stimsController>();
 
         scannerLineImage = scannerLineTransform.GetComponent<Image>();
@@ -146,7 +146,7 @@ public class TPController : MonoBehaviour {
 
         if (cooldown > 0f) {
 
-            cooldown -= Time.deltaTime;
+            cooldown = cooldown - Time.deltaTime;
 
         }
 
@@ -169,9 +169,9 @@ public class TPController : MonoBehaviour {
 
         }
 
-        if (playerHealthScript == null) {
+        if (healthSystemScript == null) {
 
-            playerHealthScript = FindFirstObjectByType<HealthSystem>();
+            healthSystemScript = FindFirstObjectByType<HealthSystem>();
 
         }
 
@@ -423,7 +423,7 @@ private IEnumerator fadeInScanner() {
 
     while (elapsed < fadeSpeed) {
 
-        elapsed += Time.deltaTime;
+        elapsed = elapsed + Time.deltaTime;
         float alpha = Mathf.Lerp(initialColor.a, 1f, elapsed / fadeSpeed);
         scannerLineImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
         yield return null;
