@@ -1,0 +1,90 @@
+using UnityEngine;
+
+public class IKFootPlacement : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private Animator animator;
+    public FPS_Controller fpsController;
+
+    // ============================================================
+    // IK & Ground Settings
+    // ============================================================
+
+    [Range(0f, 1f)]
+    public float distanceToGround;
+    public LayerMask groundLayerMask;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        animator = GetComponent<Animator>();
+
+    }
+
+    private void Update() {
+
+        animator.SetBool("isWalking", fpsController.isWalking);
+
+    }
+
+    // ============================================================
+    // Inverse Kinematics
+    // ============================================================
+
+    private void onAnimatorIK(int layerIndex) {
+
+        if (animator == null) { return; }
+
+        // ========================================================
+        // Set IK weights for both feet
+        // ========================================================
+
+        animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
+        animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
+
+        animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+        animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
+
+        // ========================================================
+        // Left foot placement
+        // ========================================================
+
+        placeFootIK(AvatarIKGoal.LeftFoot);
+
+        // ========================================================
+        // Right foot placement
+        // ========================================================
+
+        placeFootIK(AvatarIKGoal.RightFoot);
+
+    }
+
+    // ============================================================
+    // Foot IK Placement Helper
+    // ============================================================
+
+    private void placeFootIK(AvatarIKGoal foot) {
+
+        Vector3 footPosition = animator.GetIKPosition(foot) + Vector3.up;
+        Ray ray = new Ray(footPosition, Vector3.down);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, distanceToGround + 1f, groundLayerMask)) {
+
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground")) {
+
+                footPosition = hit.point;
+                footPosition.y += distanceToGround;
+                animator.SetIKPosition(foot, footPosition);
+                animator.SetIKRotation(foot, Quaternion.LookRotation(transform.forward, hit.normal));
+ 
+            }
+        }
+    }
+}
