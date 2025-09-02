@@ -1,0 +1,21 @@
+using UnityEngine;
+
+public class RotateEffect : MonoBehaviour {
+
+    // ============================================================
+    // Rotation Settings
+    // ============================================================
+
+    public Vector3 rotationSpeed = new Vector3(0f, 100f, 0f);
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void update() {
+
+        // Rotate the object each frame based on rotationSpeed
+        transform.Rotate(rotationSpeed * Time.deltaTime);
+
+    }
+}
