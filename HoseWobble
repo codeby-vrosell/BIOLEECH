@@ -1,0 +1,77 @@
+using UnityEngine;
+
+public class HoseWobble : MonoBehaviour {
+
+    // ============================================================
+    // Hose & Stream Configuration
+    // ============================================================
+
+    public Transform hoseTip;               // Tip of the hose where water exits (FirePoint)
+    public int segmentCount = 20;           // Number of segments in the water stream
+    public float streamLength = 5f;         // Total length of the water stream
+    public float delayFactor = 0.1f;        // Delay factor for each segment movement
+    public float followSpeed = 5f;          // Speed at which segments reach their target positions
+
+    // ============================================================
+    // Internal References
+    // ============================================================
+
+    private LineRenderer lineRenderer;      // Line renderer component for visualizing the stream
+    private Vector3[] positions;            // Current positions of each segment
+    private Vector3[] targetPositions;      // Target positions each segment aims to reach
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = segmentCount;
+
+        positions = new Vector3[segmentCount];
+        targetPositions = new Vector3[segmentCount];
+
+        // Initialize segment positions along the hose forward direction
+        Vector3 start = hoseTip.position;
+        Vector3 direction = hoseTip.forward;
+
+        for (int i = 0; i < segmentCount; i++) {
+
+            float t = i / (float)(segmentCount - 1);  // Normalized position along the stream
+            targetPositions[i] = positions[i] = start + direction * t * streamLength;
+
+        }
+    }
+
+    void Update() {
+
+        Vector3 start = hoseTip.position;
+
+        // Smoothly blend hose forward with object forward to get overall stream direction
+        Vector3 direction = Vector3.Lerp(hoseTip.forward, transform.forward, 0.5f).normalized;
+
+        // The first segment always follows the hose tip instantly
+        targetPositions[0] = start;
+        positions[0] = start;
+
+        // Update remaining segments with delayed movement to simulate wobble
+        for (int i = 1; i < segmentCount; i++) {
+
+            float t = i / (float)(segmentCount - 1);           // Normalized position along the stream
+            targetPositions[i] = start + direction * t * streamLength;  // Desired position for this segment
+
+            // Apply delayed movement toward target position
+            positions[i] = Vector3.Lerp(
+                positions[i],
+                targetPositions[i],
+                Time.deltaTime * followSpeed / (1 + i * delayFactor)
+
+            );
+        }
+
+        // Update the LineRenderer with current segment positions
+        lineRenderer.SetPositions(positions);
+
+    }
+}
