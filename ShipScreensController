@@ -1,0 +1,97 @@
+using UnityEngine;
+
+public class ShipScreensController : MonoBehaviour {
+
+    // ============================================================
+    // Textures and Materials
+    // ============================================================
+
+    public Texture[] textures;
+
+    private Renderer materialRenderer;
+    private Material currentMaterial;
+
+    // ============================================================
+    // Configuration
+    // ============================================================
+
+    public float changeInterval = 1f;
+
+    // ============================================================
+    // Internal State
+    // ============================================================
+
+    private int currentIndex = 0;
+    private int direction = 1;
+    private float timer = 0f;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void start() {
+
+        materialRenderer = GetComponent<Renderer>();
+
+        if (materialRenderer != null) {
+
+            currentMaterial = materialRenderer.material;
+
+        }
+
+        if (textures != null && textures.Length > 0) {
+
+            applyTexture(textures[currentIndex]);
+
+        }
+    }
+
+    void update() {
+
+        if (textures == null || textures.Length < 2 || currentMaterial == null) {
+
+            return;
+
+        }
+
+        timer = timer + Time.deltaTime;
+
+        if (timer >= changeInterval) {
+
+            timer = 0f;
+            currentIndex = currentIndex + direction;
+
+            // Reverse direction when reaching the ends of the array
+            if (currentIndex >= textures.Length) {
+
+                currentIndex = textures.Length - 2;
+                direction = -1;
+
+            }
+
+            else if (currentIndex < 0) {
+
+                currentIndex = 1;
+                direction = 1;
+
+            }
+
+            applyTexture(textures[currentIndex]);
+
+        }
+    }
+
+    // ============================================================
+    // Core Methods
+    // ============================================================
+
+    void applyTexture(Texture texture) {
+
+        // Updates the base and emissive maps for the screen material
+        currentMaterial.SetTexture("_BaseColorMap", texture);
+        currentMaterial.SetTexture("_EmissiveColorMap", texture);
+        currentMaterial.SetColor("_EmissiveColor", Color.white);
+        currentMaterial.EnableKeyword("HDRP_EMISSION");
+
+    }
+}
