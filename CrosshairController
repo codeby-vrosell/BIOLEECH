@@ -7,7 +7,7 @@ public class CrosshairController : MonoBehaviour {
     // References
     // ============================================================
 
-    private Animator crosshairAnimator;
+    private Animator animator;
     private UpgradesController upgradesControllerScript;
     private Image[] childImages;
     private GameManager gameManagerScript;
@@ -94,14 +94,14 @@ public class CrosshairController : MonoBehaviour {
 
                 if (hit.collider.CompareTag("Enemy")) {
 
-                    crosshairAnimator.Play("Anim_Close_CH");
+                    animator.Play("Anim_Close_CH");
                     changeCrosshairColor(Color.red);
 
                 }
 
                 else {
 
-                    crosshairAnimator.Play("Anim_Open_CH");
+                    animator.Play("Anim_Open_CH");
                     changeCrosshairColor(originalColor);
 
                 }
@@ -110,7 +110,7 @@ public class CrosshairController : MonoBehaviour {
 
         else {
 
-            crosshairAnimator.Play("Anim_Open_CH");
+            animator.Play("Anim_Open_CH");
             changeCrosshairColor(originalColor);
 
         }
