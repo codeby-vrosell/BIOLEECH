@@ -1,0 +1,59 @@
+using UnityEngine;
+
+public class PlayerMeshSwitch : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private FPS_Controller fpsController;
+    private TPController tpController;
+    private GameObject playerMesh;
+    private GameManagerTutorial tutorialManager;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        fpsController = Object.FindFirstObjectByType<FPS_Controller>();
+        tpController = Object.FindFirstObjectByType<TPController>();
+
+        Transform meshTransform = transform.Find("MallaPlayer");
+        playerMesh = meshTransform.gameObject;
+
+        tutorialManager = Object.FindFirstObjectByType<GameManagerTutorial>();
+
+    }
+
+    private void Update() {
+
+        // Only update mesh restriction if the tutorial manager is not active
+        if (tutorialManager == null) {
+
+            updateMeshRestriction();
+
+        }
+    }
+
+    // ============================================================
+    // Mesh Visibility Control
+    // ============================================================
+
+    private void updateMeshRestriction() {
+
+        // Hide player mesh while starting to sit or during teleporting
+        if (fpsController.startToSeat || tpController.isTeleporting) {
+
+            playerMesh.SetActive(false);
+
+        }
+
+        else {
+
+            playerMesh.SetActive(true);
+
+        }
+    }
+}
