@@ -1,0 +1,480 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class TPController : MonoBehaviour {
+
+    // ============================================================
+    // References to other scripts
+    // ============================================================
+
+    public stimsController stimsControllerScript;
+    private gameManager gameManagerScript;
+    private FPS_Controller fpsControllerScript;
+    private FPControllerGun fpControllerGunScript;
+    private HealthSystem playerHealthScript;
+    private MejorasManager upgradesManagerScript;
+    private HideMisions hideMissionsScript;
+
+    // ============================================================
+    // Player & Camera
+    // ============================================================
+
+    private Transform playerTransform;
+    private GameObject playerCamera;
+
+    // ============================================================
+    // Teleportation States
+    // ============================================================
+
+    public bool inCapsule;
+    public bool inMotherShip;
+    public bool isTeleporting = false;
+    private bool isHolding = false;
+    private bool warningTasksDone = false;
+    private bool isDeathTeleport = false;
+    private bool initialTeleportDone = false;
+    private bool firstTransitionOutDone = false;
+    private Quaternion destinationRotation;
+
+    // ============================================================
+    // Teleportation Positions
+    // ============================================================
+
+    public Transform motherShipSeatPosition;
+    public Transform capsuleSeatPosition;
+    public Transform standMotherShipPosition;
+    public Transform standCapsulePosition;
+
+    // ============================================================
+    // UI Elements
+    // ============================================================
+
+    public Image fadePanel;
+    public float fadeDuration;
+    public Image handFill;
+    public RectTransform scannerLineTransform;
+    private Image scannerLineImage;
+
+    // ============================================================
+    // Teleportation Mechanics
+    // ============================================================
+
+    private float holdTimer = 0f;
+    public float countdownTime = 3f;
+    public float shakeIntensity;
+    public float shakeDuration;
+    public float maxRayDistance;
+    public LayerMask interactableMask;
+    public float minYScanner;
+    public float maxYScanner;
+    public float fadeSpeed;
+
+    private Coroutine fadeCoroutine = null;
+
+    // ============================================================
+    // Scene & Environment
+    // ============================================================
+
+    public GameObject cozyClouds;
+    public GameObject planetParticles;
+    public string nextLevelScene;
+    public bool teleportingNextLevel = false;
+    public bool firstScene = false;
+
+    // ============================================================
+    // Animators & Glitch Effects
+    // ============================================================
+
+    [SerializeField] private Animator glitchFullScreenAnimator;
+    [SerializeField] private fullScreenGlitchEvents glitchFullScreenEvents;
+    public Animator doorsAnimator;
+    public Animator planetDoorsAnimator;
+
+    // ============================================================
+    // Audio
+    // ============================================================
+
+    [Header("Sounds")]
+    public AudioClip doorsClip;
+    public AudioClip scannerClip;
+    public AudioClip teleportClip;
+
+    // ============================================================
+    // Internal
+    // ============================================================
+
+    private float cooldown = 0f;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    private void awake() {
+
+        if (fadePanel != null) {
+
+            fadePanel.color = new Color(fadePanel.color.r, fadePanel.color.g, fadePanel.color.b, 1f);
+
+        }
+    }
+
+    private void start() {
+
+        GameObject playerObj = GameObject.FindWithTag("Player");
+
+        playerTransform = playerObj.transform;
+        playerCamera = GameObject.Find("Main Camera");
+        fpsControllerScript = playerObj.GetComponent<FPS_Controller>();
+        fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+
+        gameManagerScript = FindFirstObjectByType<gameManager>();
+        hideMissionsScript = FindFirstObjectByType<HideMisions>();
+        upgradesManagerScript = FindFirstObjectByType<MejorasManager>();
+        stimsControllerScript = Object.FindFirstObjectByType<stimsController>();
+
+        scannerLineImage = scannerLineTransform.GetComponent<Image>();
+
+        StartCoroutine(spawnPlayerAnimation());
+
+        initialTeleportDone = true;
+
+    }
+
+    private void update() {
+
+        if (cooldown > 0f) {
+
+            cooldown -= Time.deltaTime;
+
+        }
+
+        if (fpsControllerScript == null) {
+
+            fpsControllerScript = FindFirstObjectByType<FPS_Controller>();
+
+        }
+
+        if (playerCamera == null) {
+
+            playerCamera = GameObject.FindWithTag("MainCamera");
+
+        }
+
+        if (playerTransform == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            playerTransform = playerObj.transform;
+
+        }
+
+        if (playerHealthScript == null) {
+
+            playerHealthScript = FindFirstObjectByType<HealthSystem>();
+
+        }
+
+        if (planetParticles == null && playerTransform != null) {
+
+            Transform dustTransform = playerTransform.Find("Floating Dust Particles");
+
+            if (dustTransform != null) {
+
+                planetParticles = dustTransform.gameObject;
+
+            }
+        }
+
+        if (!isTeleporting) {
+
+            checkCapsuleRaycast();
+
+        }
+
+        updateScannerFill();
+
+    }
+
+    // ============================================================
+    // Raycast & Capsule/Mothership Detection
+    // ============================================================
+
+    private void checkCapsuleRaycast() {
+
+        if (playerCamera == null) {
+
+            return;
+
+        }
+
+        RaycastHit hit;
+        Vector3 rayOrigin = playerCamera.transform.position;
+        Vector3 rayDirection = playerCamera.transform.forward;
+
+        bool hitValidTarget = false;
+        Transform destination = null;
+
+        inCapsule = false;
+        inMotherShip = false;
+
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, maxRayDistance, interactableMask)) {
+
+            if (hit.collider.CompareTag("CapsuleLevel")) {
+
+                inCapsule = true;
+                hitValidTarget = true;
+                destination = motherShipSeatPosition;
+
+            }
+
+            else if (hit.collider.CompareTag("MotherShipCapsule")) {
+
+                inMotherShip = true;
+                hitValidTarget = true;
+                destination = capsuleSeatPosition;
+
+            }
+        }
+
+        if (fpControllerGunScript == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+
+        }
+
+        if (fpControllerGunScript.interactButtonPressed && hitValidTarget) {
+
+            handleTeleportConditions(destination);
+
+        }
+
+        else {
+
+            resetHoldState();
+
+        }
+    }
+
+    // ============================================================
+    // Teleportation & Countdown
+    // ============================================================
+
+    private void handleTeleportConditions(Transform destination) {
+
+        if (gameManagerScript.currentPhase == gameManager.GamePhases.onSpace && gameManagerScript.tasksCompleted == false && cooldown <= 0f) {
+
+            IAController.instance.playPriorityRandomLine("NO_TASK_COMPLETED_");
+            cooldown = 10f;
+
+        }
+
+        if (gameManagerScript.currentPhase == gameManager.GamePhases.onSpace && stimsControllerScript.numEstimulantes != 3 && gameManagerScript.tasksCompleted && upgradesManagerScript.tieneMejora && cooldown <= 0f) {
+
+            IAController.instance.playPriorityRandomLine("MISS_STIMS_");
+            cooldown = 10f;
+
+        }
+
+        if (gameManagerScript.currentPhase == gameManager.GamePhases.onSpace && gameManagerScript.tasksCompleted && upgradesManagerScript.tieneMejora == false && cooldown <= 0f) {
+
+            IAController.instance.playPriorityRandomLine("NO_PICK_UPGRADE_");
+            cooldown = 10f;
+
+        }
+
+        if (gameManagerScript.currentPhase == gameManager.GamePhases.comeBack || (gameManagerScript.currentPhase == gameManager.GamePhases.onSpace && gameManagerScript.tasksCompleted && stimsControllerScript.numEstimulantes == 3 && upgradesManagerScript.tieneMejora)) {
+
+            isHolding = true;
+            holdTimer = holdTimer + Time.deltaTime;
+            handFill.fillAmount = holdTimer / countdownTime;
+
+            if (holdTimer >= countdownTime) {
+
+                isHolding = false;
+                StartCoroutine(startTeleportCountdown(destination));
+                warningTasksDone = false;
+
+            }
+        }
+
+        else if (!warningTasksDone) {
+
+            warningTasksDone = true;
+
+        }
+    }
+
+    private void resetHoldState() {
+
+        isHolding = false;
+        warningTasksDone = false;
+
+        if (holdTimer < countdownTime) {
+
+            holdTimer = holdTimer - Time.deltaTime;
+            holdTimer = Mathf.Clamp(holdTimer, 0, countdownTime);
+            handFill.fillAmount = holdTimer / countdownTime;
+
+        }
+    }
+
+    // ============================================================
+    // Scanner Fill & Visuals
+    // ============================================================
+
+    private void updateScannerFill() {
+
+        if (scannerLineTransform != null && handFill != null) {
+
+            float fillAmount = handFill.fillAmount;
+            float newY = Mathf.Lerp(minYScanner, maxYScanner, fillAmount);
+
+            Vector2 pos = scannerLineTransform.anchoredPosition;
+            pos.y = newY;
+            scannerLineTransform.anchoredPosition = pos;
+
+            bool isScanning = fillAmount > 0f && fillAmount < 1f;
+
+            if (fpControllerGunScript.interactButtonPressed && isScanning) {
+
+                if (!scannerLineTransform.gameObject.activeSelf) {
+
+                    scannerLineTransform.gameObject.SetActive(true);
+
+                }
+
+                if (fadeCoroutine != null) {
+
+                    StopCoroutine(fadeCoroutine);
+                    fadeCoroutine = null;
+
+                }
+
+                fadeCoroutine = StartCoroutine(fadeInScanner());
+                AudioManager.instance.PlayLoopingClip(scannerClip, transform, 0.3f);
+
+            }
+
+            else {
+
+                if (fadeCoroutine != null) {
+
+                    StopCoroutine(fadeCoroutine);
+                    fadeCoroutine = null;
+
+                }
+
+                fadeCoroutine = StartCoroutine(fadeOutScanner());
+                AudioManager.instance.StopLoopingClip(scannerClip);
+
+            }
+        }
+    }
+
+    private IEnumerator fadeInScanner() {
+
+        float elapsed = 0f;
+        Color initialColor = scannerLineImage.color;
+        Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 1f);
+
+        while (elapsed < fadeSpeed) {
+
+            elapsed = elapsed + Time.deltaTime;
+            float alpha = Mathf.Lerp(initialColor.a, 1f, elapsed / fadeSpeed);
+            scannerLineImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+            yield return null;
+
+        }
+
+        scannerLineImage.color = targetColor;
+        fadeCoroutine = null;
+
+    }
+
+    private IEnumerator fadeOutScanner() {
+
+        float elapsed = 0f;
+        Color initialColor = scannerLineImage.color;
+        Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
+
+        while (elapsed < fadeSpeed) {
+
+            elapsed = elapsed + Time.deltaTime;
+            float alpha = Mathf.Lerp(initialColor.a, 0f, elapsed / fadeSpeed);
+            scannerLineImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+            yield return null;
+
+        }
+
+        scannerLineImage.color = targetColor;
+        scannerLineTransform.gameObject.SetActive(false);
+        fadeCoroutine = null;
+
+    }
+}
+
+private IEnumerator fadeInScanner() {
+
+    float elapsed = 0f;
+    Color initialColor = scannerLineImage.color;
+    Color targetColor = new Color(initialColor.r, initialColor.g, initialColor.b, 1f);
+
+    while (elapsed < fadeSpeed) {
+
+        elapsed += Time.deltaTime;
+        float alpha = Mathf.Lerp(initialColor.a, 1f, elapsed / fadeSpeed);
+        scannerLineImage.color = new Color(initialColor.r, initialColor.g, initialColor.b, alpha);
+        yield return null;
+
+    }
+
+    scannerLineImage.color = targetColor;
+    fadeCoroutine = null;
+
+}
+
+// ============================================================
+// Death Teleport Animation (Capsule)
+// ============================================================
+
+public IEnumerator capsuleDeathAnimation() {
+
+    inMotherShip = true;
+    isHolding = false;
+    holdTimer = countdownTime;
+
+    isDeathTeleport = true;
+    yield return StartCoroutine(startTeleportCountdown(capsuleSeatPosition));
+    isDeathTeleport = false;
+
+}
+
+// ============================================================
+// Player Spawn Animation
+// ============================================================
+
+public IEnumerator spawnPlayerAnimation() {
+
+    inCapsule = true;
+    isHolding = false;
+    holdTimer = countdownTime;
+
+    isDeathTeleport = true;
+    yield return StartCoroutine(startTeleportCountdown(motherShipSeatPosition, true));
+    isDeathTeleport = false;
+
+}
+
+// ============================================================
+// Set a new Player reference dynamically
+// ============================================================
+
+public void SetPlayer(GameObject newPlayer) {
+
+    playerTransform = newPlayer.transform;
+    fpsControllerScript = newPlayer.GetComponent<FPS_Controller>();
+    fpControllerGunScript = newPlayer.GetComponent<FPControllerGun>();
+
+}
