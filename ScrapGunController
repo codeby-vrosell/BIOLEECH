@@ -23,16 +23,16 @@ public class ScrapGunController : MonoBehaviour {
     // References
     // ============================================================
 
-    private ScrapMesh[] scrapMeshes;
-    private ScrapMesh currentScrapMesh;
+    private ScrapMesh[] scrapMeshesScript;
+    private ScrapMesh currentScrapMeshScript;
 
     public Camera playerCamera;
-    private UpgradesController upgradesController;
-    private FPControllerGun playerGunController;
-    private ShotGunController shotGunController;
-    private QTE_Burner qteBurnerScript;
-    private Animator gunAnimator;
-    private TutorialGameManager tutorialManager;
+    private UpgradesController upgradesControllerScript;
+    private FPControllerGun fpControllerGunScript;
+    private ShotGunController shotGunControllerScript;
+    private QTEBurner qteBurnerScript;
+    private Animator animator;
+    private TutorialGameManager tutorialGameManagerScript;
 
     // ============================================================
     // Cleaning & Scrap Suction
@@ -43,7 +43,7 @@ public class ScrapGunController : MonoBehaviour {
     private float suctionCooldown = 0f;
     private Coroutine suctionCoroutine;
 
-    [SerializeField] private ParticleSystem slimeParticle;
+    [SerializeField] private ParticleSystem scrapParticle;
 
     // ============================================================
     // Vibration Control
@@ -60,7 +60,7 @@ public class ScrapGunController : MonoBehaviour {
 
     [Header("Sounds")]
     public AudioClip cleanSound;
-    public AudioClip cleanSlimeSound;
+    public AudioClip cleanScrapSound;
 
     // ============================================================
     // Tornado Effect
@@ -83,13 +83,13 @@ public class ScrapGunController : MonoBehaviour {
 
     void Start() {
 
-        qteBurnerScript = Object.FindFirstObjectByType<QTE_Burner>();
-        shotGunController = Object.FindFirstObjectByType<ShotGunController>();
-        tutorialManager = FindFirstObjectByType<TutorialGameManager>();
+        qteBurnerScript = Object.FindFirstObjectByType<QTEBurner>();
+        shotGunControllerScript = Object.FindFirstObjectByType<ShotGunController>();
+        tutorialGameManagerScript = FindFirstObjectByType<TutorialGameManager>();
 
-        scrapMeshes = new ScrapMesh[0];
-        gunAnimator = GetComponent<Animator>();
-        gunAnimator.enabled = false;
+        scrapMeshesScript = new ScrapMesh[0];
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
 
     }
 
@@ -97,14 +97,14 @@ public class ScrapGunController : MonoBehaviour {
 
         // Ensure player and dependencies are loaded
 
-        if (playerGunController == null) {
+        if (fpControllerGunScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
             if (playerObj != null) {
 
-                playerGunController = playerObj.GetComponent<FPControllerGun>();
-                upgradesController = playerObj.GetComponent<UpgradesController>();
+                fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+                upgradesControllerScript = playerObj.GetComponent<UpgradesController>();
 
             }
         }
@@ -122,9 +122,9 @@ public class ScrapGunController : MonoBehaviour {
         }
 
         // Ensure animator exists
-        if (gunAnimator == null) {
+        if (animator == null) {
 
-            gunAnimator = GetComponent<Animator>();
+            animator = GetComponent<Animator>();
 
         }
 
@@ -153,7 +153,7 @@ public class ScrapGunController : MonoBehaviour {
             isCleaningScrap = currentRate > 0;
 
             // Only allow suction during early tutorial steps if below 75%
-            if (tutorialManager != null && tutorialManager.tutorialStep <= 6) {
+            if (tutorialGameManagerScript != null && tutorialGameManagerScript.tutorialStep <= 6) {
 
                 if (scrapPercent < 75f) {
 
@@ -184,9 +184,9 @@ public class ScrapGunController : MonoBehaviour {
         // Prevent automatic burning during tutorial
         if (burnTimer >= burnerCooldown) {
 
-            if (tutorialManager == null || tutorialManager.tutorialStep > 6) {
+            if (tutorialGameManagerScript == null || tutorialGameManagerScript.tutorialStep > 6) {
 
-                burnScrap(upgradesController.scrapDestroyedUpgrade);
+                burnScrap(upgradesControllerScript.scrapDestroyedUpgrade);
                 burnTimer = 0f;
 
             }
@@ -197,7 +197,7 @@ public class ScrapGunController : MonoBehaviour {
 
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
-        float range = upgradesController.cleanRangeUpgrade;
+        float range = upgradesControllerScript.cleanRangeUpgrade;
 
         if (Physics.Raycast(ray, out hit, range, scrapLayerMask)) {
 
@@ -211,14 +211,14 @@ public class ScrapGunController : MonoBehaviour {
 
     private void checkScrapReload() {
 
-        if (scrapPercent > 1 && playerGunController.burnButtonPressed) {
+        if (scrapPercent > 1 && fpControllerGunScript.burnButtonPressed) {
 
             // Allow reload only during tutorial step 6 or later
-            if (tutorialManager == null || tutorialManager.inStep6) {
+            if (tutorialGameManagerScript == null || tutorialGameManagerScript.inStep6) {
 
-                gunAnimator.enabled = true;
-                gunAnimator.Play("OnQTE");
-                playerGunController.burnButtonPressed = false;
+                animator.enabled = true;
+                animator.Play("OnQTE");
+                fpControllerGunScript.burnButtonPressed = false;
 
             }
         }
@@ -233,11 +233,11 @@ public class ScrapGunController : MonoBehaviour {
 
     private void burnScrap(float amount) {
 
-        if (!playerGunController.isInQTE && scrapPercent > 0f) {
+        if (!fpControllerGunScript.isInQTE && scrapPercent > 0f) {
 
             float usedScrap = Mathf.Min(amount, scrapPercent);
             int bulletsGenerated = Mathf.FloorToInt(usedScrap);
-            shotGunController.bullets = Mathf.Min(shotGunController.bullets + bulletsGenerated, 100);
+            shotGunControllerScript.bullets = Mathf.Min(shotGunControllerScript.bullets + bulletsGenerated, 100);
             scrapPercent = scrapPercent - usedScrap;
 
         }
@@ -260,29 +260,29 @@ public class ScrapGunController : MonoBehaviour {
         if (scrapPercent >= 100f) {
 
             isCleaning = false;
-            gunAnimator.enabled = true;
-            gunAnimator.Play("OnQTE");
+            animator.enabled = true;
+            animator.Play("OnQTE");
             Debug.Log("Scrap tank is at 100% capacity.");
 
         }
 
         else {
 
-            isCleaning = playerGunController.cleanButtonPressed && !playerGunController.isInQTE && !playerGunController.isShooting && !playerGunController.attackButtonPressed;
+            isCleaning = fpControllerGunScript.cleanButtonPressed && !fpControllerGunScript.isInQTE && !fpControllerGunScript.isShooting && !fpControllerGunScript.attackButtonPressed;
 
         }
 
-        playerGunController.isCleaning = isCleaning;
+        fpControllerGunScript.isCleaning = isCleaning;
 
     }
 
     public void winQTE() {
 
-        gunAnimator.enabled = true;
-        gunAnimator.Play("OffQTE");
+        animator.enabled = true;
+        animator.Play("OffQTE");
 
         int bulletsGained = Mathf.Clamp((int)scrapPercent, 0, 100);
-        shotGunController.bullets = Mathf.Min(shotGunController.bullets + bulletsGained, 100);
+        shotGunControllerScript.bullets = Mathf.Min(shotGunControllerScript.bullets + bulletsGained, 100);
         scrapPercent = 0f;
 
     }
@@ -301,7 +301,7 @@ public class ScrapGunController : MonoBehaviour {
 
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
-        float range = upgradesController.cleanRangeUpgrade;
+        float range = upgradesControllerScript.cleanRangeUpgrade;
 
         if (Physics.Raycast(ray, out hit, range, scrapLayerMask)) {
 
@@ -321,13 +321,13 @@ public class ScrapGunController : MonoBehaviour {
 
     public void animationFinished() {
 
-        gunAnimator.enabled = false;
+        animator.enabled = false;
 
     }
 
     public void registerScrapMesh(ScrapMesh newMesh) {
 
-        var list = scrapMeshes.ToList();
+        var list = scrapMeshesScript.ToList();
         list.Add(newMesh);
         scrapMeshes = list.ToArray();
 
@@ -339,9 +339,13 @@ public class ScrapGunController : MonoBehaviour {
 
     private void handleVibration() {
 
-        if (playerGunController == null) return;
+        if (fpControllerGunScript == null) {
 
-        if (playerGunController.isCleaning) {
+            return;
+
+        }
+
+        if (fpControllerGunScript.isCleaning) {
 
             if (vibrationCoroutine == null) {
 
@@ -363,7 +367,7 @@ public class ScrapGunController : MonoBehaviour {
 
     private System.Collections.IEnumerator vibrateWhileCleaning() {
 
-        while (playerGunController != null && playerGunController.isCleaning) {
+        while (fpControllerGunScript != null && fpControllerGunScript.isCleaning) {
 
             float intensity = Random.Range(minVibration, maxVibration);
             GamepadVibratorController.instance.startVibration(intensity, vibrationInterval);
@@ -381,9 +385,26 @@ public class ScrapGunController : MonoBehaviour {
 
     void tornadoManager() {
 
-        if (materialRenderer == null) { return; }
+        if (materialRenderer == null) {
 
-        float target = isCleaning ? 0.043f : 0f;
+            return;
+
+        }
+
+        float target;
+
+        if (isCleaning) {
+
+            target = 0.043f;
+
+        }
+
+        else {
+
+            target = 0f;
+
+        }
+
         tornadoValue = Mathf.MoveTowards(tornadoValue, target, Time.deltaTime * tornadoSpeed);
 
         materialRenderer.material.SetFloat(propertyName, tornadoValue);
@@ -402,7 +423,7 @@ public class ScrapGunController : MonoBehaviour {
 
                 if (suctionCoroutine == null) {
 
-                    suctionCoroutine = StartCoroutine(loopCleaningSound(cleanSlimeSound));
+                    suctionCoroutine = StartCoroutine(loopCleaningSound(cleanScrapSound));
 
                 }
 
@@ -445,13 +466,13 @@ public class ScrapGunController : MonoBehaviour {
 
         if (isCleaningScrap) {
 
-            slimeParticle.Play();
+            scrapParticle.Play();
 
         }
 
         else {
 
-            slimeParticle.Stop();
+            scrapParticle.Stop();
 
         }
     }
