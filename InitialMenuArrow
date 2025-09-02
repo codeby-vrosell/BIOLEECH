@@ -1,0 +1,34 @@
+using UnityEngine;
+
+public class InitialMenuArrow : MonoBehaviour {
+
+    // ============================================================
+    // Movement Settings
+    // ============================================================
+
+    public float distance = 20f;      // How far it will move side to side
+    public float speed = 2f;          // How fast it moves
+
+    // ============================================================
+    // Internal Variables
+    // ============================================================
+
+    private Vector3 initialPosition;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        initialPosition = transform.localPosition;
+
+    }
+
+    void Update() {
+
+        float displacement = Mathf.Sin(Time.time * speed) * distance;
+        transform.localPosition = initialPosition + new Vector3(displacement, 0f, 0f);
+
+    }
+}
