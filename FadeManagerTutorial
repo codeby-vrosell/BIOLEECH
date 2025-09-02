@@ -1,0 +1,115 @@
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
+public class FadeManagerTutorial : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public Image fadeImage;
+
+    // ============================================================
+    // Settings
+    // ============================================================
+
+    public float fadeDuration = 1f;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        // Start with fade out if fadeImage is assigned
+        if (fadeImage != null) {
+
+            StartCoroutine(fadeOut());
+
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void fadeToScene(string sceneName) {
+
+        StartCoroutine(fadeAndLoad(sceneName));
+
+    }
+
+    public void fadeAndQuit() {
+
+        StartCoroutine(fadeAndExitApplication());
+
+    }
+
+    // ============================================================
+    // Coroutines
+    // ============================================================
+
+    private IEnumerator fadeAndLoad(string sceneName) {
+
+        yield return StartCoroutine(fadeIn());
+        SceneManager.LoadScene(sceneName);
+
+    }
+
+    private IEnumerator fadeAndExitApplication() {
+
+        yield return StartCoroutine(fadeIn());
+        Application.Quit();
+
+    }
+
+    private IEnumerator fadeIn() {
+
+        float timer = 0f;
+        while (timer < fadeDuration) {
+
+            timer = timer + Time.deltaTime;
+            float alpha = timer / fadeDuration;
+            setAlpha(alpha);
+            yield return null;
+
+        }
+
+        setAlpha(1f);
+
+    }
+
+    private IEnumerator fadeOut() {
+
+        float timer = fadeDuration;
+
+        while (timer > 0f) {
+
+            timer = timer - Time.deltaTime;
+            float alpha = timer / fadeDuration;
+            setAlpha(alpha);
+            yield return null;
+
+        }
+
+        setAlpha(0f);
+
+    }
+
+    // ============================================================
+    // Helper Methods
+    // ============================================================
+
+    private void setAlpha(float alpha) {
+
+        if (fadeImage != null) {
+
+            Color color = fadeImage.color;
+            color.a = alpha;
+            fadeImage.color = color;
+
+        }
+    }
+}
