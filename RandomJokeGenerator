@@ -13,7 +13,7 @@ public class RandomJokeGenerator : MonoBehaviour {
     // References
     // ============================================================
 
-    private FPSController fpsController;
+    private FPS_Controller fpsControllerScript;
     private GameManager gameManagerScript;
 
     // ============================================================
@@ -34,13 +34,13 @@ public class RandomJokeGenerator : MonoBehaviour {
 
     private void Update() {
 
-        if (fpsController == null) {
+        if (fpsControllerScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
             if (playerObj != null) {
 
-                fpsController = playerObj.GetComponent<FPSController>();
+                fpsControllerScript = playerObj.GetComponent<FPS_Controller>();
 
             }
 
@@ -48,7 +48,7 @@ public class RandomJokeGenerator : MonoBehaviour {
 
         }
 
-        if (fpsController.isSeated == false && waitingForNextJoke == false && gameManagerScript.inSpace == false) {
+        if (fpsControllerScript.isSeated == false && waitingForNextJoke == false && gameManagerScript.inSpace == false) {
 
             StartCoroutine(waitForJoke());
 
