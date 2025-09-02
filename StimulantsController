@@ -17,7 +17,7 @@ public class StimulantsController : MonoBehaviour {
     // References
     // ============================================================
 
-    private GameManagerTutorial gameManagerTutorialScript;
+    private TutorialGameManager tutorialGameManagerScript;
     private GameManager gameManagerScript;
 
     // ============================================================
@@ -26,10 +26,10 @@ public class StimulantsController : MonoBehaviour {
 
     private void Start() {
 
-        gameManagerTutorialScript = FindFirstObjectByType<GameManagerTutorial>();
+        tutorialGameManagerScript = FindFirstObjectByType<TutorialGameManager>();
         gameManagerScript = FindFirstObjectByType<GameManager>();
 
-        if (gameManagerTutorialScript == null) {
+        if (tutorialGameManagerScript == null) {
 
             if (gameManagerScript.currentPhase != GameManager.GamePhases.onSpace) {
 
@@ -55,7 +55,7 @@ public class StimulantsController : MonoBehaviour {
 
         if (currentStimulantsText == null) {
 
-            GameObject currentTextObj = GameObject.Find("NumEstimsText");
+            GameObject currentTextObj = GameObject.Find("NumStimsText");
 
             if (currentTextObj != null) {
 
