@@ -7,7 +7,7 @@ public class DoorsController : MonoBehaviour {
     // ============================================================
 
     private Animator animator;
-    private GameManagerTutorial gameManagerTutorialScript;
+    private TutorialGameManager tutorialGameManagerScript;
     private TPController tpControllerScript;
 
     // ============================================================
@@ -23,7 +23,7 @@ public class DoorsController : MonoBehaviour {
     void Start() {
 
         animator = GetComponent<Animator>();
-        gameManagerTutorialScript = FindFirstObjectByType<GameManagerTutorial>();
+        tutorialGameManagerScript = FindFirstObjectByType<TutorialGameManager>();
         tpControllerScript = FindFirstObjectByType<TPController>();
 
     }
@@ -38,7 +38,7 @@ public class DoorsController : MonoBehaviour {
 
             bool canOpen = tpControllerScript == null || !tpControllerScript.isTeleporting;
 
-            if (canOpen && (gameManagerTutorialScript == null || gameManagerTutorialScript.pasoTutorial >= 10)) {
+            if (canOpen && (tutorialGameManagerScript == null || tutorialGameManagerScript.pasoTutorial >= 10)) {
 
                 animator.Play("Anim_OpenDoors");
                 AudioManager.instance.PlaySoundFXClip(doorsAudioClip, transform, 0.2f);
