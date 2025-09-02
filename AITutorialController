@@ -270,7 +270,7 @@ public class AITutorialController : MonoBehaviour {
 
     }
 
-    private IEnumerator blinkingCursor() // was guionParpadeando {
+    private IEnumerator blinkingCursor() {
 
         while (true) {
 
