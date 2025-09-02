@@ -1,0 +1,79 @@
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
+public class CreditsFade : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public Image fadeImage;  // Drag the black canvas image here in the inspector
+
+    // ============================================================
+    // Settings
+    // ============================================================
+
+    public float fadeDuration = 1.5f;  // Duration of the fade in seconds
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        // Ensure the image starts fully transparent
+        if (fadeImage != null) {
+
+            fadeImage.color = new Color(0f, 0f, 0f, 0f);
+
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void fadeToMenu() {
+
+        if (fadeImage != null) {
+
+            StartCoroutine(fadeAndLoadScene());
+
+        }
+
+        else {
+
+            Debug.LogError("fadeImage is not assigned in the inspector.");
+
+        }
+    }
+
+    // ============================================================
+    // Coroutines
+    // ============================================================
+
+    private IEnumerator fadeAndLoadScene() {
+
+        float timer = 0f;
+        Color color = fadeImage.color;
+
+        while (timer < fadeDuration) {
+
+            timer = timer + Time.deltaTime;
+            color.a = Mathf.Lerp(0f, 1f, timer / fadeDuration);
+            fadeImage.color = color;
+            yield return null;
+
+        }
+
+        // Ensure alpha is exactly 1
+        color.a = 1f;
+        fadeImage.color = color;
+
+        // Load the scene "Menu Inicial Final"
+        SceneManager.LoadScene("Menu Inicial Final");
+
+    }
+}
