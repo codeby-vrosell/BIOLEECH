@@ -82,7 +82,11 @@ public class MenuButtonHoverTMP : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     public void OnPointerClick(PointerEventData eventData) {
 
-        if (disableBlink == true) { return; }
+        if (disableBlink == true) {
+
+            return;
+
+        }
 
         if (activeBlink != null) {
 
