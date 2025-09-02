@@ -1,0 +1,180 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
+
+public class MainMenu : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public FadeManagerTutorial fadeManager;
+    public Animator startAnimator;
+    public List<Button> menuButtons = new List<Button>();
+
+    // ============================================================
+    // Selection State
+    // ============================================================
+
+    private int selectedButton = 0;
+    private float changeTime = 0f;
+    private float changeDelay = 0.3f;
+
+    private bool usingGamepad = false;
+    private bool previousGamepadState = false;
+
+    // ============================================================
+    // Input Actions
+    // ============================================================
+
+    public InputAction inputVertical;
+    public InputAction inputConfirm;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void OnEnable() {
+
+        inputVertical.Enable();
+        inputConfirm.Enable();
+
+    }
+
+    private void OnDisable() {
+
+        inputVertical.Disable();
+        inputConfirm.Disable();
+
+    }
+
+    private void Start() {
+
+        // Initialize cursor state based on whether a gamepad is connected
+        UpdateCursor(Gamepad.current != null);
+
+    }
+
+    private void Update() {
+
+        usingGamepad = Gamepad.current != null;
+
+        // Update cursor visibility when switching between gamepad and mouse
+        if (usingGamepad != previousGamepadState) {
+
+            UpdateCursor(usingGamepad);
+            previousGamepadState = usingGamepad;
+
+        }
+
+        if (!usingGamepad) { return; }
+
+        // Read vertical input from the gamepad
+        float movement = inputVertical.ReadValue<float>();
+
+        // Limit selection changes to occur only after the delay
+        if (Time.unscaledTime > changeTime) {
+
+            if (movement > 0.5f) {
+
+                changeSelection(-1);
+                changeTime = Time.unscaledTime + changeDelay;
+
+            }
+
+            else if (movement < -0.5f) {
+
+                changeSelection(1);
+                changeTime = Time.unscaledTime + changeDelay;
+
+            }
+        }
+
+        // Trigger the selected button when confirm is pressed
+        if (inputConfirm.WasPressedThisFrame()) {
+
+            menuButtons[selectedButton].onClick.Invoke();
+
+        }
+    }
+
+    // ============================================================
+    // Button Selection
+    // ============================================================
+
+    private void changeSelection(int direction) {
+
+        selectedButton += direction;
+
+        if (selectedButton < 0) selectedButton = menuButtons.Count - 1;
+        if (selectedButton >= menuButtons.Count) selectedButton = 0;
+
+        menuButtons[selectedButton].Select();
+    }
+
+    // ============================================================
+    // Menu Actions
+    // ============================================================
+
+    public void play() {
+
+        if (fadeManager != null) {
+
+            fadeManager.FadeToScene("Tutorial Final");
+
+        }
+
+        else {
+
+            Debug.LogWarning("FadeManager not assigned in the Inspector.");
+
+        }
+    }
+
+    public void exit() {
+
+        if (fadeManager != null) {
+
+            fadeManager.FadeAndQuit();
+
+        }
+
+        else {
+
+            Application.Quit();
+
+        }
+    }
+
+    public void credits() {
+
+        fadeManager.FadeToScene("BIOLEECH Credits");
+
+    }
+
+    // ============================================================
+    // UI Helpers
+    // ============================================================
+
+    private void resetButtonColors() {
+
+        foreach (var btn in menuButtons) {
+
+            if (btn != null) {
+
+                var colors = btn.colors;
+                btn.OnPointerExit(null); // Force event to reset color
+                btn.targetGraphic.color = colors.normalColor;
+
+            }
+        }
+    }
+
+    private void updateCursor(bool hide) {
+
+        Cursor.visible = !hide;
+        Cursor.lockState = hide ? CursorLockMode.Locked : CursorLockMode.None;
+
+    }
+}
