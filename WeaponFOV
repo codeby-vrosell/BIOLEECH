@@ -1,0 +1,118 @@
+using UnityEngine;
+using Unity.Cinemachine;
+using System.Linq;
+
+public class WeaponFOV : MonoBehaviour {
+
+    // ============================================================
+    // FOV Settings
+    // ============================================================
+
+    [Header("FOV Settings")]
+    [SerializeField] private float fovShooting;
+    [SerializeField] private float fovCleaning;
+    [SerializeField] private float requiredHoldTime;
+    [SerializeField] private float fovTransitionSpeed;
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private CinemachineCamera fpMainCamera;
+    private Camera weaponRenderCamera;
+    private FPControllerGun fpControllerScript;
+
+    // ============================================================
+    // State Variables
+    // ============================================================
+
+    private float defaultFOV;
+    private float holdTimer = 0f;
+
+    private enum fovState { Normal, Shooting, Cleaning }
+    private fovState currentState = fovState.Normal;
+
+    // ============================================================
+    // Initialization
+    // ============================================================
+
+    void start() {
+
+        GameObject playerObj = GameObject.FindWithTag("Player");
+
+        fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+
+        fpMainCamera = Object.FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None).FirstOrDefault(t => t.name == "FP MainCamera");
+
+        weaponRenderCamera = GameObject.Find("RenderArma")?.GetComponent<Camera>();
+
+        defaultFOV = fpMainCamera.Lens.FieldOfView;
+
+    }
+
+    // ============================================================
+    // Update FOV based on player actions
+    // ============================================================
+
+    void update() {
+
+        bool isHoldingAction = fpControllerScript.isShooting || fpControllerScript.isCleaning;
+
+        // Track hold time to switch FOV states
+        if (isHoldingAction) {
+
+            holdTimer += Time.deltaTime;
+
+            if (holdTimer >= requiredHoldTime) {
+
+                if (fpControllerScript.isShooting) {
+
+                    currentState = fovState.Shooting;
+
+                }
+
+                else if (fpControllerScript.isCleaning) {
+
+                    currentState = fovState.Cleaning;
+
+                }
+            }
+        }
+
+        else {
+
+            holdTimer = 0f;
+            currentState = fovState.Normal;
+
+        }
+
+        // Determine target FOV based on current state
+        float targetFOV = defaultFOV;
+
+        switch (currentState) {
+
+            case fovState.Shooting:
+
+                targetFOV = fovShooting;
+                break;
+
+            case fovState.Cleaning:
+
+                targetFOV = fovCleaning;
+                break;
+
+            case fovState.Normal:
+
+                targetFOV = defaultFOV;
+                break;
+
+        }
+
+        // Smoothly interpolate main camera FOV
+        fpMainCamera.Lens.FieldOfView = Mathf.Lerp(fpMainCamera.Lens.FieldOfView, targetFOV, Time.deltaTime * fovTransitionSpeed);
+
+        // Apply the same FOV to the weapon render camera
+        weaponRenderCamera.fieldOfView = fpMainCamera.Lens.FieldOfView;
+
+    }
+}
