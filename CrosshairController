@@ -8,12 +8,12 @@ public class CrosshairController : MonoBehaviour {
     // ============================================================
 
     private Animator crosshairAnimator;
-    private UpgradesController upgradesController;
+    private UpgradesController upgradesControllerScript;
     private Image[] childImages;
     private GameManager gameManagerScript;
     private FPSController fpsControllerScript;
     private TPController tpControllerScript;
-    private GameManagerTutorial gameManagerTutorial;
+    private TutorialGameManager tutorialGameManagerScript;
 
     public GameObject playerCamera;
     private GameObject pointCrosshair;
@@ -38,7 +38,7 @@ public class CrosshairController : MonoBehaviour {
 
         }
 
-        if (gameManagerTutorial == null) {
+        if (tutorialGameManagerScript == null) {
 
             updateCrosshairRestrictions();
 
@@ -76,13 +76,17 @@ public class CrosshairController : MonoBehaviour {
 
         }
 
-        if (upgradesController == null) { return; }
+        if (upgradesControllerScript == null) {
+
+            return;
+
+        }
 
         Vector3 rayOrigin = playerCamera.transform.position;
         Vector3 rayDirection = playerCamera.transform.forward;
         RaycastHit hit;
 
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, upgradesController.gunRange, interactableMask)) {
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, upgradesControllerScript.gunRange, interactableMask)) {
 
             if (hit.collider != null && hit.collider.gameObject != null) {
 
@@ -136,6 +140,7 @@ public class CrosshairController : MonoBehaviour {
 
             pointCrosshair.SetActive(false);
             crosshair.SetActive(false);
+
             return;
 
         }
@@ -157,7 +162,7 @@ public class CrosshairController : MonoBehaviour {
 
     private void updateCrosshairTutorial() {
 
-        if (gameManagerTutorial.inStep5_1) {
+        if (tutorialGameManagerScript.inStep5_1) {
 
             crosshair.SetActive(true);
             pointCrosshair.SetActive(false);
