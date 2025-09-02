@@ -415,7 +415,7 @@ public class AIController : MonoBehaviour {
 
     private void playAudio() {
 
-        ensureAudioSource(); // was EnsureAudioSources
+        ensureAudioSource();
 
         AudioClip clip = Resources.Load<AudioClip>($"IAAudio/{currentID}");
 
