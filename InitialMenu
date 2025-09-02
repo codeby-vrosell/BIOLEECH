@@ -9,8 +9,8 @@ public class InitialMenu : MonoBehaviour {
     // References
     // ============================================================
 
-    public FadeManagerTutorial fadeManager;
-    public Animator startAnimator;
+    public FadeManagerTutorial fadeManagerTutorialScript;
+    public Animator animator;
 
     // ============================================================
     // UI Elements
@@ -128,24 +128,24 @@ public class InitialMenu : MonoBehaviour {
 
     public void play() {
 
-        if (fadeManager != null) {
+        if (fadeManagerTutorialScript != null) {
 
-            fadeManager.FadeToScene("Tutorial Final");
+            fadeManagerTutorialScript.fadeToScene("Final Tutorial");
 
         }
 
         else {
 
-            Debug.LogWarning("FadeManager not assigned in the Inspector.");
+            Debug.LogWarning("FadeManagerTutorial not assigned in the Inspector.");
 
         }
     }
 
     public void exit() {
 
-        if (fadeManager != null) {
+        if (fadeManagerTutorialScript != null) {
 
-            fadeManager.FadeAndQuit();
+            fadeManagerTutorialScript.fadeAndQuit();
 
         }
 
@@ -158,7 +158,7 @@ public class InitialMenu : MonoBehaviour {
 
     public void credits() {
 
-        fadeManager.FadeToScene("Creditos Final");
+        fadeManagerTutorialScript.fadeToScene("Final Credits");
 
     }
 
@@ -180,7 +180,17 @@ public class InitialMenu : MonoBehaviour {
     void updateCursor(bool hide) {
 
         Cursor.visible = !hide;
-        Cursor.lockState = hide ? CursorLockMode.Locked : CursorLockMode.None;
 
+        if (hide) {
+
+            Cursor.lockState = CursorLockMode.Locked;
+
+        }
+
+        else {
+
+            Cursor.lockState = CursorLockMode.None;
+
+        }
     }
 }
