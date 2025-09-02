@@ -6,10 +6,10 @@ public class PlayerMeshSwitch : MonoBehaviour {
     // References
     // ============================================================
 
-    private FPS_Controller fpsController;
-    private TPController tpController;
+    private FPS_Controller fpsControllerScript;
+    private TPController tpControllerScript;
     private GameObject playerMesh;
-    private GameManagerTutorial tutorialManager;
+    private TutorialGameManager tutorialGameManagerScript;
 
     // ============================================================
     // Unity Lifecycle
@@ -17,20 +17,20 @@ public class PlayerMeshSwitch : MonoBehaviour {
 
     private void Start() {
 
-        fpsController = Object.FindFirstObjectByType<FPS_Controller>();
-        tpController = Object.FindFirstObjectByType<TPController>();
+        fpsControllerScript = Object.FindFirstObjectByType<FPS_Controller>();
+        tpControllerScript = Object.FindFirstObjectByType<TPController>();
 
-        Transform meshTransform = transform.Find("MallaPlayer");
+        Transform meshTransform = transform.Find("ScrapMesh");
         playerMesh = meshTransform.gameObject;
 
-        tutorialManager = Object.FindFirstObjectByType<GameManagerTutorial>();
+        tutorialGameManagerScript = Object.FindFirstObjectByType<TutorialGameManager>();
 
     }
 
     private void Update() {
 
         // Only update mesh restriction if the tutorial manager is not active
-        if (tutorialManager == null) {
+        if (tutorialGameManagerScript == null) {
 
             updateMeshRestriction();
 
@@ -44,7 +44,7 @@ public class PlayerMeshSwitch : MonoBehaviour {
     private void updateMeshRestriction() {
 
         // Hide player mesh while starting to sit or during teleporting
-        if (fpsController.startToSeat || tpController.isTeleporting) {
+        if (fpsControllerScript.startToSeat || tpControllerScript.isTeleporting) {
 
             playerMesh.SetActive(false);
 
