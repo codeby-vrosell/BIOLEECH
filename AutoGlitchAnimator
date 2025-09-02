@@ -1,0 +1,58 @@
+using UnityEngine;
+
+public class AutoGlitchAnimator : MonoBehaviour {
+
+    // ============================================================
+    // Animation Settings
+    // ============================================================
+
+    public string animationName = "Anim_GlitchTransition";
+    public float interval = 20f;
+
+    // ============================================================
+    // Internal References
+    // ============================================================
+
+    private Animator animator;
+    private float nextTriggerTime;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        animator = GetComponent<Animator>();
+        nextTriggerTime = Time.time + interval;
+
+    }
+
+    void Update() {
+
+        // Automatically trigger the glitch animation every "interval" seconds
+        if (Time.time >= nextTriggerTime) {
+
+            if (animator != null) {
+
+                animator.Play(animationName);
+
+            }
+
+            nextTriggerTime = Time.time + interval;
+
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void idleAnim() {
+
+        if (animator != null) {
+
+            animator.Play("Idle");
+
+        }
+    }
+}
