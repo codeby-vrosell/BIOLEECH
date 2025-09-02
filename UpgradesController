@@ -6,7 +6,7 @@ public class UpgradesController : MonoBehaviour {
     // References
     // ============================================================
 
-    private upgradesManager upgradesManagerScript;
+    private UpgradesManager upgradesManagerScript;
 
     // ============================================================
     // Upgrade Stats
@@ -23,7 +23,7 @@ public class UpgradesController : MonoBehaviour {
 
     void start() {
 
-        upgradesManagerScript = FindFirstObjectByType<upgradesManager>();
+        upgradesManagerScript = FindFirstObjectByType<UpgradesManager>();
 
         cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
         scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
