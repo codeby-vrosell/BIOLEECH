@@ -72,8 +72,8 @@ public class CreditsFade : MonoBehaviour {
         color.a = 1f;
         fadeImage.color = color;
 
-        // Load the scene "Menu Inicial Final"
-        SceneManager.LoadScene("Menu Inicial Final");
+        // Load the scene "Final Initial Menu"
+        SceneManager.LoadScene("Final Initial Menu");
 
     }
 }
