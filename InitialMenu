@@ -1,0 +1,186 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine.InputSystem;
+
+public class InitialMenu : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public FadeManagerTutorial fadeManager;
+    public Animator startAnimator;
+
+    // ============================================================
+    // UI Elements
+    // ============================================================
+
+    public List<Button> menuButtons = new List<Button>();
+
+    // ============================================================
+    // Navigation Settings
+    // ============================================================
+
+    private int selectedButton = 0;
+    private float changeTime = 0f;
+    private float changeDelay = 0.3f;
+
+    // ============================================================
+    // Input State
+    // ============================================================
+
+    private bool usingController = false;
+    private bool previousControllerState = false;
+
+    // ============================================================
+    // Input Actions
+    // ============================================================
+
+    public InputAction verticalInput;
+    public InputAction confirmInput;
+
+    void OnEnable() {
+
+        verticalInput.Enable();
+        confirmInput.Enable();
+
+    }
+
+    void OnDisable() {
+
+        verticalInput.Disable();
+        confirmInput.Disable();
+
+    }
+
+    void Start() {
+
+        // Set the initial cursor state depending on whether a controller is connected
+        updateCursor(Gamepad.current != null);
+
+    }
+
+    void Update() {
+
+        usingController = Gamepad.current != null;
+
+        // Detect changes in the input device (controller vs mouse/keyboard)
+        if (usingController != previousControllerState) {
+
+            updateCursor(usingController);
+            previousControllerState = usingController;
+
+        }
+
+        if (!usingController) {
+
+            return;
+
+        }
+
+        float movement = verticalInput.ReadValue<float>();
+
+        // Controller navigation with delay to avoid overshooting
+        if (Time.unscaledTime > changeTime) {
+
+            if (movement > 0.5f) {
+
+                changeSelection(-1);
+                changeTime = Time.unscaledTime + changeDelay;
+
+            }
+
+            else if (movement < -0.5f) {
+
+                changeSelection(1);
+                changeTime = Time.unscaledTime + changeDelay;
+
+            }
+        }
+
+        if (confirmInput.WasPressedThisFrame()) {
+
+            menuButtons[selectedButton].onClick.Invoke();
+
+        }
+    }
+
+    void changeSelection(int direction) {
+
+        selectedButton = selectedButton + direction;
+
+        if (selectedButton < 0) {
+
+            selectedButton = menuButtons.Count - 1;
+
+        }
+
+        if (selectedButton >= menuButtons.Count) {
+
+            selectedButton = 0;
+
+        }
+
+        menuButtons[selectedButton].Select();
+
+    }
+
+    public void play() {
+
+        if (fadeManager != null) {
+
+            fadeManager.FadeToScene("Tutorial Final");
+
+        }
+
+        else {
+
+            Debug.LogWarning("FadeManager not assigned in the Inspector.");
+
+        }
+    }
+
+    public void exit() {
+
+        if (fadeManager != null) {
+
+            fadeManager.FadeAndQuit();
+
+        }
+
+        else {
+
+            Application.Quit();
+
+        }
+    }
+
+    public void credits() {
+
+        fadeManager.FadeToScene("Creditos Final");
+
+    }
+
+    void resetButtonColors() {
+
+        // Reset all buttons to their normal colors in case of navigation issues
+        foreach (var button in menuButtons) {
+
+            if (button != null) {
+
+                var colors = button.colors;
+                button.OnPointerExit(null);
+                button.targetGraphic.color = colors.normalColor;
+
+            }
+        }
+    }
+
+    void updateCursor(bool hide) {
+
+        Cursor.visible = !hide;
+        Cursor.lockState = hide ? CursorLockMode.Locked : CursorLockMode.None;
+
+    }
+}
