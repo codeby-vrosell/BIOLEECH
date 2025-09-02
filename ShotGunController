@@ -1,0 +1,153 @@
+using UnityEngine;
+using Unity.Cinemachine;
+using System.Linq;
+using System.Collections;
+using UnityEngine.VFX;
+
+public class ShotGunController : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private FPControllerGun fpControllerScript;
+    private UpgradesController upgradesController;
+    private CrosshairController crosshairController;
+    private RecoilWeapon recoilWeaponScript;
+    public CinemachineImpulseSource impulseSource;
+    private TPController tpControllerScript;
+
+    // ============================================================
+    // Weapon Settings
+    // ============================================================
+
+    public int bullets;
+    public float cadence;
+    public bool canShoot = true;
+    public float spreadAngle;
+
+    private int ignoreLayers;
+
+    // ============================================================
+    // Shooting Point
+    // ============================================================
+
+    public Transform firePoint;
+
+    // ============================================================
+    // Visual Effects
+    // ============================================================
+
+    public VisualEffect vfxTrail;
+    public GameObject vfxImpact;
+
+    // ============================================================
+    // Sounds
+    // ============================================================
+
+    [Header("Sounds")]
+    public AudioClip shootSound;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void start() {
+
+        GameObject playerObj = GameObject.FindWithTag("Player");
+
+        upgradesController = playerObj.GetComponent<UpgradesController>();
+        fpControllerScript = Object.FindFirstObjectByType<FPControllerGun>();
+        crosshairController = Object.FindFirstObjectByType<CrosshairController>();
+        recoilWeaponScript = Object.FindFirstObjectByType<RecoilWeapon>();
+        tpControllerScript = Object.FindFirstObjectByType<TPController>();
+
+        ignoreLayers = ~(LayerMask.GetMask("Player", "Weapon", "EnemySpawn", "EnemyMark", "ignoreGun"));
+
+    }
+
+    void update() {
+
+        crosshairController.checkTarget();
+
+        if (fpControllerScript.attackButtonPressed && !fpControllerScript.isInQTE && !fpControllerScript.isCleaning && (tpControllerScript == null || !tpControllerScript.isTeleporting)) {
+
+            if (canShoot) {
+
+                fpControllerScript.isShooting = true;
+                recoilWeaponScript.aiming = true;
+                StartCoroutine(shootRaycast());
+
+            }
+        }
+
+        else {
+
+            fpControllerScript.isShooting = false;
+            recoilWeaponScript.aiming = false;
+
+        }
+    }
+
+    // ============================================================
+    // Shooting Logic
+    // ============================================================
+
+    IEnumerator shootRaycast() {
+
+        if (bullets > 0) {
+
+            canShoot = false;
+
+            // Play shooting sound and trigger trail effect
+            AudioManager.instance.PlaySoundFXClip(shootSound, transform, 0.7f);
+            vfxTrail.SetBool("Started", true);
+            vfxTrail.Play();
+
+            // Calculate bullet spread
+            Vector3 shootDirection = firePoint.forward;
+            Quaternion spreadRotation = Quaternion.Euler(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0);
+            Vector3 finalDirection = spreadRotation * shootDirection;
+
+            // Raycast to detect hit
+            if (Physics.Raycast(firePoint.position, finalDirection, out RaycastHit hit, upgradesController.gunRange, ignoreLayers)) {
+
+                GameObject vfxPrefab = Instantiate(vfxImpact, hit.point, Quaternion.LookRotation(hit.normal));
+                vfxImpact.GetComponent<VisualEffect>().SetVector3("Orientation", vfxImpact.transform.eulerAngles);
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy") || hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyDetected")) {
+
+                    EnemyHealth2 enemyScript = hit.collider.gameObject.GetComponent<EnemyHealth2>();
+
+                    if (enemyScript != null) {
+
+                        enemyScript.TakeDamage(upgradesController.dmgUpdate);
+
+                    }
+                }
+
+                Destroy(vfxPrefab, 2f);
+
+            }
+
+            bullets = bullets - 1;
+
+            // Recoil and camera impulse
+            recoilWeaponScript.fire();
+            impulseSource.GenerateImpulse();
+
+            GamepadVibratorController.instance.startVibracion(0.6f, 0.1f);
+
+            yield return new WaitForSeconds(cadence);
+
+            canShoot = true;
+
+        }
+
+        else {
+
+            fpControllerScript.isShooting = false;
+
+        }
+    }
+}
