@@ -13,7 +13,7 @@ public class MegaphoneGenerator : MonoBehaviour {
     // References & State
     // ============================================================
 
-    private GameManager gameManager;
+    private GameManager gameManagerScript;
     private bool waitingForAnnouncement = false;
 
     // ============================================================
@@ -22,14 +22,14 @@ public class MegaphoneGenerator : MonoBehaviour {
 
     private void Start() {
 
-        gameManager = Object.FindFirstObjectByType<GameManager>();
+        gameManagerScript = Object.FindFirstObjectByType<GameManager>();
 
     }
 
     private void Update() {
 
         // Start announcement coroutine only if not already waiting and the player is in space
-        if (!waitingForAnnouncement && gameManager.inSpace) {
+        if (!waitingForAnnouncement && gameManagerScript.inSpace) {
 
             StartCoroutine(waitForAnnouncement());
 
