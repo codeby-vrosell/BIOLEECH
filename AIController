@@ -110,11 +110,16 @@ public class AIController : MonoBehaviour {
     }
 
     private void Update() {
-
+    
         if (audioSource == null) {
+    
+            GameObject cameraObject = GameObject.FindWithTag("MainCamera");
 
-            audioSource = GameObject.FindWithTag("MainCamera")?.GetComponent<AudioSource>();
+            if (cameraObject != null) {
 
+                audioSource = cameraObject.GetComponent<AudioSource>();
+
+            }
         }
     }
 
@@ -179,7 +184,8 @@ public class AIController : MonoBehaviour {
                 if (insideQuotes && i + 1 < line.Length && line[i + 1] == '"') {
 
                     current = current + '"';
-                    i++;
+
+                    i = i + 1;
 
                 }
 
@@ -220,6 +226,7 @@ public class AIController : MonoBehaviour {
         if (!prefixToIDs.ContainsKey(tagPrefix)) {
 
             Debug.LogError($"Tag {tagPrefix} not found in CSV.");
+
             return;
 
         }
@@ -236,13 +243,18 @@ public class AIController : MonoBehaviour {
 
     public void playLine(string tagPrefix, int num) {
 
-        if (isTalking || hasPendingPriority) { return; }
+        if (isTalking || hasPendingPriority) {
+
+            return;
+
+        }
 
         string id = $"{tagPrefix}{num:D3}";
 
         if (!prefixToIDs.ContainsKey(tagPrefix)) {
 
             Debug.LogError($"Tag {tagPrefix} not found in CSV.");
+
             return;
 
         }
@@ -250,6 +262,7 @@ public class AIController : MonoBehaviour {
         if (!idToLine.ContainsKey(id)) {
 
             Debug.LogError($"ID {id} not found in CSV.");
+
             return;
 
         }
@@ -289,6 +302,7 @@ public class AIController : MonoBehaviour {
         if (!idToLine.ContainsKey(id)) {
 
             Debug.LogError($"Priority ID {id} not found in CSV.");
+
             return;
 
         }
