@@ -1,0 +1,103 @@
+using UnityEngine;
+
+public class Checkpoint : MonoBehaviour {
+
+    // ============================================================
+    // State
+    // ============================================================
+
+    public bool isCheckpointed = false;
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private GameObject checkpointMeshContainer;
+    public GameObject checkpointPrefab;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        // Extract checkpoint number from object name
+        string checkpointNumber = gameObject.name.Replace("Checkpoint", "").Trim();
+
+        // Look for the mesh container child object
+        Transform meshTransform = transform.Find("MallasCheckPoint" + checkpointNumber);
+
+        if (meshTransform != null) {
+
+            checkpointMeshContainer = meshTransform.gameObject;
+
+        }
+
+        else {
+
+            Debug.LogError("MallasCheckPoint" + checkpointNumber + " not found in " + gameObject.name);
+
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+
+        if (other.CompareTag("TargetToMove")) {
+
+            WaypointFollower payload = other.GetComponent<WaypointFollower>();
+
+            if (payload != null) {
+
+                payload.newCheckpoint(transform);
+                isCheckpointed = true;
+                Debug.Log("Checkpoint " + gameObject.name + " activated.");
+
+            }
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void resetCheckpoint() {
+
+        isCheckpointed = false;
+
+    }
+
+    public void restoreCheckpointMeshes() {
+
+        if (checkpointMeshContainer != null && checkpointPrefab != null) {
+
+            // Save original transform
+            Vector3 originalPosition = checkpointMeshContainer.transform.position;
+            Quaternion originalRotation = checkpointMeshContainer.transform.rotation;
+
+            // Destroy old container
+            Destroy(checkpointMeshContainer);
+
+            // Instantiate new mesh container
+            checkpointMeshContainer = Instantiate(checkpointPrefab, originalPosition, originalRotation, transform);
+            checkpointMeshContainer.name = "MallasCheckPoint" + gameObject.name.Replace("Checkpoint", "").Trim();
+
+            // Update ScrapGunController capacity
+            ScrapGunController gunController = FindAnyObjectByType<ScrapGunController>();
+
+            if (gunController != null) {
+
+                gunController.checkScrapCapacity();
+
+            }
+
+            Debug.Log("Checkpoint " + gameObject.name + " restored and registered in ScrapGunController.");
+
+        }
+
+        else {
+
+            Debug.LogError("Could not restore " + gameObject.name + " - Mesh container or Prefab not assigned.");
+
+        }
+    }
+}
