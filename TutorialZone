@@ -1,0 +1,43 @@
+using UnityEngine;
+
+public class TutorialZone : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    [SerializeField] private gameManagerTutorial tutorialGameManager;
+
+    // ============================================================
+    // Unity Callbacks
+    // ============================================================
+
+    private void onTriggerEnter(Collider collider) {
+
+        if (collider.CompareTag("Player")) {
+
+            tutorialGameManager.playerEnterZone();
+
+        }
+    }
+
+    private void onTriggerStay(Collider collider) {
+
+        if (collider.CompareTag("Player")) {
+
+            tutorialGameManager.playerEnterZone();
+
+        }
+    }
+
+    // ============================================================
+    // Public / Private Methods
+    // ============================================================
+
+    // Destroys this tutorial zone object
+    private void destroyZone() {
+
+        Destroy(this.gameObject);
+
+    }
+}
