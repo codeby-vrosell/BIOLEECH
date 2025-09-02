@@ -1,0 +1,123 @@
+using UnityEngine;
+using System.Collections;
+
+public class SkyEventsController : MonoBehaviour {
+
+    // ============================================================
+    // Sky States
+    // ============================================================
+
+    public enum SkyState { clear, meteorShower }
+    private SkyState currentSkyState = SkyState.clear;
+
+    // ============================================================
+    // Rain Duration (seconds)
+    // ============================================================
+
+    [Header("Rain Duration (seconds)")]
+    public float rainDurationMin;
+    public float rainDurationMax;
+
+    // ============================================================
+    // Minimum Time Between Rain (minutes)
+    // ============================================================
+
+    [Header("Minimum Time Between Meteor Showers (minutes)")]
+    public float waitMinMin;
+    public float waitMaxMin;
+
+    // ============================================================
+    // Particle System Settings
+    // ============================================================
+
+    [Header("Particle System Settings")]
+    public int maxMeteorCount;
+    public float interpolationSpeed;
+
+    private ParticleSystem particleSystemRef;
+    private ParticleSystem.MainModule mainModule;
+
+    // ============================================================
+    // Timing Variables
+    // ============================================================
+
+    private float targetTime = 0f;
+    private float currentTime = 0f;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    private void start() {
+
+        StartCoroutine(delayStart());
+
+    }
+
+    private IEnumerator delayStart() {
+
+        yield return null;
+
+        GameObject particlesGO = GameObject.Find("Cozy Weather Sphere/FX/Particle FX/Meteor Shower Particle FX");
+
+        particleSystemRef = particlesGO.GetComponent<ParticleSystem>();
+
+        mainModule = particleSystemRef.main;
+        mainModule.maxParticles = 0;
+
+        StartCoroutine(controlSkyState());
+
+    }
+
+    // ============================================================
+    // Sky State Control Coroutine
+    // ============================================================
+
+    private IEnumerator controlSkyState() {
+
+        while (true) {
+
+            if (currentSkyState == SkyState.clear) {
+
+                float waitTime = Random.Range(waitMinMin * 60f, waitMaxMin * 60f);
+                yield return new WaitForSeconds(waitTime);
+
+                currentSkyState = SkyState.meteorShower;
+                targetTime = Random.Range(rainDurationMin, rainDurationMax);
+                currentTime = 0f;
+
+            }
+
+            else if (currentSkyState == SkyState.meteorShower) {
+
+                // Interpolating meteor count during the shower
+                while (currentTime < targetTime) {
+
+                    currentTime = currentTime + Time.deltaTime;
+                    float t = currentTime / targetTime;
+                    int interpolatedValue = Mathf.RoundToInt(Mathf.Lerp(0, maxMeteorCount, t));
+                    mainModule.maxParticles = interpolatedValue;
+                    yield return null;
+
+                }
+
+                currentSkyState = SkyState.clear;
+                currentTime = 0f;
+
+                // Gradually reduce particles after the shower
+                while (mainModule.maxParticles > 0) {
+
+                    currentTime = currentTime + Time.deltaTime;
+                    float t = currentTime / interpolationSpeed;
+                    int interpolatedValue = Mathf.RoundToInt(Mathf.Lerp(maxMeteorCount, 0, t));
+                    mainModule.maxParticles = interpolatedValue;
+                    yield return null;
+
+                }
+
+                mainModule.maxParticles = 0;
+
+            }
+        }
+    }
+}
