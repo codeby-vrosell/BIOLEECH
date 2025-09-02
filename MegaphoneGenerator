@@ -1,0 +1,57 @@
+using UnityEngine;
+using System.Collections;
+
+public class MegaphoneGenerator : MonoBehaviour {
+
+    // ============================================================
+    // Configuration
+    // ============================================================
+
+    public float waitTimeForAnnouncement;
+
+    // ============================================================
+    // References & State
+    // ============================================================
+
+    private GameManager gameManager;
+    private bool waitingForAnnouncement = false;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        gameManager = Object.FindFirstObjectByType<GameManager>();
+
+    }
+
+    private void Update() {
+
+        // Start announcement coroutine only if not already waiting and the player is in space
+        if (!waitingForAnnouncement && gameManager.inSpace) {
+
+            StartCoroutine(waitForAnnouncement());
+
+        }
+    }
+
+    // ============================================================
+    // Announcement Coroutine
+    // ============================================================
+
+    private IEnumerator waitForAnnouncement() {
+
+        waitingForAnnouncement = true;
+
+        // Wait for the configured time before playing a line
+        yield return new WaitForSeconds(waitTimeForAnnouncement);
+
+        IAController.instance.playRandomLine("NAVE_PROPAGANDA_");
+
+        Debug.Log("Announcement line is being played");
+
+        waitingForAnnouncement = false;
+
+    }
+}
