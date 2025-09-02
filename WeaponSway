@@ -1,0 +1,239 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class WeaponSway : MonoBehaviour {
+
+    // ============================================================
+    // Player & Input References
+    // ============================================================
+
+    public CharacterController characterController;
+    private PlayerInput playerInput;
+    private InputAction moveInputAction;
+    private InputAction lookInputAction;
+    private Vector2 moveInput;
+    private Vector2 lookInput;
+
+    private TPController tpControllerScript;
+
+    // ============================================================
+    // Sway Position Settings
+    // ============================================================
+
+    [Header("Sway Settings")]
+    public float swayStep = 0.01f;
+    public float maxSwayDistance = 0.06f;
+    private Vector3 swayPosition;
+
+    // ============================================================
+    // Sway Rotation Settings
+    // ============================================================
+
+    [Header("Sway Rotation Settings")]
+    public float swayRotationStep = 4.0f;
+    public float maxSwayRotation = 5.0f;
+    private Vector3 swayEulerRotation;
+
+    public float positionSmooth = 10.0f;
+    private float rotationSmooth = 12.0f;
+
+    // ============================================================
+    // Bobbing Settings
+    // ============================================================
+
+    [Header("Bobbing Settings")]
+    public float bobSpeedCurve;
+    private float bobCurveSin {get { return Mathf.Sin(bobSpeedCurve); }}
+    private float bobCurveCos {get { return Mathf.Cos(bobSpeedCurve); }}
+
+    public Vector3 travelLimit = Vector3.one * 0.025f;
+    public Vector3 bobLimit = Vector3.one * 0.01f;
+    private Vector3 bobPosition;
+    public float bobExaggeration;
+
+    [Header("Bobbing Rotation")]
+    public Vector3 bobRotationMultiplier;
+    private Vector3 bobEulerRotation;
+
+    // ============================================================
+    // Initial Transform
+    // ============================================================
+
+    private Vector3 initialLocalPosition;
+    private Quaternion initialLocalRotation;
+
+    // ============================================================
+    // Unity Events
+    // ============================================================
+
+    void Awake() {
+
+        playerInput = GetComponent<PlayerInput>();
+
+    }
+
+    void OnEnable() {
+
+        reassignInputs();
+
+    }
+
+    void OnDisable() {
+
+        if (moveInputAction != null) {
+
+            moveInputAction.Disable();
+
+        }
+
+        if (lookInputAction != null) {
+
+            lookInputAction.Disable();
+
+        }
+    }
+
+    void Start() {
+
+        tpControllerScript = FindFirstObjectByType<TPController>();
+
+        initialLocalPosition = transform.localPosition;
+        initialLocalRotation = transform.localRotation;
+
+    }
+
+    void Update() {
+
+        if (tpControllerScript != null) {
+
+            if (tpControllerScript.isTeleporting) {
+
+                return;
+
+            }
+
+        }
+
+        getInput();
+        calculateSwayPosition();
+        calculateSwayRotation();
+        calculateBobPosition();
+        calculateBobRotation();
+        applyCompositeTransform();
+
+    }
+
+    // ============================================================
+    // Input Handling
+    // ============================================================
+
+    void getInput() {
+
+        moveInput = moveInputAction.ReadValue<Vector2>().normalized;
+        lookInput = lookInputAction.ReadValue<Vector2>();
+
+    }
+
+    // ============================================================
+    // Sway Calculations
+    // ============================================================
+
+    void calculateSwayPosition() {
+
+        Vector3 invertedLook = lookInput * -swayStep;
+        invertedLook.x = Mathf.Clamp(invertedLook.x, -maxSwayDistance, maxSwayDistance);
+        invertedLook.y = Mathf.Clamp(invertedLook.y, -maxSwayDistance, maxSwayDistance);
+
+        swayPosition = invertedLook;
+
+    }
+
+    void calculateSwayRotation() {
+
+        Vector2 invertedLook = lookInput * -swayRotationStep;
+        invertedLook.x = Mathf.Clamp(invertedLook.x, -maxSwayRotation, maxSwayRotation);
+        invertedLook.y = Mathf.Clamp(invertedLook.y, -maxSwayRotation, maxSwayRotation);
+
+        swayEulerRotation = new Vector3(invertedLook.y, invertedLook.x, invertedLook.x);
+
+    }
+
+    // ============================================================
+    // Bobbing Calculations
+    // ============================================================
+
+    void calculateBobPosition() {
+
+        float movementAmount = moveInput.magnitude;
+
+        bobSpeedCurve = bobSpeedCurve + Time.deltaTime * (characterController.isGrounded ? movementAmount * bobExaggeration : 1.0f) + 0.01f;
+
+        bobPosition.x = (bobCurveCos * bobLimit.x * (characterController.isGrounded ? 1.0f : 0.0f)) - (moveInput.x * travelLimit.x);
+        bobPosition.y = (bobCurveSin * bobLimit.y) - (moveInput.y * travelLimit.y);
+        bobPosition.z = -(moveInput.y * travelLimit.z);
+
+    }
+
+    void calculateBobRotation() {
+
+        if (moveInput != Vector2.zero) {
+
+            bobEulerRotation.x = bobRotationMultiplier.x * Mathf.Sin(2.0f * bobSpeedCurve);
+            bobEulerRotation.y = bobRotationMultiplier.y * bobCurveCos;
+            bobEulerRotation.z = bobRotationMultiplier.z * bobCurveCos * moveInput.x;
+
+        }
+
+        else {
+
+            bobEulerRotation.x = bobRotationMultiplier.x * Mathf.Sin(2.0f * bobSpeedCurve) / 2.0f;
+            bobEulerRotation.y = 0.0f;
+            bobEulerRotation.z = 0.0f;
+
+        }
+    }
+
+    // ============================================================
+    // Apply Final Transform
+    // ============================================================
+
+    void applyCompositeTransform() {
+
+        Vector3 targetPosition = initialLocalPosition + swayPosition + bobPosition;
+        Quaternion targetRotation = initialLocalRotation * Quaternion.Euler(swayEulerRotation) * Quaternion.Euler(bobEulerRotation);
+
+        transform.localPosition = Vector3.Lerp(transform.localPosition, targetPosition, Time.deltaTime * positionSmooth);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * rotationSmooth);
+
+    }
+
+    // ============================================================
+    // Input Reassignment
+    // ============================================================
+
+    public void reassignInputs() {
+
+        if (playerInput == null) {
+
+            playerInput = GetComponent<PlayerInput>();
+
+        }
+
+        moveInputAction = playerInput.actions["moveInput"];
+        lookInputAction = playerInput.actions["lookInput"];
+
+        if (moveInputAction != null) {
+
+            moveInputAction.Enable();
+
+        }
+
+        if (lookInputAction != null) {
+
+            lookInputAction.Enable();
+
+        }
+    }
+}
