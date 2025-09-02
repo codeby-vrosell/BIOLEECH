@@ -1,0 +1,174 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class CrosshairController : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private Animator crosshairAnimator;
+    private UpgradesController upgradesController;
+    private Image[] childImages;
+    private GameManager gameManagerScript;
+    private FPSController fpsControllerScript;
+    private TPController tpControllerScript;
+    private GameManagerTutorial gameManagerTutorial;
+
+    public GameObject playerCamera;
+    private GameObject pointCrosshair;
+    private GameObject crosshair;
+
+    // ============================================================
+    // Settings
+    // ============================================================
+
+    public LayerMask interactableMask;
+    private Color originalColor;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Update() {
+
+        if (playerCamera == null) {
+
+            playerCamera = GameObject.FindWithTag("MainCamera");
+
+        }
+
+        if (gameManagerTutorial == null) {
+
+            updateCrosshairRestrictions();
+
+        }
+
+        else {
+
+            updateCrosshairTutorial();
+
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void showCrosshair(bool newValue) {
+
+        gameObject.SetActive(newValue);
+
+    }
+
+    public Vector3 crosshairToWorld() {
+
+        Vector3 screenPoint = transform.position;
+        return Camera.main.ScreenToWorldPoint(new Vector3(screenPoint.x, screenPoint.y, 10f));
+
+    }
+
+    public void checkTarget() {
+
+        if (playerCamera == null) {
+
+            playerCamera = GameObject.FindWithTag("MainCamera");
+
+        }
+
+        if (upgradesController == null) { return; }
+
+        Vector3 rayOrigin = playerCamera.transform.position;
+        Vector3 rayDirection = playerCamera.transform.forward;
+        RaycastHit hit;
+
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, upgradesController.gunRange, interactableMask)) {
+
+            if (hit.collider != null && hit.collider.gameObject != null) {
+
+                GameObject hitObject = hit.collider.gameObject;
+
+                if (hit.collider.CompareTag("Enemy")) {
+
+                    crosshairAnimator.Play("Anim_Close_CH");
+                    changeCrosshairColor(Color.red);
+
+                }
+
+                else {
+
+                    crosshairAnimator.Play("Anim_Open_CH");
+                    changeCrosshairColor(originalColor);
+
+                }
+            }
+        }
+
+        else {
+
+            crosshairAnimator.Play("Anim_Open_CH");
+            changeCrosshairColor(originalColor);
+
+        }
+    }
+
+    // ============================================================
+    // Private Methods
+    // ============================================================
+
+    private void changeCrosshairColor(Color color) {
+
+        foreach (Image img in childImages) {
+
+            img.color = color;
+
+        }
+    }
+
+    private void updateCrosshairRestrictions() {
+
+        if (fpsControllerScript == null || tpControllerScript == null) {
+
+            return;
+        }
+
+        if (fpsControllerScript.startToSeat || tpControllerScript.isTeleporting) {
+
+            pointCrosshair.SetActive(false);
+            crosshair.SetActive(false);
+            return;
+
+        }
+
+        if (gameManagerScript == null || gameManagerScript.inSpace) {
+
+            pointCrosshair.SetActive(true);
+            crosshair.SetActive(false);
+
+        }
+
+        else {
+
+            pointCrosshair.SetActive(false);
+            crosshair.SetActive(true);
+
+        }
+    }
+
+    private void updateCrosshairTutorial() {
+
+        if (gameManagerTutorial.inStep5_1) {
+
+            crosshair.SetActive(true);
+            pointCrosshair.SetActive(false);
+
+        }
+
+        else {
+
+            pointCrosshair.SetActive(true);
+            crosshair.SetActive(false);
+
+        }
+    }
+}
