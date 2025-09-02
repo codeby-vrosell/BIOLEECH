@@ -39,7 +39,11 @@ public class IKFootPlacement : MonoBehaviour {
 
     private void onAnimatorIK(int layerIndex) {
 
-        if (animator == null) { return; }
+        if (animator == null) {
+
+            return;
+
+        }
 
         // ========================================================
         // Set IK weights for both feet
@@ -80,7 +84,7 @@ public class IKFootPlacement : MonoBehaviour {
             if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground")) {
 
                 footPosition = hit.point;
-                footPosition.y += distanceToGround;
+                footPosition.y = footPosition.y + distanceToGround;
                 animator.SetIKPosition(foot, footPosition);
                 animator.SetIKRotation(foot, Quaternion.LookRotation(transform.forward, hit.normal));
  
