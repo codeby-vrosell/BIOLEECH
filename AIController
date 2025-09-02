@@ -1,0 +1,494 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using System.Linq;
+using System.ComponentModel;
+using TMPro;
+
+public class AIController : MonoBehaviour {
+
+    // ============================================================
+    // Singleton
+    // ============================================================
+
+    public static AIController instance;
+
+    // ============================================================
+    // UI References
+    // ============================================================
+
+    [SerializeField] private TextMeshProUGUI aiTextUI;
+
+    // ============================================================
+    // Typing Settings
+    // ============================================================
+
+    [SerializeField] private float typingSpeed;
+    [SerializeField] private float cursorBlinkSpeed;
+
+    // ============================================================
+    // Animator and Audio
+    // ============================================================
+
+    [SerializeField] private Animator animator;
+    [SerializeField] private AudioSource audioSource;
+
+    // ============================================================
+    // Audio Spectrum Visualizers
+    // ============================================================
+
+    [SerializeField] private GameObject audioSpectrum;
+    [SerializeField] private GameObject audioSpectrumShip;
+
+    // ============================================================
+    // States
+    // ============================================================
+
+    public bool isTalking = false;
+    private bool isWriting = false;
+
+    [SerializeField] private float waitTime; // Minimum wait time before showing another line
+
+    // ============================================================
+    // Data Containers
+    // ============================================================
+
+    private Dictionary<string, string> idToLine = new Dictionary<string, string>();
+    private Dictionary<string, List<string>> prefixToIDs = new Dictionary<string, List<string>>();
+
+    private string pendingLine = "";
+    private string currentID = "";
+
+    // ============================================================
+    // Priority Lines
+    // ============================================================
+
+    private Queue<string> priorityQueue = new Queue<string>();
+    [SerializeField] private float priorityWaitTime;
+    private bool isPlayingPriority = false;
+
+    // ============================================================
+    // Coroutines
+    // ============================================================
+
+    private Coroutine typingCoroutine;
+    private Coroutine cursorCoroutine;
+    private Coroutine priorityCoroutine = null;
+
+    // ============================================================
+    // Properties
+    // ============================================================
+
+    public bool hasPendingPriority => priorityQueue.Count > 0 || isPlayingPriority;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Awake() {
+
+        if (instance == null) {
+
+            instance = this;
+
+        }
+
+        else {
+
+            Destroy(this.gameObject);
+
+        }
+    }
+
+    void Start() {
+
+        audioSpectrum.SetActive(false);
+        audioSpectrumShip.SetActive(false);
+        readCSV();
+
+    }
+
+    private void Update() {
+
+        if (audioSource == null) {
+
+            audioSource = GameObject.FindWithTag("MainCamera")?.GetComponent<AudioSource>();
+
+        }
+    }
+
+    // ============================================================
+    // CSV Reader
+    // ============================================================
+
+    void readCSV() {
+
+        string path = Path.Combine(Application.streamingAssetsPath, "IA_Bioleech.csv");
+
+        if (!File.Exists(path)) {
+
+            Debug.LogError("CSV file not found.");
+            return;
+
+        }
+
+        string[] data = File.ReadAllLines(path);
+
+        for (int i = 0; i < data.Length; i++) {
+
+            string[] entry = parseCSVLine(data[i]);
+
+            if (entry.Length < 2) { continue; }
+
+            string id = entry[0].Trim();
+            string text = entry[1].Trim();
+
+            idToLine[id] = text;
+
+            int lastUnderscore = id.LastIndexOf('_');
+
+            if (lastUnderscore > 0) {
+
+                string prefix = id.Substring(0, lastUnderscore + 1);
+
+                if (!prefixToIDs.ContainsKey(prefix)) {
+
+                    prefixToIDs[prefix] = new List<string>();
+
+                }
+
+                prefixToIDs[prefix].Add(id);
+
+            }
+        }
+    }
+
+    string[] parseCSVLine(string line) {
+
+        List<string> result = new List<string>();
+        bool insideQuotes = false;
+        string current = "";
+
+        for (int i = 0; i < line.Length; i++) {
+
+            char c = line[i];
+
+            if (c == '"') {
+
+                if (insideQuotes && i + 1 < line.Length && line[i + 1] == '"') {
+
+                    current = current + '"';
+                    i++;
+
+                }
+
+                else {
+
+                    insideQuotes = !insideQuotes;
+
+                }
+            }
+
+            else if (c == ',' && !insideQuotes) {
+
+                result.Add(current);
+                current = "";
+
+            }
+
+            else {
+
+                current = current + c;
+
+            }
+        }
+
+        result.Add(current);
+        return result.ToArray();
+
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void playRandomLine(string tagPrefix) {
+
+        if (isTalking || hasPendingPriority) { return; }
+
+        if (!prefixToIDs.ContainsKey(tagPrefix)) {
+
+            Debug.LogError($"Tag {tagPrefix} not found in CSV.");
+            return;
+
+        }
+
+        var ids = prefixToIDs[tagPrefix];
+        string randomID = ids[Random.Range(0, ids.Count)];
+        string line = idToLine[randomID];
+
+        currentID = randomID;
+
+        StartCoroutine(speakLine(line));
+
+    }
+
+    public void playLine(string tagPrefix, int num) {
+
+        if (isTalking || hasPendingPriority) { return; }
+
+        string id = $"{tagPrefix}{num:D3}";
+
+        if (!prefixToIDs.ContainsKey(tagPrefix)) {
+
+            Debug.LogError($"Tag {tagPrefix} not found in CSV.");
+            return;
+
+        }
+
+        if (!idToLine.ContainsKey(id)) {
+
+            Debug.LogError($"ID {id} not found in CSV.");
+            return;
+
+        }
+
+        string line = idToLine[id];
+        currentID = id;
+
+        StartCoroutine(speakLine(line));
+
+    }
+
+    public void playPriorityRandomLine(string tagPrefix) {
+
+        if (!prefixToIDs.ContainsKey(tagPrefix)) {
+
+            Debug.LogError($"Tag {tagPrefix} not found in CSV.");
+            return;
+
+        }
+
+        var ids = prefixToIDs[tagPrefix];
+        string randomID = ids[Random.Range(0, ids.Count)];
+
+        priorityQueue.Enqueue(randomID);
+
+        if (priorityCoroutine == null) {
+
+            priorityCoroutine = StartCoroutine(processPriorityQueue());
+
+        }
+    }
+
+    public void playPriorityLine(string tagPrefix, int num) {
+
+        string id = $"{tagPrefix}{num:D3}";
+
+        if (!idToLine.ContainsKey(id)) {
+
+            Debug.LogError($"Priority ID {id} not found in CSV.");
+            return;
+
+        }
+
+        priorityQueue.Enqueue(id);
+
+        if (priorityCoroutine == null) {
+
+            priorityCoroutine = StartCoroutine(processPriorityQueue());
+
+        }
+    }
+
+    // ============================================================
+    // Line Playback
+    // ============================================================
+
+    IEnumerator speakLine(string line) {
+
+        isTalking = true;
+
+        animator.Play("CuadroON");
+        yield return new WaitForSeconds(0.2f);
+        aiTextUI.text = "";
+        pendingLine = line;
+
+        if (typingCoroutine != null) {
+
+            StopCoroutine(typingCoroutine);
+
+        }
+
+        typingCoroutine = StartCoroutine(typingEffect());
+        yield return typingCoroutine;
+        typingCoroutine = null;
+
+        if (audioSource != null) {
+
+            while (audioSource.isPlaying) {
+
+                yield return null;
+
+            }
+        }
+
+        audioSpectrum.SetActive(false);
+        audioSpectrumShip.SetActive(false);
+
+        hideFrame();
+
+        if (cursorCoroutine != null) {
+
+            StopCoroutine(cursorCoroutine);
+            cursorCoroutine = null;
+
+        }
+
+        isTalking = false;
+
+    }
+
+    public void showSpectrum() {
+
+        audioSpectrum.SetActive(true);
+        audioSpectrumShip.SetActive(true);
+
+        playAudio();
+
+    }
+
+    public void hideFrame() {
+
+        if (typingCoroutine != null) {
+
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+
+        }
+
+        if (cursorCoroutine != null) {
+
+            StopCoroutine(cursorCoroutine);
+            cursorCoroutine = null;
+
+        }
+
+        animator.Play("CuadroOFF");
+
+        isTalking = false;
+
+    }
+
+    private IEnumerator typingEffect() {
+
+        isWriting = true;
+
+        foreach (char character in pendingLine) {
+
+            aiTextUI.text = aiTextUI.text + character;
+            yield return new WaitForSeconds(typingSpeed);
+
+        }
+
+        isWriting = false;
+
+        aiTextUI.text = pendingLine;
+
+        cursorCoroutine = StartCoroutine(blinkingCursor());
+
+    }
+
+    private IEnumerator blinkingCursor() {
+
+        while (true) {
+
+            aiTextUI.text = pendingLine + "_";
+            yield return new WaitForSeconds(cursorBlinkSpeed);
+
+            aiTextUI.text = pendingLine + " ";
+            yield return new WaitForSeconds(cursorBlinkSpeed);
+
+        }
+    }
+
+    private void playAudio() {
+
+        ensureAudioSource(); // was EnsureAudioSources
+
+        AudioClip clip = Resources.Load<AudioClip>($"IAAudio/{currentID}");
+
+        if (clip != null) {
+
+            AudioSource sourceToUse = audioSource;
+
+            if (audioSpectrum != null && audioSpectrumShip != null) {
+
+                audioSpectrum.SetActive(true);
+                audioSpectrumShip.SetActive(true);
+
+            }
+
+            if (sourceToUse != null) {
+
+                sourceToUse.clip = clip;
+                sourceToUse.Play();
+
+            }
+        }
+
+        else {
+
+            Debug.Log($"No audio found with name: {currentID} in Resources/IAAudio/");
+
+            if (audioSource != null) {
+
+                audioSource.clip = null;
+
+            }
+        }
+    }
+
+    private IEnumerator processPriorityQueue() {
+
+        while (isTalking) {
+
+            yield return null;
+
+        }
+
+        yield return new WaitForSeconds(priorityWaitTime);
+
+        isPlayingPriority = true;
+
+        while (priorityQueue.Count > 0) {
+
+            string nextID = priorityQueue.Dequeue();
+            string line = idToLine[nextID];
+            currentID = nextID;
+
+            yield return StartCoroutine(speakLine(line));
+            yield return new WaitForSeconds(priorityWaitTime);
+
+        }
+
+        isPlayingPriority = false;
+        priorityCoroutine = null;
+
+    }
+
+    private void ensureAudioSource() {
+
+        if (audioSource == null) {
+
+            GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+
+            if (mainCam != null) {
+
+                audioSource = mainCam.GetComponent<AudioSource>();
+
+            }
+        }
+    }
+}
