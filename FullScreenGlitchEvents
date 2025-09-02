@@ -1,0 +1,46 @@
+using UnityEngine;
+
+public class FullScreenGlitchEvents : MonoBehaviour {
+
+    // ============================================================
+    // Animation State
+    // ============================================================
+
+    public bool animationEnded = false;
+
+    // ============================================================
+    // Internal References
+    // ============================================================
+
+    private Animator animator;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Awake() {
+
+        animator = GetComponent<Animator>();
+
+    }
+
+    // ============================================================
+    // Methods
+    // ============================================================
+
+    public void glitchAnimationEnded() {
+
+        Debug.Log("Glitch animation finished.");
+
+        animationEnded = true;
+
+        animator.Play("Idle");
+
+    }
+
+    public void setAnimationEndedFalse() {
+
+        animationEnded = false;
+
+    }
+}
