@@ -1,0 +1,202 @@
+using System.Linq;
+using UnityEngine;
+
+public class ScrapMesh : MonoBehaviour {
+
+    // ============================================================
+    // Mesh Configuration
+    // ============================================================
+
+    public float sinkingSpeed;
+    [SerializeField] private float settlingTime = 0.5f;
+    [SerializeField] private float settlingSpeed = 0.5f;
+
+    // ============================================================
+    // Mesh Data
+    // ============================================================
+
+    private float cleanRange;
+    private Vector3[] vertices;
+    private MeshCollider meshCollider;
+    private Mesh mesh;
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private UpgradesController upgradesController;
+    private ScrapGunController scrapGunController;
+
+    // ============================================================
+    // State Tracking
+    // ============================================================
+
+    private float timeSinceLastClean = 0f;
+    private bool wasSuckedRecently = false;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        mesh = GetComponent<MeshFilter>().mesh;
+        vertices = mesh.vertices;
+        meshCollider = GetComponent<MeshCollider>();
+
+        StartCoroutine(waitForReferences());
+
+    }
+
+    private System.Collections.IEnumerator waitForReferences() {
+
+        // Wait until player and gun controller exist
+        while (upgradesController == null || scrapGunController == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+
+            if (playerObj != null && upgradesController == null) {
+
+                upgradesController = playerObj.GetComponent<UpgradesController>();
+
+            }
+
+            scrapGunController = Object.FindFirstObjectByType<ScrapGunController>();
+
+            yield return null;
+
+        }
+
+        // Register this mesh in the gun controller
+        scrapGunController.registerScrapMesh(this);
+
+    }
+
+    private void Update() {
+
+        if (!wasSuckedRecently || upgradesController == null || scrapGunController == null) { return; }
+
+        timeSinceLastClean += Time.deltaTime;
+
+        if (timeSinceLastClean < settlingTime) {
+
+            settleVertices(Time.deltaTime);
+
+        }
+
+        else {
+
+            wasSuckedRecently = false;
+
+        }
+    }
+
+    // ============================================================
+    // Cleaning Logic
+    // ============================================================
+
+    public void cleanMesh(Vector3 aimingPoint, float deltaTime) {
+
+        if (upgradesController == null) {
+
+            return;
+
+        }
+
+        cleanRange = upgradesController.cleanRangeUpgrade;
+        bool hasChanges = false;
+
+        for (int i = 0; i < vertices.Length; i++) {
+
+            Vector3 vertexWorldPosition = transform.TransformPoint(vertices[i]);
+            float distance = Vector3.Distance(aimingPoint, vertexWorldPosition);
+
+            if (distance < cleanRange) {
+
+                float ratio = 1f - (distance / cleanRange);
+                float speed = sinkingSpeed * ratio;
+
+                sinkVertex(i, speed * deltaTime);
+                hasChanges = true;
+
+            }
+        }
+
+        if (hasChanges) {
+
+            mesh.vertices = vertices;
+            mesh.RecalculateNormals();
+            meshCollider.sharedMesh = mesh;
+
+        }
+
+        timeSinceLastClean = 0f;
+        wasSuckedRecently = true;
+
+    }
+
+    // ============================================================
+    // Vertex Manipulation
+    // ============================================================
+
+    private void sinkVertex(int index, float amount) {
+
+        Vector3 worldPos = transform.TransformPoint(vertices[index]);
+        worldPos += Vector3.down * amount;
+        vertices[index] = transform.InverseTransformPoint(worldPos);
+
+    }
+
+    private void settleVertices(float deltaTime) {
+
+        bool hasChanges = false;
+        Vector3 aimingPoint = scrapGunController.GetAimingPoint();
+
+        for (int i = 0; i < vertices.Length; i++) {
+
+            Vector3 vertexWorldPosition = transform.TransformPoint(vertices[i]);
+            float distance = Vector3.Distance(aimingPoint, vertexWorldPosition);
+
+            if (distance < cleanRange) {
+
+                float ratio = 1f - (distance / cleanRange);
+                float speed = settlingSpeed * ratio;
+
+                sinkVertex(i, speed * deltaTime);
+                hasChanges = true;
+
+            }
+        }
+
+        if (hasChanges) {
+
+            mesh.vertices = vertices;
+            mesh.RecalculateNormals();
+            meshCollider.sharedMesh = mesh;
+
+        }
+    }
+
+    // ============================================================
+    // Utility
+    // ============================================================
+
+    public int getSuckedVertices() {
+
+        if (scrapGunController == null || scrapGunController.playerCamera == null) { return 0; }
+
+        int count = 0;
+        Vector3 aimingPoint = scrapGunController.GetAimingPoint();
+
+        foreach (Vector3 vertex in vertices) {
+
+            Vector3 vertexWorldPosition = transform.TransformPoint(vertex);
+
+            if (Vector3.Distance(aimingPoint, vertexWorldPosition) < cleanRange) { count++; }
+                
+        }
+
+        return count;
+
+    }
+}
