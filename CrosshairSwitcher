@@ -1,0 +1,42 @@
+using UnityEngine;
+
+public class CrosshairSwitcher : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+7
+    private GameObject crosshair;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        crosshair = GameObject.FindWithTag("crosshairUI");
+
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void crosshairOn() {
+
+        if (crosshair != null) {
+
+            crosshair.SetActive(true);
+
+        }
+    }
+
+    public void crosshairOff() {
+
+        if (crosshair != null) {
+
+            crosshair.SetActive(false);
+
+        }
+    }
+}
