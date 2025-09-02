@@ -1,0 +1,142 @@
+using UnityEngine;
+using TMPro;
+using UnityEngine.EventSystems;
+using System.Collections;
+
+public class MenuButtonHoverTMP : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISelectHandler, IDeselectHandler {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public TextMeshProUGUI buttonText;
+    public GameObject arrowIndicator;
+
+    // ============================================================
+    // Colors
+    // ============================================================
+
+    private Color hoverColor = Color.black;
+    private Color normalColor = new Color(0x3D / 255f, 0xF8 / 255f, 0x58 / 255f); // #3DF858
+
+    // ============================================================
+    // Blink Settings
+    // ============================================================
+
+    public int numberOfBlinks = 3;
+    public float blinkSpeed = 0.1f;
+
+    private Coroutine activeBlink;
+
+    public bool disableBlink = false;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        if (buttonText == null) {
+
+            buttonText = GetComponentInChildren<TextMeshProUGUI>();
+
+        }
+
+        if (arrowIndicator != null) {
+
+            arrowIndicator.SetActive(false);
+
+        }
+
+        buttonText.color = normalColor;
+
+    }
+
+    // ============================================================
+    // Event Handlers
+    // ============================================================
+
+    public void OnPointerEnter(PointerEventData eventData) {
+
+        activateVisual();
+
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+
+        deactivateVisual();
+
+    }
+
+    public void OnSelect(BaseEventData eventData) {
+
+        activateVisual();
+
+    }
+
+    public void OnDeselect(BaseEventData eventData) {
+
+        deactivateVisual();
+
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+
+        if (disableBlink == true) { return; }
+
+        if (activeBlink != null) {
+
+            StopCoroutine(activeBlink);
+
+        }
+
+        activeBlink = StartCoroutine(blinkText());
+
+    }
+
+    // ============================================================
+    // Visual Control
+    // ============================================================
+
+    public void activateVisual() {
+
+        buttonText.color = hoverColor;
+
+        if (arrowIndicator != null) {
+
+            arrowIndicator.SetActive(true);
+
+        }
+    }
+
+    void deactivateVisual() {
+
+        buttonText.color = normalColor;
+
+        if (arrowIndicator != null) {
+
+            arrowIndicator.SetActive(false);
+
+        }
+    }
+
+    // ============================================================
+    // Coroutine for blinking effect
+    // ============================================================
+
+    private IEnumerator blinkText() {
+
+        Color visibleColor = buttonText.color;
+        Color invisibleColor = new Color(visibleColor.r, visibleColor.g, visibleColor.b, 0f);
+
+        for (int i = 0; i < numberOfBlinks; i++) {
+
+            buttonText.color = invisibleColor;
+            yield return new WaitForSeconds(blinkSpeed);
+
+            buttonText.color = visibleColor;
+            yield return new WaitForSeconds(blinkSpeed);
+
+        }
+    }
+}
