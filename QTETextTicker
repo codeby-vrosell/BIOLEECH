@@ -1,0 +1,173 @@
+using UnityEngine;
+using TMPro;
+using System.Collections;
+
+public class QTETextTicker : MonoBehaviour {
+
+    // ============================================================
+    // Text Phrases
+    // ============================================================
+
+    [TextArea]
+    public string[] phrases;
+
+    public float visibleTime;
+    public float fadeDuration;
+
+    // ============================================================
+    // TMP References
+    // ============================================================
+
+    private TextMeshProUGUI tmpUI;
+    private TextMeshPro tmp3D;
+
+    // ============================================================
+    // Coroutine & Index
+    // ============================================================
+
+    private Coroutine showPhraseCoroutine;
+    private int lastPhraseIndex = -1;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    private void start() {
+
+        tmpUI = GetComponent<TextMeshProUGUI>();
+        tmp3D = GetComponent<TextMeshPro>();
+
+        showPhraseCoroutine = StartCoroutine(showPhrases());
+
+    }
+
+    // ============================================================
+    // Show Phrases Coroutine
+    // ============================================================
+
+    private IEnumerator showPhrases() {
+
+        while (true) {
+
+            string phrase = playRandomPhrase();
+            setAlpha(0f);
+            setText(phrase);
+
+            yield return StartCoroutine(fadeIn());
+
+            yield return new WaitForSeconds(visibleTime);
+
+            yield return StartCoroutine(fadeOut());
+
+        }
+    }
+
+    // ============================================================
+    // Select a random phrase without repeating the last one
+    // ============================================================
+
+    private string playRandomPhrase() {
+
+        if (phrases.Length == 0) {
+
+            return "";
+
+        }
+
+        int newIndex;
+
+        do {
+
+            newIndex = Random.Range(0, phrases.Length);
+
+        } 
+
+        while (newIndex == lastPhraseIndex && phrases.Length > 1);
+
+        lastPhraseIndex = newIndex;
+        return phrases[newIndex];
+
+    }
+
+    // ============================================================
+    // Fade in text
+    // ============================================================
+
+    private IEnumerator fadeIn() {
+
+        float t = 0f;
+        while (t < fadeDuration) {
+
+            t = t + Time.deltaTime;
+            float alpha = Mathf.Lerp(0f, 1f, t / fadeDuration);
+            setAlpha(alpha);
+            yield return null;
+
+        }
+
+        setAlpha(1f);
+
+    }
+
+    // ============================================================
+    // Fade out text
+    // ============================================================
+
+    private IEnumerator fadeOut() {
+
+        float t = 0f;
+        while (t < fadeDuration) {
+
+            t = t + Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, t / fadeDuration);
+            setAlpha(alpha);
+            yield return null;
+
+        }
+
+        setAlpha(0f);
+
+    }
+
+    // ============================================================
+    // Set alpha for both TMP UI and 3D TMP
+    // ============================================================
+
+    private void setAlpha(float alpha) {
+
+        if (tmpUI != null) {
+
+            Color c = tmpUI.color;
+            c.a = alpha;
+            tmpUI.color = c;
+
+        }
+
+        if (tmp3D != null) {
+
+            Color c = tmp3D.color;
+            c.a = alpha;
+            tmp3D.color = c;
+
+        }
+    }
+
+    // ============================================================
+    // Set text for both TMP UI and 3D TMP
+    // ============================================================
+
+    private void setText(string text) {
+
+        if (tmpUI != null) {
+
+            tmpUI.text = text;
+
+        }
+
+        if (tmp3D != null) {
+
+            tmp3D.text = text;
+
+        }
+    }
+}
