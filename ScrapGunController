@@ -1,0 +1,472 @@
+using NUnit.Framework.Internal;
+using System.Linq;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
+
+public class ScrapGunController : MonoBehaviour {
+
+    // ============================================================
+    // Scrap Storage and Burning
+    // ============================================================
+
+    private float maxScrap = 100f;
+    public float scrapPercent = 0f;
+    private float burnTimer = 0f;
+    public float burnerCooldown;
+
+    public bool isCleaning = false;
+    public bool isCleaningScrap = false;
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private ScrapMesh[] scrapMeshes;
+    private ScrapMesh currentScrapMesh;
+
+    public Camera playerCamera;
+    private UpgradesController upgradesController;
+    private FPControllerGun playerGunController;
+    private ShotGunController shotGunController;
+    private QTE_Burner qteBurnerScript;
+    private Animator gunAnimator;
+    private TutorialGameManager tutorialManager;
+
+    // ============================================================
+    // Cleaning & Scrap Suction
+    // ============================================================
+
+    [SerializeField] private float vertexMultiplier;
+    [SerializeField] private float suctionCooldownTime = 0.5f; // minimum 0.5s between suction sounds
+    private float suctionCooldown = 0f;
+    private Coroutine suctionCoroutine;
+
+    [SerializeField] private ParticleSystem slimeParticle;
+
+    // ============================================================
+    // Vibration Control
+    // ============================================================
+
+    [SerializeField] private float minVibration = 0.2f;
+    [SerializeField] private float maxVibration = 0.6f;
+    [SerializeField] private float vibrationInterval = 0.1f;
+    private Coroutine vibrationCoroutine = null;
+
+    // ============================================================
+    // Sounds
+    // ============================================================
+
+    [Header("Sounds")]
+    public AudioClip cleanSound;
+    public AudioClip cleanSlimeSound;
+
+    // ============================================================
+    // Tornado Effect
+    // ============================================================
+
+    public Renderer materialRenderer;
+    public string propertyName = "_AlphaTornado";
+    public float tornadoSpeed = 2f;
+    private float tornadoValue = 0f; // Interpolated value (0-1)
+
+    // ============================================================
+    // Layer Masks
+    // ============================================================
+
+    public LayerMask scrapLayerMask;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        qteBurnerScript = Object.FindFirstObjectByType<QTE_Burner>();
+        shotGunController = Object.FindFirstObjectByType<ShotGunController>();
+        tutorialManager = FindFirstObjectByType<TutorialGameManager>();
+
+        scrapMeshes = new ScrapMesh[0];
+        gunAnimator = GetComponent<Animator>();
+        gunAnimator.enabled = false;
+
+    }
+
+    void Update() {
+
+        // Ensure player and dependencies are loaded
+
+        if (playerGunController == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+
+            if (playerObj != null) {
+
+                playerGunController = playerObj.GetComponent<FPControllerGun>();
+                upgradesController = playerObj.GetComponent<UpgradesController>();
+
+            }
+        }
+
+        // Ensure camera reference exists
+        if (!playerCamera) {
+
+            GameObject camObj = GameObject.FindWithTag("MainCamera");
+
+            if (camObj != null) {
+
+                playerCamera = camObj.GetComponent<Camera>();
+
+            }
+        }
+
+        // Ensure animator exists
+        if (gunAnimator == null) {
+
+            gunAnimator = GetComponent<Animator>();
+
+        }
+
+        handleSuction();
+        checkScrapCapacity();
+        checkScrapReload();
+        handleVibration();
+        tornadoManager();
+        handleSounds();
+
+    }
+
+    // ============================================================
+    // Scrap Suction & Burning
+    // ============================================================
+
+    private void handleSuction() {
+
+        ScrapMesh detectedMesh = detectScrapMeshToSuck();
+
+        if (isCleaning && detectedMesh != null && scrapPercent < maxScrap) {
+
+            float currentRate = calculateScrapPercent(detectedMesh) * vertexMultiplier;
+            float amountToStore = Time.deltaTime * currentRate;
+
+            isCleaningScrap = currentRate > 0;
+
+            // Only allow suction during early tutorial steps if below 75%
+            if (tutorialManager != null && tutorialManager.tutorialStep <= 6) {
+
+                if (scrapPercent < 75f) {
+
+                    Vector3 aimingPoint = getAimingPoint();
+                    detectedMesh.cleanMesh(aimingPoint, Time.deltaTime);
+                    storeScrap(amountToStore);
+
+                }
+            }
+
+            else {
+
+                Vector3 aimingPoint = getAimingPoint();
+                detectedMesh.cleanMesh(aimingPoint, Time.deltaTime);
+                storeScrap(amountToStore);
+
+            }
+        }
+
+        else {
+
+            isCleaningScrap = false;
+
+        }
+
+        burnTimer = burnTimer + Time.deltaTime;
+
+        // Prevent automatic burning during tutorial
+        if (burnTimer >= burnerCooldown) {
+
+            if (tutorialManager == null || tutorialManager.tutorialStep > 6) {
+
+                burnScrap(upgradesController.scrapDestroyedUpgrade);
+                burnTimer = 0f;
+
+            }
+        }
+    }
+
+    private ScrapMesh detectScrapMeshToSuck() {
+
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+        float range = upgradesController.cleanRangeUpgrade;
+
+        if (Physics.Raycast(ray, out hit, range, scrapLayerMask)) {
+
+            return hit.collider.GetComponent<ScrapMesh>();
+
+        }
+
+        return null;
+
+    }
+
+    private void checkScrapReload() {
+
+        if (scrapPercent > 1 && playerGunController.burnButtonPressed) {
+
+            // Allow reload only during tutorial step 6 or later
+            if (tutorialManager == null || tutorialManager.inStep6) {
+
+                gunAnimator.enabled = true;
+                gunAnimator.Play("OnQTE");
+                playerGunController.burnButtonPressed = false;
+
+            }
+        }
+    }
+
+    private void storeScrap(float amount) {
+
+        scrapPercent = scrapPercent + amount;
+        scrapPercent = Mathf.Clamp(scrapPercent, 0, maxScrap);
+
+    }
+
+    private void burnScrap(float amount) {
+
+        if (!playerGunController.isInQTE && scrapPercent > 0f) {
+
+            float usedScrap = Mathf.Min(amount, scrapPercent);
+            int bulletsGenerated = Mathf.FloorToInt(usedScrap);
+            shotGunController.bullets = Mathf.Min(shotGunController.bullets + bulletsGenerated, 100);
+            scrapPercent = scrapPercent - usedScrap;
+
+        }
+    }
+
+    private float calculateScrapPercent(ScrapMesh mesh) {
+
+        if (mesh != null) {
+
+            return mesh.getSuckedVertices() * 0.01f;
+
+        }
+
+        return 0f;
+
+    }
+
+    public void checkScrapCapacity() {
+
+        if (scrapPercent >= 100f) {
+
+            isCleaning = false;
+            gunAnimator.enabled = true;
+            gunAnimator.Play("OnQTE");
+            Debug.Log("Scrap tank is at 100% capacity.");
+
+        }
+
+        else {
+
+            isCleaning = playerGunController.cleanButtonPressed && !playerGunController.isInQTE && !playerGunController.isShooting && !playerGunController.attackButtonPressed;
+
+        }
+
+        playerGunController.isCleaning = isCleaning;
+
+    }
+
+    public void winQTE() {
+
+        gunAnimator.enabled = true;
+        gunAnimator.Play("OffQTE");
+
+        int bulletsGained = Mathf.Clamp((int)scrapPercent, 0, 100);
+        shotGunController.bullets = Mathf.Min(shotGunController.bullets + bulletsGained, 100);
+        scrapPercent = 0f;
+
+    }
+
+    // ============================================================
+    // Aiming & QTE
+    // ============================================================
+
+    public Vector3 getAimingPoint() {
+
+        if (playerCamera == null) {
+
+            return Vector3.zero;
+
+        }
+
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+        float range = upgradesController.cleanRangeUpgrade;
+
+        if (Physics.Raycast(ray, out hit, range, scrapLayerMask)) {
+
+            return hit.point;
+
+        }
+
+        return ray.origin + ray.direction * range;
+
+    }
+
+    public void callStartQTE() {
+
+        qteBurnerScript.startQTE();
+
+    }
+
+    public void animationFinished() {
+
+        gunAnimator.enabled = false;
+
+    }
+
+    public void registerScrapMesh(ScrapMesh newMesh) {
+
+        var list = scrapMeshes.ToList();
+        list.Add(newMesh);
+        scrapMeshes = list.ToArray();
+
+    }
+
+    // ============================================================
+    // Vibration
+    // ============================================================
+
+    private void handleVibration() {
+
+        if (playerGunController == null) return;
+
+        if (playerGunController.isCleaning) {
+
+            if (vibrationCoroutine == null) {
+
+                vibrationCoroutine = StartCoroutine(vibrateWhileCleaning());
+
+            }
+        }
+
+        else {
+
+            if (vibrationCoroutine != null) {
+
+                StopCoroutine(vibrationCoroutine);
+                vibrationCoroutine = null;
+
+            }
+        }
+    }
+
+    private System.Collections.IEnumerator vibrateWhileCleaning() {
+
+        while (playerGunController != null && playerGunController.isCleaning) {
+
+            float intensity = Random.Range(minVibration, maxVibration);
+            GamepadVibratorController.instance.startVibration(intensity, vibrationInterval);
+            yield return new WaitForSeconds(vibrationInterval);
+
+        }
+
+        vibrationCoroutine = null;
+
+    }
+
+    // ============================================================
+    // Tornado Visual Effect
+    // ============================================================
+
+    void tornadoManager() {
+
+        if (materialRenderer == null) { return; }
+
+        float target = isCleaning ? 0.043f : 0f;
+        tornadoValue = Mathf.MoveTowards(tornadoValue, target, Time.deltaTime * tornadoSpeed);
+
+        materialRenderer.material.SetFloat(propertyName, tornadoValue);
+
+    }
+
+    // ============================================================
+    // Sounds & Particles
+    // ============================================================
+
+    private void handleSounds() {
+
+        if (isCleaning) {
+
+            if (isCleaningScrap) {
+
+                if (suctionCoroutine == null) {
+
+                    suctionCoroutine = StartCoroutine(loopCleaningSound(cleanSlimeSound));
+
+                }
+
+                suctionCooldown = suctionCooldownTime;
+
+            }
+
+            else {
+
+                if (suctionCoroutine != null) {
+
+                    StopCoroutine(suctionCoroutine);
+                    suctionCoroutine = null;
+
+                }
+
+                suctionCooldown = suctionCooldown - Time.deltaTime;
+
+                if (suctionCooldown <= 0f) {
+
+                    AudioManager.instance.PlaySoundFXClip(cleanSound, transform, 1f);
+                    suctionCooldown = suctionCooldownTime;
+
+                }
+            }
+        }
+
+        else {
+
+            if (suctionCoroutine != null) {
+
+                StopCoroutine(suctionCoroutine);
+                suctionCoroutine = null;
+
+            }
+
+            suctionCooldown = suctionCooldownTime;
+
+        }
+
+        if (isCleaningScrap) {
+
+            slimeParticle.Play();
+
+        }
+
+        else {
+
+            slimeParticle.Stop();
+
+        }
+    }
+
+    private System.Collections.IEnumerator loopCleaningSound(AudioClip clip) {
+
+        while (isCleaning) {
+
+            AudioManager.instance.PlaySoundFXClip(clip, transform, 1f);
+            yield return new WaitForSeconds(clip.length);
+
+        }
+
+        suctionCoroutine = null;
+
+    }
+
+}
