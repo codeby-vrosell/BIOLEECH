@@ -9,7 +9,7 @@ public class WeaponSway : MonoBehaviour {
     // Player & Input References
     // ============================================================
 
-    public CharacterController characterController;
+    public CharacterController characterControllerComponent;
     private PlayerInput playerInput;
     private InputAction moveInputAction;
     private InputAction lookInputAction;
@@ -168,9 +168,37 @@ public class WeaponSway : MonoBehaviour {
 
         float movementAmount = moveInput.magnitude;
 
-        bobSpeedCurve = bobSpeedCurve + Time.deltaTime * (characterController.isGrounded ? movementAmount * bobExaggeration : 1.0f) + 0.01f;
+        if (characterControllerComponent.isGrounded) {
 
-        bobPosition.x = (bobCurveCos * bobLimit.x * (characterController.isGrounded ? 1.0f : 0.0f)) - (moveInput.x * travelLimit.x);
+            bobSpeedCurve = bobSpeedCurve + (Time.deltaTime * (movementAmount * bobExaggeration)) + 0.01f;
+
+        }
+
+        else {
+
+            bobSpeedCurve = bobSpeedCurve + (Time.deltaTime * 1.0f) + 0.01f;
+
+        }
+
+        float groundedFactor;
+
+        if (characterControllerComponent.isGrounded) {
+
+            groundedFactor = 1.0f;
+
+        }
+
+        else {
+
+            groundedFactor = 0.0f;
+
+        }
+
+        float leftTerm = bobCurveCos * bobLimit.x * groundedFactor;
+        float rightTerm = moveInput.x * travelLimit.x;
+
+        bobPosition.x = leftTerm - rightTerm;
+
         bobPosition.y = (bobCurveSin * bobLimit.y) - (moveInput.y * travelLimit.y);
         bobPosition.z = -(moveInput.y * travelLimit.z);
 
