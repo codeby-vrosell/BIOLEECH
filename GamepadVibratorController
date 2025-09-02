@@ -1,0 +1,104 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections;
+using System.Collections.Generic;
+
+public class GamepadVibratorController : MonoBehaviour {
+
+    // ============================================================
+    // Singleton Instance
+    // ============================================================
+
+    public static GamepadVibratorController instance;
+
+    // ============================================================
+    // Vibration Data Structure
+    // ============================================================
+
+    private class Vibration {
+
+        public float intensity;
+        public float duration;
+
+    }
+
+    // ============================================================
+    // Active Vibrations
+    // ============================================================
+
+    private List<Vibration> activeVibrations = new List<Vibration>();
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Awake() {
+
+        if (instance == null) {
+
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+
+        }
+
+        else {
+
+            Destroy(this.gameObject);
+
+        }
+    }
+
+    // ============================================================
+    // Vibration Control
+    // ============================================================
+
+    // Starts a new vibration with given intensity and duration
+    public void startVibration(float intensity, float duration) {
+
+        if (Time.timeScale == 0 || Gamepad.current == null) { return; }
+
+        Vibration vibration = new Vibration { intensity = intensity, duration = duration };
+        activeVibrations.Add(vibration);
+        StartCoroutine(vibrationRoutine(vibration));
+        updateGamepadMotor();
+
+    }
+
+    // Coroutine that handles the duration of a single vibration
+    private IEnumerator vibrationRoutine(Vibration vibration) {
+
+        yield return new WaitForSeconds(vibration.duration);
+        activeVibrations.Remove(vibration);
+        updateGamepadMotor();
+
+    }
+
+    // Updates the gamepad motors based on current active vibrations
+    private void updateGamepadMotor() {
+
+        if (Gamepad.current == null) { return; }
+
+        float finalIntensity = 0f;
+
+        // Use the maximum intensity among all active vibrations
+        foreach (var vibration in activeVibrations) {
+
+            if (vibration.intensity > finalIntensity) {
+
+                finalIntensity = vibration.intensity;
+
+            }
+        }
+
+        Gamepad.current.SetMotorSpeeds(finalIntensity, finalIntensity);
+
+    }
+
+    // Stops all active vibrations immediately
+    public void stopAllVibrations() {
+
+        activeVibrations.Clear();
+        updateGamepadMotor();
+
+    }
+}
