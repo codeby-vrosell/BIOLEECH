@@ -55,9 +55,16 @@ public class GamepadVibratorController : MonoBehaviour {
     // Starts a new vibration with given intensity and duration
     public void startVibration(float intensity, float duration) {
 
-        if (Time.timeScale == 0 || Gamepad.current == null) { return; }
+        if (Time.timeScale == 0 || Gamepad.current == null) {
 
-        Vibration vibration = new Vibration { intensity = intensity, duration = duration };
+            return;
+
+        }
+
+        Vibration vibration = new Vibration();
+        vibration.intensity = intensity;
+        vibration.duration = duration;
+
         activeVibrations.Add(vibration);
         StartCoroutine(vibrationRoutine(vibration));
         updateGamepadMotor();
@@ -76,7 +83,11 @@ public class GamepadVibratorController : MonoBehaviour {
     // Updates the gamepad motors based on current active vibrations
     private void updateGamepadMotor() {
 
-        if (Gamepad.current == null) { return; }
+        if (Gamepad.current == null) {
+    
+            return;
+
+        }
 
         float finalIntensity = 0f;
 
