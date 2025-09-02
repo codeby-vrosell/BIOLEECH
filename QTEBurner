@@ -1,0 +1,277 @@
+using System.Collections;
+using System.Linq;
+using UnityEngine;
+
+public class QTEBurner : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public Transform indicator;
+
+    public GameObject crosshairCanvas;
+    public Animator gunAnimator;
+
+    private chatarraGunController chatarraGunController;
+    private FPControllerGun fpControllerScript;
+
+    // ============================================================
+    // Hit Zone Configuration
+    // ============================================================
+
+    public HitZone[] hitZones;
+
+    // ============================================================
+    // Success Counters and Visuals
+    // ============================================================
+
+    public GameObject[] successLightsON;
+    public GameObject[] successLightsOFF;
+
+    public float rotationSpeed = 200f;
+    public int successCount = 0;
+
+    // ============================================================
+    // Sounds
+    // ============================================================
+
+    public AudioClip qteSound0;
+    public AudioClip qteSound1;
+    public AudioClip qteSound2;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void start() {
+
+        chatarraGunController = Object.FindFirstObjectByType<chatarraGunController>();
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+
+        resetIndicators();
+
+    }
+
+    void update() {
+
+        findLights();
+
+        if (fpControllerScript == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null) {
+
+                fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+
+            }
+
+        }
+
+        if (fpControllerScript != null && fpControllerScript.isInQTE) {
+
+            rotateIndicator();
+            checkSuccess();
+
+        }
+    }
+
+    // ============================================================
+    // QTE Lifecycle
+    // ============================================================
+
+    public void startQTE() {
+
+        crosshairCanvas.SetActive(false);
+
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+
+        chatarraGunController = Object.FindFirstObjectByType<chatarraGunController>();
+
+        if (chatarraGunController != null) {
+
+            gunAnimator = chatarraGunController.GetComponent<Animator>();
+
+        }
+
+        fpControllerScript.isInQTE = true;
+        fpControllerScript.burnButtonPressed = false;
+
+        successCount = 0;
+        updateSuccessIndicators();
+
+    }
+
+    public void resetQTE() {
+
+        crosshairCanvas.SetActive(true);
+        fpControllerScript.isInQTE = false;
+        successCount = 0;
+        Invoke("resetIndicators", 1f);
+
+    }
+
+    // ============================================================
+    // Indicator Management
+    // ============================================================
+
+    public void findLights() {
+
+        if (indicator == null) {
+
+            GameObject indicatorObj = GameObject.Find("VarillaContador_Low");
+
+            if (indicatorObj != null) {
+
+                indicator = indicatorObj.transform;
+
+            }
+        }
+
+        GameObject lightsParent = GameObject.Find("LucesPadre");
+
+        if (lightsParent != null) {
+
+            successLightsON[0] = lightsParent.transform.Find("LucesQTE_Low_ON")?.gameObject;
+            successLightsON[1] = lightsParent.transform.Find("LucesQTE_Low.001_ON")?.gameObject;
+            successLightsON[2] = lightsParent.transform.Find("LucesQTE_Low.002_ON")?.gameObject;
+
+            successLightsOFF[0] = lightsParent.transform.Find("LucesQTE_Low_OFF")?.gameObject;
+            successLightsOFF[1] = lightsParent.transform.Find("LucesQTE_Low.001_OFF")?.gameObject;
+            successLightsOFF[2] = lightsParent.transform.Find("LucesQTE_Low.002_OFF")?.gameObject;
+
+        }
+    }
+
+    private void rotateIndicator() {
+
+        // Rotates the indicator continuously during QTE
+        indicator.Rotate(0f, 0f, rotationSpeed * Time.deltaTime, Space.Self);
+
+    }
+
+    private void checkSuccess() {
+
+        if (fpControllerScript.burnButtonPressed) {
+
+            fpControllerScript.burnButtonPressed = false;
+
+            if (isInHitZone()) {
+
+                successCount = successCount + 1;
+                updateSuccessIndicators();
+                playSuccessSound(successCount - 1);
+
+                if (successCount >= 3) {
+
+                    resetQTE();
+                    chatarraGunController.winQTE();
+
+                }
+            }
+
+            else {
+
+                GamepadVibratorController.instance.startVibration(1f, 0.2f);
+                successCount = 0;
+                updateSuccessIndicators();
+
+            }
+        }
+    }
+
+    private bool isInHitZone() {
+
+        float angle = indicator.localEulerAngles.z;
+
+        foreach (HitZone zone in hitZones) {
+
+            if (angle >= zone.minAngle && angle <= zone.maxAngle) {
+
+                return true;
+
+            }
+        }
+
+        return false;
+
+    }
+
+    private void updateSuccessIndicators() {
+
+        for (int i = 0; i < successLightsON.Length; i++) {
+
+            if (successLightsON[i] != null) {
+
+                successLightsON[i].SetActive(i < successCount);
+
+            }
+
+            if (successLightsOFF[i] != null) {
+
+                successLightsOFF[i].SetActive(i >= successCount);
+
+            }
+        }
+    }
+
+    private void resetIndicators() {
+
+        findLights();
+        StartCoroutine(resetIndicatorSequence());
+
+    }
+
+    private IEnumerator resetIndicatorSequence() {
+
+        for (int i = successLightsON.Length - 1; i >= 0; i = i - 1) {
+
+            if (successLightsON[i] != null) {
+
+                successLightsON[i].SetActive(false);
+
+            }
+
+            if (successLightsOFF[i] != null) {
+
+                successLightsOFF[i].SetActive(true);
+
+            }
+
+            yield return new WaitForSeconds(0.2f);
+
+        }
+    }
+
+    private void playSuccessSound(int index) {
+
+        AudioClip clipToPlay = null;
+
+        switch (index) {
+
+            case 0:
+
+                clipToPlay = qteSound0;
+                break;
+
+            case 1:
+
+                clipToPlay = qteSound1;
+                break;
+
+            case 2:
+
+                clipToPlay = qteSound2;
+                break;
+
+        }
+
+        if (clipToPlay != null) {
+
+            AudioManager.instance.PlaySoundFXClip(clipToPlay, transform, 1f);
+
+        }
+    }
+}
