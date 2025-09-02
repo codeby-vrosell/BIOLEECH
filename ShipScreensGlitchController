@@ -1,0 +1,130 @@
+using UnityEngine;
+
+public class ShipScreensGlitchController : MonoBehaviour {
+
+    // ============================================================
+    // Textures and Materials
+    // ============================================================
+
+    public Texture[] textures;
+
+    private Renderer materialRenderer;
+    private Material currentMaterial;
+
+    // ============================================================
+    // Configuration
+    // ============================================================
+
+    public float changeInterval;
+    public float minimumDelay;
+    public float maximumDelay;
+
+    // ============================================================
+    // Internal State
+    // ============================================================
+
+    private int currentIndex = 0;
+    private float changeTimer = 0f;
+    private float waitTimer = 0f;
+    private bool isPlaying = false;
+    private float nextDelay;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void start() {
+
+        materialRenderer = GetComponent<Renderer>();
+
+        if (materialRenderer != null) {
+
+            currentMaterial = materialRenderer.material;
+
+        }
+
+        if (textures != null && textures.Length > 0) {
+
+            applyTexture(textures[0]);
+
+        }
+
+        calculateNextDelay();
+
+    }
+
+    void update() {
+
+        if (textures == null || textures.Length < 2 || currentMaterial == null) {
+
+            return;
+
+        }
+
+        if (isPlaying == true) {
+
+            changeTimer = changeTimer + Time.deltaTime;
+
+            // When the interval is reached, switch to the next texture
+            if (changeTimer >= changeInterval) {
+
+                changeTimer = 0f;
+                currentIndex = currentIndex + 1;
+
+                // Stop the glitch when all textures have been used
+                if (currentIndex >= textures.Length) {
+
+                    currentIndex = textures.Length - 1;
+                    isPlaying = false;
+                    calculateNextDelay();
+
+                }
+
+                applyTexture(textures[currentIndex]);
+
+            }
+        }
+
+        else {
+
+            waitTimer = waitTimer + Time.deltaTime;
+
+            if (waitTimer >= nextDelay) {
+
+                startAnimation();
+
+            }
+        }
+    }
+
+    // ============================================================
+    // Core Methods
+    // ============================================================
+
+    void applyTexture(Texture texture) {
+
+        // Updates both base and emissive maps to create the glitch effect
+        currentMaterial.SetTexture("_BaseColorMap", texture);
+        currentMaterial.SetTexture("_EmissiveColorMap", texture);
+        currentMaterial.SetColor("_EmissiveColor", Color.white);
+        currentMaterial.EnableKeyword("HDRP_EMISSION");
+
+    }
+
+    void calculateNextDelay() {
+
+        // Selects a random delay before the next glitch starts
+        nextDelay = Random.Range(minimumDelay, maximumDelay);
+        waitTimer = 0f;
+
+    }
+
+    void startAnimation() {
+
+        currentIndex = 0;
+        changeTimer = 0f;
+        isPlaying = true;
+        applyTexture(textures[currentIndex]);
+
+    }
+}
