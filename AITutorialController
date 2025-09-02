@@ -83,6 +83,7 @@ public class AITutorialController : MonoBehaviour {
         if (!File.Exists(path)) {
 
             Debug.LogError("CSV file not found.");
+
             return;
 
         }
@@ -137,7 +138,8 @@ public class AITutorialController : MonoBehaviour {
                 if (insideQuotes && i + 1 < line.Length && line[i + 1] == '"') {
 
                     current = current + '"';
-                    i++;
+
+                    i = i + 1;
 
                 }
 
@@ -178,6 +180,7 @@ public class AITutorialController : MonoBehaviour {
         if (!idToLine.ContainsKey(id)) {
 
             Debug.LogError($"ID {id} not found in CSV.");
+
             return;
 
         }
