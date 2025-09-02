@@ -1,0 +1,107 @@
+using TMPro;
+using UnityEngine;
+
+public class StimulantsController : MonoBehaviour {
+
+    // ============================================================
+    // Stimulant Counters
+    // ============================================================
+
+    public int currentStimulants;
+    public int maxStimulants;
+
+    [SerializeField] private TextMeshProUGUI currentStimulantsText;
+    [SerializeField] private TextMeshProUGUI maxStimulantsText;
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private GameManagerTutorial gameManagerTutorialScript;
+    private GameManager gameManagerScript;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        gameManagerTutorialScript = FindFirstObjectByType<GameManagerTutorial>();
+        gameManagerScript = FindFirstObjectByType<GameManager>();
+
+        if (gameManagerTutorialScript == null) {
+
+            if (gameManagerScript.currentPhase != GameManager.GamePhases.onSpace) {
+
+                currentStimulants = 3;
+
+            }
+
+            else {
+
+                currentStimulants = 0;
+
+            }
+        }
+
+        else {
+
+            currentStimulants = 0;
+
+        }
+    }
+
+    private void Update() {
+
+        if (currentStimulantsText == null) {
+
+            GameObject currentTextObj = GameObject.Find("NumEstimsText");
+
+            if (currentTextObj != null) {
+
+                currentStimulantsText = currentTextObj.GetComponent<TextMeshProUGUI>();
+
+            }
+        }
+
+        if (maxStimulantsText == null) {
+
+            GameObject maxTextObj = GameObject.Find("Max");
+
+            if (maxTextObj != null) {
+
+                maxStimulantsText = maxTextObj.GetComponent<TextMeshProUGUI>();
+
+            }
+        }
+
+        if (currentStimulantsText != null && maxStimulantsText != null) {
+
+            currentStimulantsText.text = currentStimulants.ToString("0");
+            maxStimulantsText.text = "/" + maxStimulants.ToString("0");
+
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void decreaseStimulant() {
+
+        if (currentStimulants > 0) {
+
+            currentStimulants = currentStimulants - 1;
+
+        }
+    }
+
+    public void increaseStimulant() {
+
+        if (currentStimulants < maxStimulants) {
+
+            currentStimulants = currentStimulants + 1;
+
+        }
+    }
+}
