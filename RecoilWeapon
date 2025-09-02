@@ -1,0 +1,91 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class RecoilWeapon : MonoBehaviour {
+
+    // ============================================================
+    // Reference Points
+    // ============================================================
+
+    public Transform recoilPositionPoint;
+    public Transform rotationPoint;
+
+    // ============================================================
+    // Speed Settings
+    // ============================================================
+
+    public float positionalRecoilSpeed;
+    public float rotationalRecoilSpeed;
+
+    public float positionalReturnSpeed;
+    public float rotationalReturnSpeed;
+
+    // ============================================================
+    // Recoil Amounts
+    // ============================================================
+
+    public Vector3 recoilRotation;
+    public Vector3 recoilKickBack;
+
+    public Vector3 recoilRotationAim;
+    public Vector3 recoilKickBackAim;
+
+    // ============================================================
+    // Internal State
+    // ============================================================
+
+    private Vector3 currentRotationalRecoil;
+    private Vector3 currentPositionalRecoil;
+    private Vector3 currentRotationEuler;
+
+    // ============================================================
+    // Weapon State
+    // ============================================================
+
+    public bool isAiming;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void fixedUpdate() {
+
+        // Smoothly return recoil values to zero
+        currentRotationalRecoil = Vector3.Lerp(currentRotationalRecoil, Vector3.zero, rotationalReturnSpeed * Time.deltaTime);
+        currentPositionalRecoil = Vector3.Lerp(currentPositionalRecoil, Vector3.zero, positionalReturnSpeed * Time.deltaTime);
+
+        // Apply positional recoil using spherical interpolation
+        recoilPositionPoint.localPosition = Vector3.Slerp(recoilPositionPoint.localPosition, currentPositionalRecoil, positionalRecoilSpeed * Time.fixedDeltaTime);
+
+        // Apply rotational recoil using spherical interpolation
+        currentRotationEuler = Vector3.Slerp(currentRotationEuler, currentRotationalRecoil, rotationalRecoilSpeed * Time.fixedDeltaTime);
+        rotationPoint.localRotation = Quaternion.Euler(currentRotationEuler);
+
+    }
+
+    // ============================================================
+    // Core Methods
+    // ============================================================
+
+    public void fire() {
+
+        if (isAiming) {
+
+            // Recoil while aiming: precise vertical kick, random horizontal and roll
+            currentRotationalRecoil = currentRotationalRecoil + new Vector3(-recoilRotationAim.x, Random.Range(-recoilRotationAim.y, recoilRotationAim.y), Random.Range(-recoilRotationAim.z, recoilRotationAim.z));
+
+            currentPositionalRecoil = currentPositionalRecoil + new Vector3(Random.Range(-recoilKickBackAim.x, recoilKickBackAim.x), Random.Range(-recoilKickBackAim.y, recoilKickBackAim.y), recoilKickBackAim.z);
+
+        }
+
+        else {
+
+            // Recoil while hip-firing: stronger vertical kick, random horizontal and roll
+            currentRotationalRecoil = currentRotationalRecoil + new Vector3(-recoilRotation.x, Random.Range(-recoilRotation.y, recoilRotation.y), Random.Range(-recoilRotation.z, recoilRotation.z));
+
+            currentPositionalRecoil = currentPositionalRecoil + new Vector3(Random.Range(-recoilKickBack.x, recoilKickBack.x), Random.Range(-recoilKickBack.y, recoilKickBack.y), recoilKickBack.z);
+
+        }
+    }
+}
