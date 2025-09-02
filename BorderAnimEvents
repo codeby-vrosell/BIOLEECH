@@ -6,8 +6,8 @@ public class BorderAnimEvents : MonoBehaviour {
     // References
     // ============================================================
 
-    [SerializeField] private IAController aiController;
-    [SerializeField] private IAControllerTutorial aiControllerTutorial;
+    [SerializeField] private IAController aiControllerScript;
+    [SerializeField] private AITutorialController aiControllerTutorialScript;
 
     // ============================================================
     // Animation Events
@@ -16,15 +16,15 @@ public class BorderAnimEvents : MonoBehaviour {
     public void onShowSpectrum() {
 
         // Calls the correct controller depending on whether tutorial controller exists
-        if (aiControllerTutorial == null) {
+        if (aiControllerTutorialScript == null) {
 
-            aiController.showSpectrum();
+            aiControllerScript.showSpectrum();
 
         }
 
         else {
 
-            aiControllerTutorial.showSpectrum();
+            aiControllerTutorialScript.showSpectrum();
 
         }
     }
