@@ -7,7 +7,7 @@ public class HitZone {
     // Angle Range
     // ============================================================
 
-    public float minAngle;      // Minimum angle of the hit zone in degrees
-    public float maxAngle;      // Maximum angle of the hit zone in degrees
+    public float minAngle;
+    public float maxAngle;
 
 }
