@@ -1,0 +1,304 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using TMPro;
+
+public class AITutorialController : MonoBehaviour {
+
+    // ============================================================
+    // CSV Prefix
+    // ============================================================
+
+    private string tagPrefix = "STEP_TUTORIAL_";
+
+    // ============================================================
+    // UI References
+    // ============================================================
+
+    [SerializeField] private TextMeshProUGUI aiTextUI;
+
+    // ============================================================
+    // Typing Settings
+    // ============================================================
+
+    [SerializeField] private float typingSpeed;
+    [SerializeField] private float cursorBlinkSpeed;
+
+    // ============================================================
+    // Animator and Audio
+    // ============================================================
+
+    [SerializeField] private Animator animator;
+    [SerializeField] private AudioSource audioSource;
+
+    // ============================================================
+    // Audio Spectrum Visualizer
+    // ============================================================
+
+    [SerializeField] private GameObject audioSpectrum;
+
+    // ============================================================
+    // State
+    // ============================================================
+
+    public bool isTalking = false;
+    private bool isWriting = false;
+
+    // ============================================================
+    // Dialogue Data
+    // ============================================================
+
+    private Dictionary<string, string> idToLine = new Dictionary<string, string>();
+    private Dictionary<string, List<string>> prefixToIDs = new Dictionary<string, List<string>>();
+    private string pendingLine = "";
+    private string currentID = "";
+
+    // ============================================================
+    // Coroutines
+    // ============================================================
+
+    private Coroutine typingCoroutine;
+    private Coroutine cursorCoroutine;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        audioSpectrum.SetActive(false);
+        readCSV();
+
+    }
+
+    // ============================================================
+    // CSV Reader
+    // ============================================================
+
+    void readCSV() {
+
+        string path = Path.Combine(Application.streamingAssetsPath, "IA_Bioleech.csv");
+
+        if (!File.Exists(path)) {
+
+            Debug.LogError("CSV file not found.");
+            return;
+
+        }
+
+        string[] data = File.ReadAllLines(path);
+
+        for (int i = 0; i < data.Length; i++) {
+
+            string[] entry = parseCSVLine(data[i]);
+
+            if (entry.Length < 2) {
+
+                continue;
+
+            }
+
+            string id = entry[0].Trim();
+            string text = entry[1].Trim();
+
+            idToLine[id] = text;
+
+            int lastUnderscore = id.LastIndexOf('_');
+
+            if (lastUnderscore > 0) {
+
+                string prefix = id.Substring(0, lastUnderscore + 1);
+
+                if (!prefixToIDs.ContainsKey(prefix)) {
+
+                    prefixToIDs[prefix] = new List<string>();
+
+                }
+
+                prefixToIDs[prefix].Add(id);
+
+            }
+        }
+    }
+
+    string[] parseCSVLine(string line) {
+
+        List<string> result = new List<string>();
+        bool insideQuotes = false;
+        string current = "";
+
+        for (int i = 0; i < line.Length; i++) {
+
+            char c = line[i];
+
+            if (c == '"') {
+
+                if (insideQuotes && i + 1 < line.Length && line[i + 1] == '"') {
+
+                    current = current + '"';
+                    i++;
+
+                }
+
+                else {
+
+                    insideQuotes = !insideQuotes;
+
+                }
+            }
+
+            else if (c == ',' && !insideQuotes) {
+
+                result.Add(current);
+                current = "";
+
+            }
+
+            else {
+
+                current = current + c;
+
+            }
+        }
+
+        result.Add(current);
+        return result.ToArray();
+
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void playTutorialLine(int num) {
+
+        string id = $"{tagPrefix}{num:D3}";
+
+        if (!idToLine.ContainsKey(id)) {
+
+            Debug.LogError($"ID {id} not found in CSV.");
+            return;
+
+        }
+
+        string line = idToLine[id];
+        currentID = id;
+
+        StartCoroutine(speakLine(line));
+
+    }
+
+    public void showSpectrum() {
+
+        audioSpectrum.SetActive(true);
+        playAudio();
+
+    }
+
+    public void hideFrame() {
+
+        if (typingCoroutine != null) {
+
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+
+        }
+
+        if (cursorCoroutine != null) {
+
+            StopCoroutine(cursorCoroutine);
+            cursorCoroutine = null;
+
+        }
+
+        animator.Play("CuadroOFF");
+        isTalking = false;
+
+    }
+
+    // ============================================================
+    // Line Playback
+    // ============================================================
+
+    IEnumerator speakLine(string line) {
+
+        isTalking = true;
+        animator.Play("CuadroON");
+
+        yield return new WaitForSeconds(0.2f);
+
+        aiTextUI.text = "";
+        pendingLine = line;
+
+        if (typingCoroutine != null) {
+
+            StopCoroutine(typingCoroutine);
+
+        }
+
+        typingCoroutine = StartCoroutine(typingEffect());
+        yield return typingCoroutine;
+        typingCoroutine = null;
+
+        while (audioSource.isPlaying) {
+
+            yield return null;
+
+        }
+
+        audioSpectrum.SetActive(false);
+        isTalking = false;
+
+    }
+
+    private IEnumerator typingEffect() {
+
+        isWriting = true;
+
+        foreach (char character in pendingLine) {
+
+            aiTextUI.text = aiTextUI.text + character;
+            yield return new WaitForSeconds(typingSpeed);
+
+        }
+
+        isWriting = false;
+        aiTextUI.text = pendingLine;
+
+        cursorCoroutine = StartCoroutine(blinkingCursor());
+
+    }
+
+    private IEnumerator blinkingCursor() // was guionParpadeando {
+
+        while (true) {
+
+            aiTextUI.text = pendingLine + "_";
+            yield return new WaitForSeconds(cursorBlinkSpeed);
+
+            aiTextUI.text = pendingLine + " ";
+            yield return new WaitForSeconds(cursorBlinkSpeed);
+
+        }
+    }
+
+    private void playAudio() {
+
+        AudioClip clip = Resources.Load<AudioClip>($"IAAudio/{currentID}");
+
+        if (clip != null) {
+
+            audioSource.clip = clip;
+            audioSource.Play();
+
+        }
+
+        else {
+
+            Debug.Log($"No audio found with name: {currentID} in Resources/IAAudio/");
+            audioSource.clip = null;
+
+        }
+    }
+}
