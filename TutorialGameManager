@@ -23,10 +23,10 @@ public class TutorialGameManager : MonoBehaviour {
     // References
     // ============================================================
 
-    private AIControllerTutorial aiController;
-    private FPSController fpsController;
-    private FPControllerGun fpControllerGun;
-    private ScrapGunController scrapGunController;
+    private AITutorialController aiTutorialControllerScript;
+    private FPS_Controller fpsControllerScript;
+    private FPControllerGun fpControllerGunScript;
+    private ScrapGunController scrapGunControllerScript;
 
     [SerializeField] private GameObject weaponObject;
     [SerializeField] private GameObject tutorialIndicator;
@@ -34,15 +34,15 @@ public class TutorialGameManager : MonoBehaviour {
     [SerializeField] private Animator planeDistortionAnimator;
     [SerializeField] private TextMeshProUGUI missionPanelText;
     [SerializeField] private HealthSystem healthSystem;
-    [SerializeField] private EstimsController estimsController;
+    [SerializeField] private StimulantsController stimulantsController;
     [SerializeField] private QTEHeal qteHeal;
-    [SerializeField] private Animator glitchFullScreenAnimator;
-    [SerializeField] private FullScreenGlitchEvents glitchFullScreenEvents;
+    [SerializeField] private Animator animator;
+    [SerializeField] private FullScreenGlitchEvents fullScreenGlitchEventsScript;
     [SerializeField] private GameObject barrier1;
     [SerializeField] private GameObject barrier2;
     [SerializeField] private GameObject barrier3;
-    [SerializeField] private QTE_Burner qteBurner;
-    [SerializeField] private TerrainScannerManager terrainScannerManager;
+    [SerializeField] private QTEBurner qteBurnerScript;
+    [SerializeField] private TerrainScannerManager terrainScannerManagerScript;
 
     // ============================================================
     // Tutorial Step 2
@@ -120,18 +120,18 @@ public class TutorialGameManager : MonoBehaviour {
     // Tutorial Step 9
     // ============================================================
 
-    [SerializeField] private GameObject cargo;
-    [SerializeField] private GameObject mosquitoCargoGroup;
-    private GameObject previusMosquito0;
-    private GameObject previusMosquito1;
-    private GameObject previusMosquito2;
-    private GameObject previusMosquito3;
-    private GameObject previusMosquito4;
-    [SerializeField] private GameObject cargoZone;
+    [SerializeField] private GameObject load;
+    [SerializeField] private GameObject mosquitoLoadGroup;
+    private GameObject loadMosquito0;
+    private GameObject loadMosquito1;
+    private GameObject loadMosquito2;
+    private GameObject loadMosquito3;
+    private GameObject loadMosquito4;
+    [SerializeField] private GameObject loadZone;
     private bool inStep9 = false;
-    private bool countingCargoEnemies = false;
-    private int cargoEnemiesKilled = 0;
-    private bool cargoObjectiveShown = false;
+    private bool countingLoadEnemies = false;
+    private int loadEnemiesKilled = 0;
+    private bool loadObjectiveShown = false;
 
     // ============================================================
     // Tutorial Step 10
@@ -167,22 +167,22 @@ public class TutorialGameManager : MonoBehaviour {
         weaponObject.SetActive(false);
         tutorialIndicator.SetActive(false);
 
-        aiController = FindAnyObjectByType<AIControllerTutorial>();
-        fpsController = FindAnyObjectByType<FPSController>();
-        fpControllerGun = FindAnyObjectByType<FPControllerGun>();
+        aiTutorialControllerScript = FindAnyObjectByType<AITutorialController>();
+        fpsControllerScript = FindAnyObjectByType<FPS_Controller>();
+        fpControllerGunScript = FindAnyObjectByType<FPControllerGun>();
 
-        fpsController.canMove = false;
-        fpsController.canLook = false;
+        fpsControllerScript.canMove = false;
+        fpsControllerScript.canLook = false;
 
-        cargo.SetActive(false);
+        load.SetActive(false);
 
         if (!inTutorial) {
 
             inTutorial = true;
-            glitchFullScreenEvents.animationEnded = false;
+            fullScreenGlitchEventsScript.animationEnded = false;
 
             // Plays the fullscreen glitch transition animation and starts the tutorial sequence.
-            glitchFullScreenAnimator.Play("Anim_GlithTransition");
+            animator.Play("Anim_GlithTransition");
             StartCoroutine(startTutorial());
 
         }
@@ -211,7 +211,7 @@ public class TutorialGameManager : MonoBehaviour {
 
             checkSuctionObjectives();
 
-            if (scrapGunController != null && scrapGunController.scrapPercent > 0) {
+            if (scrapGunControllerScript != null && scrapGunControllerScript.scrapPercent > 0) {
 
                 toggleScrapMarkers(false);
 
@@ -224,7 +224,7 @@ public class TutorialGameManager : MonoBehaviour {
 
         }
 
-        if (tutorialStep == 7 && terrainScannerManager.isScanning && !sonarCompleted) {
+        if (tutorialStep == 7 && terrainScannerManagerScript.isScanning && !sonarCompleted) {
 
             sonarCompleted = true;
             updateSonarText();
@@ -238,16 +238,16 @@ public class TutorialGameManager : MonoBehaviour {
 
         }
 
-        if (inStep8 && !shootingCompleted && fpControllerGun.isShooting) {
+        if (inStep8 && !shootingCompleted && fpControllerGunScript.isShooting) {
 
             shootingCompleted = true;
             updateEnemyText();
 
         }
 
-        if (tutorialStep == 9 && countingCargoEnemies) {
+        if (tutorialStep == 9 && countingLoadEnemies) {
 
-            handleCargoEnemyKills();
+            handleLoadEnemyKills();
 
         }
 
@@ -273,17 +273,17 @@ public class TutorialGameManager : MonoBehaviour {
 
     private IEnumerator startTutorial() {
 
-        yield return new WaitUntil(() => glitchFullScreenEvents.animationEnded);
+        yield return new WaitUntil(() => fullScreenGlitchEventsScript.animationEnded);
         StartCoroutine(startStep1());
 
     }
 
     private IEnumerator startStep1() {
 
-        aiController.playTutorialLine(1);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(1);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         yield return new WaitForSeconds(1f);
         StartCoroutine(startStep2());
 
@@ -292,10 +292,10 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep2() {
 
         tutorialStep = 2;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
 
         // Shows the distortion effect and updates the indicator + mission text for the TAB menu tutorial step.
         planeDistortionAnimator.Play("Glitch");
@@ -309,33 +309,33 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep3() {
 
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         tutorialStep = 3;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         setNewMissionPanelText("missionMove");
-        fpsController.canMove = true;
-        fpsController.canLook = true;
+        fpsControllerScript.canMove = true;
+        fpsControllerScript.canLook = true;
 
     }
 
     private IEnumerator startStep4() {
 
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         tutorialStep = 4;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         setNewMissionPanelText("missionHealing");
         checkHealingObjectives();
 
         // Forces the player to heal by giving a stim and reducing health to trigger the healing tutorial.
-        estimsController.addStim();
-        healthSystem.TakeDamage(75);
+        stimulantsController.addStim();
+        healthSystem.takeDMG(75);
 
     }
 
@@ -349,22 +349,22 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep5_1() {
 
         inStep5 = true;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
 
-        glitchFullScreenEvents.animationEnded = false;
+        fullScreenGlitchEventsScript.animationEnded = false;
 
         // Plays the glitch transition, waits for it to finish, then enables the weapon for the player.
-        glitchFullScreenAnimator.Play("Anim_GlithTransition");
-        yield return new WaitUntil(() => glitchFullScreenEvents.animationEnded);
+        animator.Play("Anim_GlithTransition");
+        yield return new WaitUntil(() => fullScreenGlitchEventsScript.animationEnded);
 
         weaponObject.SetActive(true);
         inStep5_1 = true;
 
         yield return new WaitUntil(() => FindAnyObjectByType<ScrapGunController>() != null);
-        scrapGunController = FindAnyObjectByType<ScrapGunController>();
+        scrapGunControllerScript = FindAnyObjectByType<ScrapGunController>();
 
         setNewMissionPanelText("missionSuction");
         toggleScrapMarkers(true);
@@ -374,12 +374,12 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep6() {
 
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         tutorialStep = 6;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         inStep6 = true;
         setNewMissionPanelText("missionQTE");
 
@@ -388,7 +388,7 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep7() {
 
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         tutorialStep = 7;
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(lowerBarrier2());
@@ -397,30 +397,30 @@ public class TutorialGameManager : MonoBehaviour {
 
     private IEnumerator startStep7_1() {
 
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         setNewMissionPanelText("missionSonar");
-        terrainScannerManager.canScan = true;
+        terrainScannerManagerScript.canScan = true;
 
     }
 
     private IEnumerator startStep8() {
 
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         tutorialStep = 8;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
 
-        glitchFullScreenEvents.animationEnded = false;
-        glitchFullScreenAnimator.Play("Anim_GlithTransition");
-        yield return new WaitUntil(() => glitchFullScreenEvents.animationEnded);
+        fullScreenGlitchEventsScript.animationEnded = false;
+        animator.Play("Anim_GlithTransition");
+        yield return new WaitUntil(() => fullScreenGlitchEventsScript.animationEnded);
 
-        cargo.SetActive(true);
+        load.SetActive(true);
         mosquitoSamples.SetActive(true);
 
         mosquito0 = GameObject.Find("mosquitoSample");
@@ -438,28 +438,28 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep9() {
 
         tutorialStep = 9;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
 
-        glitchFullScreenEvents.animationEnded = false;
-        glitchFullScreenAnimator.Play("Anim_GlithTransition");
-        yield return new WaitUntil(() => glitchFullScreenEvents.animationEnded);
+        fullScreenGlitchEventsScript.animationEnded = false;
+        animator.Play("Anim_GlithTransition");
+        yield return new WaitUntil(() => fullScreenGlitchEventsScript.animationEnded);
 
-        mosquitoCargoGroup.SetActive(true);
+        mosquitoLoadGroup.SetActive(true);
 
-        previusMosquito0 = GameObject.Find("previusMosquito0");
-        previusMosquito1 = GameObject.Find("previusMosquito1");
-        previusMosquito2 = GameObject.Find("previusMosquito2");
-        previusMosquito3 = GameObject.Find("previusMosquito3");
-        previusMosquito4 = GameObject.Find("previusMosquito4");
+        loadMosquito0 = GameObject.Find("loadMosquito0");
+        loadMosquito1 = GameObject.Find("loadMosquito1");
+        loadMosquito2 = GameObject.Find("loadMosquito2");
+        loadMosquito3 = GameObject.Find("loadMosquito3");
+        loadMosquito4 = GameObject.Find("loadMosquito4");
 
-        cargoEnemiesKilled = 0;
-        countingCargoEnemies = true;
+        loadEnemiesKilled = 0;
+        countingLoadEnemies = true;
         inStep9 = true;
 
-        updateCargoText();
+        updateLoadText();
 
     }
 
@@ -467,10 +467,10 @@ public class TutorialGameManager : MonoBehaviour {
 
         finalZone.SetActive(true);
         tutorialStep = 10;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         setNewMissionPanelText("missionTeleport");
 
     }
@@ -478,18 +478,18 @@ public class TutorialGameManager : MonoBehaviour {
     private IEnumerator startStep11() {
 
         tutorialStep = 11;
-        aiController.playTutorialLine(tutorialStep);
-        yield return new WaitUntil(() => !aiController.isTalking);
+        aiTutorialControllerScript.playTutorialLine(tutorialStep);
+        yield return new WaitUntil(() => !aiTutorialControllerScript.isTalking);
         yield return new WaitForSeconds(0.5f);
-        aiController.hideDialogBox();
+        aiTutorialControllerScript.hideDialogBox();
         setNewMissionPanelText("missionFinal");
 
         yield return new WaitForSeconds(0.5f);
-        glitchFullScreenEvents.animationEnded = false;
-        glitchFullScreenAnimator.Play("Anim_GlithTransition");
+        fullScreenGlitchEventsScript.animationEnded = false;
+        animator.Play("Anim_GlithTransition");
         yield return StartCoroutine(fadeIn());
 
-        SceneManager.LoadScene("Level 1 Final");
+        SceneManager.LoadScene("Final Level 1");
 
     }
 
@@ -514,11 +514,13 @@ public class TutorialGameManager : MonoBehaviour {
             case "ctrlMissions":
 
                 text = isControllerConnected ? "D-PAD: UP" : "TAB";
+
                 break;
 
             default:
 
                 text = "";
+
                 break;
 
         }
@@ -538,6 +540,7 @@ public class TutorialGameManager : MonoBehaviour {
             case "missionTAB":
 
                 text = "<color=#3DF858>This panel will show you the missions assigned when in a real environment.</color>";
+
                 break;
 
             case "missionMove":
@@ -582,9 +585,9 @@ public class TutorialGameManager : MonoBehaviour {
 
                 break;
 
-            case "missionCargo":
+            case "missionLoad":
 
-                text = "Defend the cargo from enemies.";
+                text = "Defend the load from enemies.";
 
                 break;
 
@@ -657,7 +660,7 @@ public class TutorialGameManager : MonoBehaviour {
 
             float t = elapsed / duration;
             barrier1.transform.position = Vector3.Lerp(startPos, endPos, t);
-            elapsed += Time.deltaTime;
+            elapsed = elapsed + Time.deltaTime;
 
             // Applies a small random shake to the camera (player head) to simulate an earthquake effect while the barrier lowers.
             Vector3 shakeOffset = new Vector3(Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity));
@@ -690,7 +693,7 @@ public class TutorialGameManager : MonoBehaviour {
 
             float t = elapsed / duration;
             barrier2.transform.position = Vector3.Lerp(startPos, endPos, t);
-            elapsed += Time.deltaTime;
+            elapsed = elapsed + Time.deltaTime;
 
             // Applies a small random shake to the camera (player head) to simulate an earthquake effect while the barrier lowers.
             Vector3 shakeOffset = new Vector3(Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity));
@@ -723,7 +726,7 @@ public class TutorialGameManager : MonoBehaviour {
 
             float t = elapsed / duration;
             barrier3.transform.position = Vector3.Lerp(startPos, endPos, t);
-            elapsed += Time.deltaTime;
+            elapsed = elapsed + Time.deltaTime;
 
             // Applies a small random shake to the camera (player head) to simulate an earthquake effect while the barrier lowers.
             Vector3 shakeOffset = new Vector3(Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity), Random.Range(-shakeIntensity, shakeIntensity));
@@ -735,7 +738,7 @@ public class TutorialGameManager : MonoBehaviour {
 
         barrier3.transform.position = endPos;
         playerHead.localPosition = originalHeadPosition;
-        cargoZone.SetActive(true);
+        loadZone.SetActive(true);
 
     }
 
@@ -775,7 +778,7 @@ public class TutorialGameManager : MonoBehaviour {
 
         float speed = Time.deltaTime / countdownTime;
 
-        if (aimingAtCapsule && fpControllerGun.interactButtonPressed) {
+        if (aimingAtCapsule && fpControllerGunScript.interactButtonPressed) {
 
             interactStep2Completed = true;
             updateInteractText();
