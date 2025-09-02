@@ -1,0 +1,78 @@
+using UnityEngine;
+using System.Collections;
+
+public class RandomJokeGenerator : MonoBehaviour {
+
+    // ============================================================
+    // Settings
+    // ============================================================
+
+    public float jokeWaitTime;
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private FPSController fpsController;
+    private GameManager gameManagerScript;
+
+    // ============================================================
+    // State
+    // ============================================================
+
+    private bool waitingForNextJoke = false;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    private void Start() {
+
+        gameManagerScript = FindFirstObjectByType<GameManager>();
+
+    }
+
+    private void Update() {
+
+        if (fpsController == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+
+            if (playerObj != null) {
+
+                fpsController = playerObj.GetComponent<FPSController>();
+
+            }
+
+            return;
+
+        }
+
+        if (fpsController.isSeated == false && waitingForNextJoke == false && gameManagerScript.inSpace == false) {
+
+            StartCoroutine(waitForJoke());
+
+        }
+    }
+
+    // ============================================================
+    // Coroutine
+    // ============================================================
+
+    private IEnumerator waitForJoke() {
+
+        waitingForNextJoke = true;
+
+        // Wait until AI finishes talking
+        yield return new WaitUntil(() => IAController.instance.isIATalking == false);
+
+        yield return new WaitForSeconds(jokeWaitTime);
+
+        IAController.instance.playRandomLine("JOKE_GENERIC_");
+
+        yield return new WaitUntil(() => IAController.instance.isIATalking == false);
+
+        waitingForNextJoke = false;
+
+    }
+}
