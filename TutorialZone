@@ -6,7 +6,7 @@ public class TutorialZone : MonoBehaviour {
     // References
     // ============================================================
 
-    [SerializeField] private gameManagerTutorial tutorialGameManager;
+    [SerializeField] private TutorialGameManager tutorialGameManagerScript;
 
     // ============================================================
     // Unity Callbacks
@@ -16,7 +16,7 @@ public class TutorialZone : MonoBehaviour {
 
         if (collider.CompareTag("Player")) {
 
-            tutorialGameManager.playerEnterZone();
+            tutorialGameManagerScript.playerEnterZone();
 
         }
     }
@@ -25,7 +25,7 @@ public class TutorialZone : MonoBehaviour {
 
         if (collider.CompareTag("Player")) {
 
-            tutorialGameManager.playerEnterZone();
+            tutorialGameManagerScript.playerEnterZone();
 
         }
     }
