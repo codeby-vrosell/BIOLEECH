@@ -468,5 +468,4 @@ public class ScrapGunController : MonoBehaviour {
         suctionCoroutine = null;
 
     }
-
 }
