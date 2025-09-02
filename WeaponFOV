@@ -20,7 +20,7 @@ public class WeaponFOV : MonoBehaviour {
 
     private CinemachineCamera fpMainCamera;
     private Camera weaponRenderCamera;
-    private FPControllerGun fpControllerScript;
+    private FPControllerGun fpControllerGunScript;
 
     // ============================================================
     // State Variables
@@ -40,7 +40,7 @@ public class WeaponFOV : MonoBehaviour {
 
         GameObject playerObj = GameObject.FindWithTag("Player");
 
-        fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+        fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
 
         fpMainCamera = Object.FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None).FirstOrDefault(t => t.name == "FP MainCamera");
 
@@ -56,22 +56,22 @@ public class WeaponFOV : MonoBehaviour {
 
     void update() {
 
-        bool isHoldingAction = fpControllerScript.isShooting || fpControllerScript.isCleaning;
+        bool isHoldingAction = fpControllerGunScript.isShooting || fpControllerGunScript.isCleaning;
 
         // Track hold time to switch FOV states
         if (isHoldingAction) {
 
-            holdTimer += Time.deltaTime;
+            holdTimer = holdTimer + Time.deltaTime;
 
             if (holdTimer >= requiredHoldTime) {
 
-                if (fpControllerScript.isShooting) {
+                if (fpControllerGunScript.isShooting) {
 
                     currentState = fovState.Shooting;
 
                 }
 
-                else if (fpControllerScript.isCleaning) {
+                else if (fpControllerGunScript.isCleaning) {
 
                     currentState = fovState.Cleaning;
 
