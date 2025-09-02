@@ -10,9 +10,9 @@ public class ShotGunController : MonoBehaviour {
     // References
     // ============================================================
 
-    private FPControllerGun fpControllerScript;
-    private UpgradesController upgradesController;
-    private CrosshairController crosshairController;
+    private FPControllerGun fpControllerGunScript;
+    private UpgradesController upgradesControllerScript;
+    private CrosshairController crosshairControllerScript;
     private RecoilWeapon recoilWeaponScript;
     public CinemachineImpulseSource impulseSource;
     private TPController tpControllerScript;
@@ -56,9 +56,9 @@ public class ShotGunController : MonoBehaviour {
 
         GameObject playerObj = GameObject.FindWithTag("Player");
 
-        upgradesController = playerObj.GetComponent<UpgradesController>();
-        fpControllerScript = Object.FindFirstObjectByType<FPControllerGun>();
-        crosshairController = Object.FindFirstObjectByType<CrosshairController>();
+        upgradesControllerScript = playerObj.GetComponent<UpgradesController>();
+        fpControllerGunScript = Object.FindFirstObjectByType<FPControllerGun>();
+        crosshairControllerScript = Object.FindFirstObjectByType<CrosshairController>();
         recoilWeaponScript = Object.FindFirstObjectByType<RecoilWeapon>();
         tpControllerScript = Object.FindFirstObjectByType<TPController>();
 
@@ -68,13 +68,13 @@ public class ShotGunController : MonoBehaviour {
 
     void update() {
 
-        crosshairController.checkTarget();
+        crosshairControllerScript.checkTarget();
 
-        if (fpControllerScript.attackButtonPressed && !fpControllerScript.isInQTE && !fpControllerScript.isCleaning && (tpControllerScript == null || !tpControllerScript.isTeleporting)) {
+        if (fpControllerGunScript.attackButtonPressed && !fpControllerGunScript.isInQTE && !fpControllerGunScript.isCleaning && (tpControllerScript == null || !tpControllerScript.isTeleporting)) {
 
             if (canShoot) {
 
-                fpControllerScript.isShooting = true;
+                fpControllerGunScript.isShooting = true;
                 recoilWeaponScript.aiming = true;
                 StartCoroutine(shootRaycast());
 
@@ -83,7 +83,7 @@ public class ShotGunController : MonoBehaviour {
 
         else {
 
-            fpControllerScript.isShooting = false;
+            fpControllerGunScript.isShooting = false;
             recoilWeaponScript.aiming = false;
 
         }
@@ -110,18 +110,18 @@ public class ShotGunController : MonoBehaviour {
             Vector3 finalDirection = spreadRotation * shootDirection;
 
             // Raycast to detect hit
-            if (Physics.Raycast(firePoint.position, finalDirection, out RaycastHit hit, upgradesController.gunRange, ignoreLayers)) {
+            if (Physics.Raycast(firePoint.position, finalDirection, out RaycastHit hit, upgradesControllerScript.gunRange, ignoreLayers)) {
 
                 GameObject vfxPrefab = Instantiate(vfxImpact, hit.point, Quaternion.LookRotation(hit.normal));
                 vfxImpact.GetComponent<VisualEffect>().SetVector3("Orientation", vfxImpact.transform.eulerAngles);
 
                 if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy") || hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyDetected")) {
 
-                    EnemyHealth2 enemyScript = hit.collider.gameObject.GetComponent<EnemyHealth2>();
+                    EnemyHealth2 enemyHealth2Script = hit.collider.gameObject.GetComponent<EnemyHealth2>();
 
-                    if (enemyScript != null) {
+                    if (enemyHealth2Script != null) {
 
-                        enemyScript.TakeDamage(upgradesController.dmgUpdate);
+                        enemyHealth2Script.takeDMG(upgradesControllerScript.dmgUpdate);
 
                     }
                 }
@@ -146,7 +146,7 @@ public class ShotGunController : MonoBehaviour {
 
         else {
 
-            fpControllerScript.isShooting = false;
+            fpControllerGunScript.isShooting = false;
 
         }
     }
