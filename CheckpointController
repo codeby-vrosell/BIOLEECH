@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class CheckpointController : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    public Checkpoint[] checkpoints;
+
+    // ============================================================
+    // State
+    // ============================================================
+
+    public bool isPlayerDead = false;
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void respawnMeshes() {
+
+        foreach (Checkpoint checkpoint in checkpoints) {
+
+            if (!checkpoint.isCheckpointed) {
+
+                checkpoint.restoreCheckpointMeshes();
+
+            }
+        }
+
+        Debug.Log("Respawn completed.");
+
+    }
+}
