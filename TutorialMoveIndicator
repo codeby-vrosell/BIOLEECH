@@ -1,0 +1,35 @@
+using UnityEngine;
+
+public class TutorialMoveIndicator : MonoBehaviour {
+
+    // ============================================================
+    // Movement Settings
+    // ============================================================
+
+    public float distance;
+    public float speed;
+
+    // ============================================================
+    // Internal References
+    // ============================================================
+
+    private RectTransform rectTransform;
+    private Vector2 initialPosition;
+
+    void start() {
+
+        rectTransform = GetComponent<RectTransform>();
+        initialPosition = rectTransform.anchoredPosition;
+
+    }
+
+    void update() {
+
+        // Calculate oscillating horizontal displacement using a sine wave
+        float displacement = Mathf.Sin(Time.time * speed) * distance;
+
+        // Apply displacement to the original position
+        rectTransform.anchoredPosition = new Vector2(initialPosition.x + displacement, initialPosition.y);
+
+    }
+}
