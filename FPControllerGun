@@ -1,0 +1,59 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class FPControllerGun : MonoBehaviour {
+
+    // ============================================================
+    // Button States
+    // ============================================================
+
+    public bool cleanButtonPressed = false;
+    public bool interactButtonPressed = false;
+    public bool burnButtonPressed = false;
+    public bool attackButtonPressed = false;
+
+    // ============================================================
+    // Control States
+    // ============================================================
+
+    public bool isInQTE = false;
+    public bool isShooting = false;
+    public bool isCleaning = false;
+
+    // ============================================================
+    // Input Callbacks
+    // ============================================================
+
+    public void onClean(InputAction.CallbackContext context) {
+
+        cleanButtonPressed = context.ReadValueAsButton();
+
+    }
+
+    public void onInteract(InputAction.CallbackContext context) {
+
+        interactButtonPressed = context.ReadValueAsButton();
+
+    }
+
+    public void onBurn(InputAction.CallbackContext context) {
+
+        burnButtonPressed = context.ReadValueAsButton();
+
+    }
+
+    public void onAttack(InputAction.CallbackContext context) {
+
+        if (context.performed) {
+
+            attackButtonPressed = true;
+
+        }
+
+        else if (context.canceled) {
+
+            attackButtonPressed = false;
+
+        }
+    }
+}
