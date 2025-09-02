@@ -1,0 +1,47 @@
+using UnityEngine;
+
+public class UpgradesController : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private upgradesManager upgradesManagerScript;
+
+    // ============================================================
+    // Upgrade Stats
+    // ============================================================
+
+    public float cleanRangeUpgrade;        // Increases scrap absorption range.
+    public float scrapDestroyedUpgrade;    // Increases the amount of scrap destroyed per burn.
+    public float weaponDamageUpgrade;      // Increases weapon damage.
+    public float weaponRangeUpgrade;       // Increases weapon range.
+
+    // ============================================================
+    // Initialization
+    // ============================================================
+
+    void start() {
+
+        upgradesManagerScript = FindFirstObjectByType<upgradesManager>();
+
+        cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
+        scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
+        weaponDamageUpgrade = upgradesManagerScript.dmgUpdate;
+        weaponRangeUpgrade = upgradesManagerScript.gunRange;
+
+    }
+
+    // ============================================================
+    // Update stats from upgrades manager
+    // ============================================================
+
+    public void updateStats() {
+
+        cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
+        scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
+        weaponDamageUpgrade = upgradesManagerScript.dmgUpdate;
+        weaponRangeUpgrade = upgradesManagerScript.gunRange;
+
+    }
+}
