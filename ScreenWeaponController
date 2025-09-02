@@ -7,9 +7,9 @@ public class ScreenWeaponController : MonoBehaviour {
     // References
     // ============================================================
 
-    private FPControllerGun fpControllerScript;
-    private ChatarraGunController scrapGunController;
-    private ShotGunController shotGunController;
+    private FPControllerGun fpControllerGunScript;
+    private ScrapGunController scrapGunControllerScript;
+    private ShotGunController shotGunControllerScript;
 
     [SerializeField] private TextMeshProUGUI screenText;
 
@@ -25,54 +25,54 @@ public class ScreenWeaponController : MonoBehaviour {
 
     void start() {
 
-        scrapGunController = GetComponent<ChatarraGunController>();
-        shotGunController = GetComponent<ShotGunController>();
+        scrapGunControllerScript = GetComponent<ScrapGunController>();
+        shotGunControllerScript = GetComponent<ShotGunController>();
 
     }
 
     void update() {
 
         // Ensure player reference exists
-        if (fpControllerScript == null) {
+        if (fpControllerGunScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
             if (playerObj != null) {
 
-                fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+                fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
 
             }
         }
 
-        if (fpControllerScript == null || screenText == null) {
+        if (fpControllerGunScript == null || screenText == null) {
 
             return;
 
         }
 
-        if (shotGunController != null && scrapGunController != null) {
+        if (shotGunControllerScript != null && scrapGunControllerScript != null) {
 
             string bulletText;
 
             // Blink effect when bullets are zero
-            if (shotGunController.bullets == 0) {
+            if (shotGunControllerScript.bullets == 0) {
 
                 float alpha = Mathf.Lerp(0.2f, 1f, (Mathf.Sin(Time.time * blinkSpeed) + 1f) / 2f);
                 int alphaHex = Mathf.RoundToInt(alpha * 255);
                 string alphaHexStr = alphaHex.ToString("X2"); // Convert alpha to 2-digit hex
 
-                bulletText = "<color=#F83D49" + alphaHexStr + ">" + shotGunController.bullets.ToString() + "/100</color>";
+                bulletText = "<color=#F83D49" + alphaHexStr + ">" + shotGunControllerScript.bullets.ToString() + "/100</color>";
 
             }
 
             else {
 
-                bulletText = shotGunController.bullets.ToString() + "/100";
+                bulletText = shotGunControllerScript.bullets.ToString() + "/100";
 
             }
 
             // Update screen text with bullets and scrap percentage
-            screenText.text = bulletText + "\n" + scrapGunController.scrapPercent.ToString("F0") + "%";
+            screenText.text = bulletText + "\n" + scrapGunControllerScript.scrapPercent.ToString("F0") + "%";
 
         }
     }
@@ -83,13 +83,13 @@ public class ScreenWeaponController : MonoBehaviour {
 
     public void retrievePlayerScript() {
 
-        if (fpControllerScript == null) {
+        if (fpControllerGunScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
             if (playerObj != null) {
 
-                fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+                fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
 
             }
         }
