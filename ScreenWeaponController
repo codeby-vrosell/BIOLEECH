@@ -1,0 +1,97 @@
+using UnityEngine;
+using TMPro;
+
+public class ScreenWeaponController : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private FPControllerGun fpControllerScript;
+    private ChatarraGunController scrapGunController;
+    private ShotGunController shotGunController;
+
+    [SerializeField] private TextMeshProUGUI screenText;
+
+    // ============================================================
+    // Settings
+    // ============================================================
+
+    [SerializeField] private float blinkSpeed;
+
+    // ============================================================
+    // Unity Methods
+    // ============================================================
+
+    void start() {
+
+        scrapGunController = GetComponent<ChatarraGunController>();
+        shotGunController = GetComponent<ShotGunController>();
+
+    }
+
+    void update() {
+
+        // Ensure player reference exists
+        if (fpControllerScript == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+
+            if (playerObj != null) {
+
+                fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+
+            }
+        }
+
+        if (fpControllerScript == null || screenText == null) {
+
+            return;
+
+        }
+
+        if (shotGunController != null && scrapGunController != null) {
+
+            string bulletText;
+
+            // Blink effect when bullets are zero
+            if (shotGunController.bullets == 0) {
+
+                float alpha = Mathf.Lerp(0.2f, 1f, (Mathf.Sin(Time.time * blinkSpeed) + 1f) / 2f);
+                int alphaHex = Mathf.RoundToInt(alpha * 255);
+                string alphaHexStr = alphaHex.ToString("X2"); // Convert alpha to 2-digit hex
+
+                bulletText = "<color=#F83D49" + alphaHexStr + ">" + shotGunController.bullets.ToString() + "/100</color>";
+
+            }
+
+            else {
+
+                bulletText = shotGunController.bullets.ToString() + "/100";
+
+            }
+
+            // Update screen text with bullets and scrap percentage
+            screenText.text = bulletText + "\n" + scrapGunController.scrapPercent.ToString("F0") + "%";
+
+        }
+    }
+
+    // ============================================================
+    // Public Methods
+    // ============================================================
+
+    public void retrievePlayerScript() {
+
+        if (fpControllerScript == null) {
+
+            GameObject playerObj = GameObject.FindWithTag("Player");
+
+            if (playerObj != null) {
+
+                fpControllerScript = playerObj.GetComponent<FPControllerGun>();
+
+            }
+        }
+    }
+}
