@@ -1,0 +1,64 @@
+using UnityEngine;
+
+public class DoorsController : MonoBehaviour {
+
+    // ============================================================
+    // References
+    // ============================================================
+
+    private Animator animator;
+    private GameManagerTutorial gameManagerTutorialScript;
+    private TPController tpControllerScript;
+
+    // ============================================================
+    // Sounds
+    // ============================================================
+
+    public AudioClip doorsAudioClip;
+
+    // ============================================================
+    // Unity Lifecycle
+    // ============================================================
+
+    void Start() {
+
+        animator = GetComponent<Animator>();
+        gameManagerTutorialScript = FindFirstObjectByType<GameManagerTutorial>();
+        tpControllerScript = FindFirstObjectByType<TPController>();
+
+    }
+
+    // ============================================================
+    // Trigger Events
+    // ============================================================
+
+    void OnTriggerEnter(Collider other) {
+
+        if (other.CompareTag("Player")) {
+
+            bool canOpen = tpControllerScript == null || !tpControllerScript.isTeleporting;
+
+            if (canOpen && (gameManagerTutorialScript == null || gameManagerTutorialScript.pasoTutorial >= 10)) {
+
+                animator.Play("Anim_OpenDoors");
+                AudioManager.instance.PlaySoundFXClip(doorsAudioClip, transform, 0.2f);
+
+            }
+        }
+    }
+
+    void OnTriggerExit(Collider other) {
+
+        if (other.CompareTag("Player")) {
+
+            bool canClose = tpControllerScript == null || !tpControllerScript.isTeleporting;
+
+            if (canClose) {
+
+                animator.Play("Anim_CloseDoors");
+                AudioManager.instance.PlaySoundFXClip(doorsAudioClip, transform, 0.2f);
+
+            }
+        }
+    }
+}
