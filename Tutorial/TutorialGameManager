@@ -25,8 +25,8 @@ public class TutorialGameManager : MonoBehaviour {
 
     private AITutorialController aiTutorialControllerScript;
     private FPS_Controller fpsControllerScript;
-    private FPControllerGun fpControllerGunScript;
-    private ScrapGunController scrapGunControllerScript;
+    private FPControllerWeapon fpControllerWeaponScript;
+    private ScrapWeaponController scrapWeaponControllerScript;
 
     [SerializeField] private GameObject weaponObject;
     [SerializeField] private GameObject tutorialIndicator;
@@ -169,7 +169,7 @@ public class TutorialGameManager : MonoBehaviour {
 
         aiTutorialControllerScript = FindAnyObjectByType<AITutorialController>();
         fpsControllerScript = FindAnyObjectByType<FPS_Controller>();
-        fpControllerGunScript = FindAnyObjectByType<FPControllerGun>();
+        fpControllerWeaponScript = FindAnyObjectByType<FPControllerWeapon>();
 
         fpsControllerScript.canMove = false;
         fpsControllerScript.canLook = false;
@@ -211,7 +211,7 @@ public class TutorialGameManager : MonoBehaviour {
 
             checkSuctionObjectives();
 
-            if (scrapGunControllerScript != null && scrapGunControllerScript.scrapPercent > 0) {
+            if (scrapWeaponControllerScript != null && scrapWeaponControllerScript.scrapPercent > 0) {
 
                 toggleScrapMarkers(false);
 
@@ -238,7 +238,7 @@ public class TutorialGameManager : MonoBehaviour {
 
         }
 
-        if (inStep8 && !shootingCompleted && fpControllerGunScript.isShooting) {
+        if (inStep8 && !shootingCompleted && fpControllerWeaponScript.isShooting) {
 
             shootingCompleted = true;
             updateEnemyText();
@@ -363,8 +363,8 @@ public class TutorialGameManager : MonoBehaviour {
         weaponObject.SetActive(true);
         inStep5_1 = true;
 
-        yield return new WaitUntil(() => FindAnyObjectByType<ScrapGunController>() != null);
-        scrapGunControllerScript = FindAnyObjectByType<ScrapGunController>();
+        yield return new WaitUntil(() => FindAnyObjectByType<ScrapWeaponController>() != null);
+        scrapWeaponControllerScript = FindAnyObjectByType<ScrapWeaponController>();
 
         setNewMissionPanelText("missionSuction");
         toggleScrapMarkers(true);
@@ -778,7 +778,7 @@ public class TutorialGameManager : MonoBehaviour {
 
         float speed = Time.deltaTime / countdownTime;
 
-        if (aimingAtCapsule && fpControllerGunScript.interactButtonPressed) {
+        if (aimingAtCapsule && fpControllerWeaponScript.interactButtonPressed) {
 
             interactStep2Completed = true;
             updateInteractText();
