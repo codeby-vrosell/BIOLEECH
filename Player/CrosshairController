@@ -86,7 +86,7 @@ public class CrosshairController : MonoBehaviour {
         Vector3 rayDirection = playerCamera.transform.forward;
         RaycastHit hit;
 
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, upgradesControllerScript.gunRange, interactableMask)) {
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, upgradesControllerScript.weaponRange, interactableMask)) {
 
             if (hit.collider != null && hit.collider.gameObject != null) {
 
