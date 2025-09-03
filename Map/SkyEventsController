@@ -1,3 +1,31 @@
+// ============================================================
+// Readme of SkyEventsController
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages dynamic sky events, specifically meteor showers.  
+It controls the timing, duration, and intensity of meteor showers using particle systems, creating a more immersive environment.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Defines sky states (`clear` and `meteorShower`) and tracks the current state.  
+- Configures the duration of meteor showers and the minimum time between events.  
+- References and controls a particle system to visualize meteor showers.  
+- Uses coroutines to smoothly interpolate meteor particle count during showers.  
+- Gradually ramps down particles after a meteor shower ends.  
+- Randomizes timing and duration to create dynamic and varied sky events.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using System.Collections;
 
