@@ -1,3 +1,28 @@
+// ============================================================
+// Readme of CrosshairSwitcher
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script controls the activation and deactivation of the player’s crosshair UI.  
+It allows turning the crosshair on or off via public methods.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Finds the crosshair UI GameObject at startup using the tag "crosshairUI".  
+- Provides public methods `crosshairOn()` and `crosshairOff()` to enable or disable the crosshair.  
+- Ensures safe operation by checking if the crosshair reference exists before changing its active state.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class CrosshairSwitcher : MonoBehaviour {
