@@ -1,3 +1,29 @@
+// ============================================================  
+// Readme of UpgradesController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages and exposes the player’s upgrade stats by referencing the global `UpgradesManager`.  
+It provides easy access to upgraded values such as weapon stats and scrap interaction parameters.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Finds the `UpgradesManager` instance at startup to retrieve current upgrade values.  
+- Stores and exposes player upgrade stats: `cleanRangeUpgrade`, `scrapDestroyedUpgrade`, `weaponDamageUpgrade`, and `weaponRangeUpgrade`.  
+- Provides a public method `updateStats()` to refresh upgrade values when the `UpgradesManager` is updated.  
+- Ensures that the player’s local upgrade stats stay synchronized with the global upgrade system.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class UpgradesController : MonoBehaviour {
