@@ -1,3 +1,32 @@
+// ============================================================  
+// Readme of QTETextTicker  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script displays a series of text phrases one at a time using a TextMeshPro (UI or 3D) component.  
+Each phrase fades in, remains visible for a set duration, then fades out. Phrases are chosen randomly without repeating the last one.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Stores an array of phrases to display (`phrases`).  
+- Configures the visible time (`visibleTime`) and fade duration (`fadeDuration`) for each phrase.  
+- References either a TextMeshProUGUI or a TextMeshPro component to display text.  
+- Randomly selects a phrase, ensuring the same phrase does not repeat consecutively.  
+- Fades text in and out smoothly using coroutines (`fadeIn` and `fadeOut`).  
+- Updates the alpha and text content of the TMP component each frame for visual effects.  
+- Continuously loops through phrases indefinitely with fading and timing control.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 using TMPro;
 using System.Collections;
