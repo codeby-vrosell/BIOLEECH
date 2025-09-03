@@ -1,3 +1,29 @@
+// ============================================================  
+// Readme of RotateEffect  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script continuously rotates a GameObject at a specified speed along its local axes.  
+It provides a simple way to apply constant rotation effects to objects in the scene.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Exposes a `rotationSpeed` vector to control rotation around the X, Y, and Z axes.  
+- Rotates the GameObject every frame in `Update()` using `Transform.Rotate()`.  
+- Ensures frame-independent rotation by multiplying speed with `Time.deltaTime`.  
+- Can be attached to any GameObject to create simple visual rotation effects.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class RotateEffect : MonoBehaviour {
