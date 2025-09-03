@@ -1,3 +1,30 @@
+// ============================================================  
+// Readme of PlayerMeshSwitch  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages the visibility of the player’s mesh based on the player’s state.  
+It hides the mesh when the player is sitting down or teleporting.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Retrieves references to FPS_Controller, TPController, the player’s mesh, and TutorialGameManager at startup.  
+- Monitors the player’s state each frame to determine whether the mesh should be visible.  
+- Hides the player mesh when the player is starting to sit or is teleporting.  
+- Shows the player mesh when the player is neither sitting nor teleporting.  
+- Skips updates if the tutorial manager is active to avoid interfering with tutorial-specific mesh behavior.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class PlayerMeshSwitch : MonoBehaviour {
