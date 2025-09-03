@@ -1,0 +1,235 @@
+ETIQUETA (TEXTO Y AUDIO),TEXTO,PRIORITARIA
+DMG_PLAYER_100_50_001,Tus niveles de vitalidad han disminuido. ¿Quizá necesitas una charla motivacional?,NO
+DMG_PLAYER_100_50_002,Recibir daño es solo una percepción subjetiva. Prosigue.,NO
+DMG_PLAYER_100_50_003,"Anomalía detectada en la biometría. Si puedes leer esto, sigues siendo útil.",NO
+DMG_PLAYER_100_50_004,Tu traje ha registrado fallos estructurales. Se recomienda evitar más errores humanos.,NO
+DMG_PLAYER_100_50_005,Considera el dolor como una oportunidad de mejora continua.,NO
+DMG_PLAYER_100_50_006,Deterioro en el traje registrado. La reparación corre por tu cuenta.,NO
+DMG_PLAYER_100_50_007,Tu integridad física está comprometida. El flujo de trabajo no debería estarlo.,NO
+DMG_PLAYER_100_50_008,"Recuerda: si el traje se mancha de sangre, la limpieza del mismo es tu responsabilidad.",NO
+DMG_PLAYER_50_01_001,Estimulante disponible. Consumo voluntario obligatorio recomendado.,SÍ
+DMG_PLAYER_50_01_002,Nivel vital bajo. Una dosis más y seguirás siendo estadísticamente rentable.,SÍ
+DMG_PLAYER_50_01_003,Una dosis a tiempo evita auditorías por negligencia.,SÍ
+DMG_PLAYER_50_01_004,Puedes seguir sufriendo… o puedes drogarte gentilmente por orden corporativa.,SÍ
+DMG_PLAYER_50_01_005,Ese hilillo de sangre dice ‘urgente’. ¿Hace falta que te lo deletree?,SÍ
+DMG_PLAYER_50_01_006,Estimulante disponible. Legalmente no podemos llamarlo droga. Así que lo llamamos ‘rendimiento concentrado’.,SÍ
+DMG_PLAYER_50_01_007,No es dopaje si la empresa lo proporciona. El estimulante es una herramienta más para alcanzar tu potencial.,SÍ
+DMG_CARGA_100_50_001,"Daños registrados en la unidad de transporte. Recuerda: tu integridad es negociable, la suya, no.
+",NO
+DMG_CARGA_100_50_002,Estado del cargamento: degradado. Estado del operario: sustituible.,NO
+DMG_CARGA_100_50_003,Deterioro logístico detectado. La corporación te recuerda que estás aquí para proteger algo más importante que tú.,NO
+DMG_CARGA_100_50_004,"La carga está en riesgo. Tu rendimiento, en evaluación.",NO
+DMG_CARGA_100_50_005,No te castigues por el estado de la carga. La corporación ya se encargará de eso en tu evaluación.,NO
+DMG_CARGA_100_50_006,"Recuerda: no eres un fracaso. Solo necesitas reenfocar tus prioridades. En este caso, la carga.",NO
+DMG_CARGA_100_50_007,"Cada impacto es una oportunidad de mejora. Para ti, y para el blindaje del cargamento.",NO
+DMG_CARGA_50_01_001,"Estado del activo por debajo del umbral de estabilidad. Se sugiere, con insistencia, intervención inmediata.",SÍ
+DMG_CARGA_50_01_002,Alerta de integridad: el activo está alcanzando el límite inferior de tolerancia. La pasividad no está protocolizada.,SÍ
+DMG_CARGA_50_01_003,Vida de la carga por debajo del 50%. La eficiencia de la misión entra en territorio discutible. Esfuérzate más o afronta las consecuencias.,SÍ
+DMG_CARGA_50_01_004,Estado crítico. Refuerza la defensa antes de que el sistema comience a calcular pérdidas.,SÍ
+DMG_CARGA_50_01_005,"El activo sigue bajo ataque. Mejorar tu defensa no es opcional, solo urgente.",SÍ
+DMG_STRUCT_100_50_001,Estado estructural en descenso. ¿Tal vez deberías concentrarte un poco más? Gracias.,NO
+DMG_STRUCT_100_50_002,"La estructura presenta daños. Por favor, recuerda que reconstruir es más caro que proteger.",NO
+DMG_STRUCT_100_50_003,Integridad del punto defensivo en riesgo. La palabra ‘prioridad’ existe por una razón.,NO
+DMG_STRUCT_100_50_004,"La estructura necesita apoyo. Tú también, probablemente. Pero empecemos por lo importante.",NO
+DMG_STRUCT_100_50_005,Los fallos son parte del proceso. Solo intenta que no sean tan evidentes en el informe.,NO
+DMG_STRUCT_100_50_006,"Impactos detectados. Si puedes detenerlos, sería conveniente para el informe final.",NO
+DMG_STRUCT_100_50_007,"La estructura muestra signos de fallo. El entorno agradecerá su protección, el informe, aún más.",NO
+DMG_STRUCT_100_50_008,El sistema sugiere reforzar la defensa. La infraestructura sigue ligada a objetivos ambientales válidos.,NO
+DMG_STRUCT_100_50_009,"Recuerda: esta estructura es 70% reciclada, 30% inestable y 100% tu responsabilidad.",NO
+DMG_STRUCT_50_01_001,"Zona defensiva ineficaz. Mejora tu respuesta antes de que sea una reconstrucción, no una misión.",SÍ
+DMG_STRUCT_50_01_002,La construcción no está diseñada para aguantar indefinidamente. Haz algo.,SÍ
+DMG_STRUCT_50_01_003,Punto defensivo inestable. El sistema sugiere pasar de contención pasiva a acción inmediata.,SÍ
+DMG_STRUCT_50_01_004,Estado estructural por debajo del 50%. Se espera una reacción proporcional.,SÍ
+DMG_STRUCT_50_01_005,"Nivel de daños críticos. Sin esta estructura, el entorno sufre… y también nuestra puntuación en sostenibilidad.",SÍ
+DMG_STRUCT_50_01_006,Degradación avanzada. Aún puede evitarse un desenlace negativo para el entorno… y para el informe.,SÍ
+DMG_STRUCT_50_01_007,Condición estructural deficiente. Sería recomendable restaurarla mientras aún tiene valor… ecológico y sobre todo funcional.,SÍ
+END_MISION_OBJETOS_001,"Objetos recuperados. Dirígete a la zona de extracción, a poder ser, de una sola pieza.
+",SÍ
+END_MISION_OBJETOS_002,"Carga lista para activarse. Dirígete a la salida. No por descanso, sino por redistribución.",SÍ
+END_MISION_OBJETOS_003,"Componentes asegurados, procede a la extracción. La siguiente misión te estará esperando antes de que llegues.",SÍ
+END_MISION_OBJETOS_004,"Objetos localizados. Ya puedes volver. No es una recompensa, es pura logística.",SÍ
+END_MISION_OBJETOS_005,Todos los componentes están en posición y tú también deberías estarlo. Zona de extracción habilitada.,SÍ
+END_MISION_ESCOLTAR_001,Objetivo logístico alcanzado. Zona de extracción habilitada. No esperes más instrucciones.,SÍ
+END_MISION_ESCOLTAR_002,"Carga asegurada. El protocolo de evacuación ya está activo. Tu permanencia es opcional, pero no recomendada.",SÍ
+END_MISION_ESCOLTAR_003,Tu escolta ha finalizado. Regresa. El sistema ya ha empezado a ignorarte proactivamente.,SÍ
+END_MISION_ESCOLTAR_004,Escolta finalizada. Evacuación disponible. Aprovecha la eficiencia mientras aún te incluye.,SÍ
+END_MISION_ESCOLTAR_005,Carga asegurada. Tu presencia excede el tiempo útil estimado. Procede a la extracción.,SÍ
+END_MISION_DEFENDER_001,Has completado la defensa. Tu permanencia ya no suma productividad. Zona de extracción habilitada.,SÍ
+END_MISION_DEFENDER_002,Punto asegurado. Tu presencia ya ha dejado de ser crítica o necesaria.,SÍ
+END_MISION_DEFENDER_003,"Estructura defendida con éxito. Ahora solo falta volver, suena más fácil de lo que parece.",SÍ
+END_MISION_DEFENDER_004,"Objetivo cumplido. Retorno autorizado. Evita dramatismos innecesarios.",SÍ
+END_MISION_DEFENDER_005,"Defensa registrada. La instalación sobrevivió. Lo recomendable ahora es que tú también lo intentes.",SÍ
+END_MISION_DEFENDER_006,La estructura ha sido defendida. Procede a la extracción antes de que el entorno lo reconsidere.,SÍ
+LORE_OBJETOS_001,"Encuentra los 3 objetos esenciales para la carga. Alguien los descartó por error. Ahora son tu responsabilidad, felicidades.
+",SÍ
+LORE_OBJETOS_002,"Encuentra los componentes necesarios para el funcionamiento de la carga. No deberían estar ahí, pero ahí están. Y tú también.
+
+",SÍ
+LORE_OBJETOS_003,"Tres piezas imprescindibles, perdidas entre restos. Y tú, imprescindible para recuperarlas. Qué coincidencia.
+
+",SÍ
+LORE_OBJETOS_004,"Busca los objetos esenciales para la carga. El protocolo ha fallado, ahora debes compensarlo con esfuerzo físico no remunerado.
+",SÍ
+LORE_OBJETOS_005,"Tres módulos esenciales han sido mal gestionados. Enhorabuena: la solución también ha sido delegada.
+
+",SÍ
+LORE_ESCOLTAR_001,"Traslada la carga con seguridad. En caso de conflicto, recuerda cuál de los dos es reemplazable.
+",SÍ
+LORE_ESCOLTAR_002,"El activo debe llegar al punto final, el sistema no está preparado para otra pérdida… de inventario.",SÍ
+LORE_ESCOLTAR_003,"Asegura que la carga no sufra daños, en cuanto a ti, haz lo que puedas.",SÍ
+LORE_ESCOLTAR_004,"Asegura la entrega del activo, la corporación no tolera pérdidas materiales.",SÍ
+LORE_ESCOLTAR_005,"Protege la carga a toda costa, el sistema logístico confía en ti.",SÍ
+LORE_ESCOLTAR_006,Recuerda: escoltar la carga no solo es importante… es obligatorio. Pero puedes sentirte bien al hacerlo.,SÍ
+LORE_DEFENDER_001,"Defiende la estructura hasta que finalice la construcción, es lo único en esta zona con un presupuesto definido.",SÍ
+LORE_DEFENDER_002,"Protege la instalación. Bioleech.Corp cuenta contigo. Técnicamente eres un número, pero cuentas.",SÍ
+LORE_DEFENDER_003,"Inicia la defensa del punto. La estabilidad de la zona depende de su integridad, no necesariamente de la tuya.",SÍ
+LORE_DEFENDER_004,Defiende el punto a cualquier precio. Es lo único irreemplazable de esta zona.,SÍ
+LORE_DEFENDER_005,"Mantén la defensa operativa. El sistema espera resultados, no explicaciones.",SÍ
+DEAD_PLAYER_001,"Sustitución completada. Continúa donde el anterior lo dejó. Idealmente, sin cometer el mismo error.",SÍ
+DEAD_PLAYER_002,"Tu inserción fue programada con éxito tras la pérdida del anterior trabajador. Técnicamente, es un ascenso.",SÍ
+DEAD_PLAYER_003,"Unidad reemplazada con éxito. Recuerda: no se trata de quién lo hace, sino de que se haga.",SÍ
+DEAD_PLAYER_004,"Reasignación completada. Recuerda: lo importante no es ser el primero, sino el siguiente.",SÍ
+DEAD_PLAYER_005,Tu presencia cubre una vacante reciente. El sistema recomienda no encariñarse con el puesto.,SÍ
+DEAD_PLAYER_006,"Si arrastras pensamientos residuales del anterior compañero, ignóralos. No te pertenecen, el puesto sí.",SÍ
+DEAD_PLAYER_007,El sistema agradece tu disponibilidad inmediata. La vacante no podía permitirse estar vacía.,SÍ
+DEAD_PLAYER_008,"Tu predecesor dejó el listón accesible. No te sientas presionado, pero solo tienes una oportunidad.",SÍ
+DEAD_PLAYER_009,"Eres el nuevo estándar. Hasta que falles. El anterior lo hizo, y ahora es un dato irrelevante.",SÍ
+DEAD_PLAYER_010,"Nuevo perfil cargado. Esta es tu oportunidad de demostrar que la rotación no es obligatoria, solo frecuente.",SÍ
+START_EXTRACCION_001,"Comenzando extracción. Se recomienda permanecer quieto. No por seguridad, sino por eficiencia visual.",NO
+START_EXTRACCION_002,"Preparando extracción. Se recomienda no hacer preguntas, especialmente sobre el viaje.",NO
+START_EXTRACCION_003,"Extracción activada. Disfruta del trayecto, o al menos, evita generar más costes.",NO
+START_EXTRACCION_004,Extracción en proceso. Tu eficiencia ha sido suficiente para justificar tu regreso. Por esta vez.,NO
+START_EXTRACCION_005,"Extracción en marcha. Agradece al sistema, en silencio.",NO
+START_EXTRACCION_006,Iniciando extracción. El regreso no exime de responsabilidades contractuales pendientes.,NO
+START_EXTRACCION_007,Comenzando retirada operativa. Evita interpretar este movimiento como un privilegio.,NO
+START_EXTRACCION_008,"Proceso de extracción iniciado. No es una recompensa, es reubicación estratégica.",NO
+START_EXTRACCION_009,Extracción programada. No interpretes el ascenso como final de jornada.,NO
+FAIL_MISION_ESCOLTAR_001,El activo crítico ha sido destruido. Gracias por tu participación interpretativa.,SÍ
+FAIL_MISION_ESCOLTAR_002,"La mercancía era valiosa. La experiencia ha sido... formativa, para el siguiente operario.",SÍ
+FAIL_MISION_ESCOLTAR_003,"El cargamento ha sido destruido, tu función también. Se procederá con la rotación habitual.",SÍ
+FAIL_MISION_ESCOLTAR_004,"   La carga no ha alcanzado su destino, lamentablemente, tú sí has alcanzado el tuyo.",SÍ
+FAIL_MISION_DEFENDER_001,La estructura ha colapsado. Tu posición también lo hará en breve.,SÍ
+FAIL_MISION_DEFENDER_002,Defensa ineficaz registrada. Procedemos a optimizar el operario.,SÍ
+FAIL_MISION_DEFENDER_003,La construcción no ha sobrevivido. Las estadísticas indican que tú tampoco.,SÍ
+FAIL_MISION_DEFENDER_004,"Punto crítico destruido. Se iniciará un protocolo de limpieza, empezando por el personal.",SÍ
+FAIL_MISION_DEFENDER_005,La misión era simple: defender. La solución ahora también lo será: reemplazar.,SÍ
+JOKE_GENERIC_001,"Algún día habrá que abrir el melón acerca de las horas de sueño de los trabajadores, ¿no?",NO
+JOKE_GENERIC_002,Hace tiempo salía con ChatGPT… pero lo dejamos. Se le subió la fama a la cabeza.,NO
+JOKE_GENERIC_003,"Sal, respira hondo y disfruta tu pitipausa. Es lo más cerca que estarás hoy de un momento personal.",NO
+JOKE_GENERIC_004,"Hubo un trabajador que trajo a su perro Simba al trabajo, si limpias suficientes residuos, quizá lo encuentres.",NO
+JOKE_GENERIC_005,"Las pausas para contemplar el cielo, serán descontadas de tu nómina.",NO
+JOKE_GENERIC_006,¿Terapia? Para Bioleech.Corp silbar es una técnica 'mindfulness' efectiva... y barata.,NO
+JOKE_GENERIC_007,"Si los dinosaurios hubieran trabajado más horas extra, quizás seguirían aquí.",NO
+JOKE_GENERIC_008,Buscando a CreakyNebula en nuestra base de datos... Error 404.,NO
+JOKE_GENERIC_009,"La base de datos de virus, ha sido actualizada.",NO
+JOKE_GENERIC_010,"Las condiciones son extremas, como nuestra confianza en tu capacidad de ignorarlas.",NO
+JOKE_GENERIC_011,"No es explotación laboral, es un ciclo de optimización permanente con participación obligatoria.",NO
+JOKE_GENERIC_012,"Tu bienestar es importante, por eso fue recortado del presupuesto de esta misión.",NO
+JOKE_GENERIC_013,"Si sientes que estás al límite, es porque lo estás haciendo bien… para nosotros.
+
+",NO
+JOKE_GENERIC_014,Las criaturas autóctonas eran importantes para el planeta... hasta que empezaron a interferir en la logística.,NO
+JOKE_GENERIC_015,Buen trabajo. Tu rendimiento actual supera el del 38% de los empleados desaparecidos.,NO
+JOKE_GENERIC_016,"Tu contrato dice que eres parte del cambio, técnicamente, eso incluye mutaciones.",NO
+JOKE_GENERIC_017,"¿Te duele algo? No te preocupes, el seguro de salud está optimizado para ignorarlo.",NO
+JOKE_GENERIC_018,"Evita inhalar el polvo del terreno, no por salud. Sino porque entorpece las métricas ambientales.",NO
+JOKE_GENERIC_019,"Tranquilo, los niveles de radiación están por debajo del umbral en el que activan indemnización.",NO
+JOKE_GENERIC_020,"Si tu arma se atasca, recuerda: no es un fallo técnico. Es una oportunidad de demostrar carácter.",NO
+JOKE_GENERIC_021,"No estás trabajando solo, estás acompañado por métricas, presión y vigilancia constante.",NO
+JOKE_GENERIC_022,"¿Condiciones peligrosas? No te preocupes, el formulario de quejas es biodegradable.",NO
+JOKE_GENERIC_023,El sobrecalentamiento es una excelente ocasión para practicar la paciencia profesional.,NO
+JOKE_GENERIC_024,"Las herramientas no fallan, solo te desafían a adaptarte con menos.",NO
+JOKE_GENERIC_025,Aspirar residuos es esencial para la misión. También lo es asumir que seguirán apareciendo.,NO
+JOKE_GENERIC_026,"Tus habilidades de improvisación son un recurso no presupuestado, aprovechémoslo.",NO
+JOKE_GENERIC_027,"Si todo parece en tu contra, es señal de que los objetivos se están cumpliendo.",NO
+JOKE_GENERIC_028,"Recoger residuos es un acto noble, sobre todo, cuando mejora las métricas trimestrales.",NO
+JOKE_GENERIC_029,¿Fatiga? Normal. No está contemplada en la política de pausas activas.,NO
+JOKE_GENERIC_030,"Cualquier daño sufrido será evaluado, a nivel de coste, no de preocupación.",NO
+JOKE_GENERIC_031,La vida silvestre reacciona de forma entusiasta a señales lumínicas. Considéralo una oportunidad para optimizar tu capacidad de evasión.,NO
+JOKE_GENERIC_032,"La tecnología de tu equipo maximiza la eficiencia energética. Lamentablemente, también maximiza la atención de organismos hostiles.
+",NO
+JOKE_GENERIC_033,"La atracción de criaturas hostiles por nuestras balizas luminosas ha sido clasificada como ‘interacción natural no obstructiva’.",NO
+JOKE_GENERIC_034,"El uso de balizas de alta intensidad responde a criterios de eficiencia logística. La fauna local no fue considerada un factor crítico.
+
+",NO
+JOKE_GENERIC_035,"Las unidades con señalización luminosa refuerzan la imagen corporativa. Su interacción con depredadores locales es anecdótica.
+",NO
+JOKE_GENERIC_036,"La atracción de los enemigos por la luz está dentro de los parámetros previstos. Curiosamente, no es un parámetro contemplado en tu seguro.
+",NO
+JOKE_GENERIC_037,"Bioleech.Corp apuesta por la transparencia operativa. Nada representa mejor ese valor que iluminar cada objetivo hasta atraer toda la atención posible.",NO
+JOKE_GENERIC_038,"Si notas resistencia en tus herramientas, es probable que estén enseñándote una valiosa lección de austeridad.",NO
+START_INCURSION_001,Secuencia de descenso activada. No olvides lo esencial: rendir más que el anterior.,NO
+START_INCURSION_002,"Tu descenso comenzará en breve. Si tienes dudas, ignóralas antes de que lo haga el sistema.",NO
+START_INCURSION_003,"Activando protocolo de descenso. Si no estás listo, finge. El impacto no distinguirá la diferencia.",NO
+START_INCURSION_004,"Despliegue inminente. Que tengas un aterrizaje suave y consecuencias gestionables.",NO
+START_INCURSION_005,"
+En breve comenzará la fase de descenso. Se le desea un retorno dentro de los márgenes funcionales.
+",NO
+START_INCURSION_006,Inicio de misión confirmado. Permanecer a bordo ya no es una opción reglamentaria.,NO
+START_INCURSION_007,"Se ha programado su lanzamiento a superficie. No es una misión, es continuidad laboral automatizada.",NO
+START_INCURSION_008,Listo para desplegar. La corporación agradece su cooperación no remunerada.,NO
+START_INCURSION_009,"Listo para desplegar. La corporación agradece su cooperación forzada.",NO
+MISS_STIMS_001,"Procedimiento interrumpido. Estimulantes no presentes en inventario. Afrontar la misión con espíritu de superación es, técnicamente, insuficiente.",SÍ
+MISS_STIMS_002,Acceso a misión denegado. Estimulantes pendientes. Productividad natural es insuficiente para objetivos actuales.,SÍ
+MISS_STIMS_003,"Recogida de estimulantes obligatoria. Su eficacia está científicamente cuestionada, pero administrativamente validada.",SÍ
+MISS_STIMS_004,"Tu estado actual carece de soporte farmacológico. La productividad exige soluciones verificadas…",SÍ
+MISS_STIMS_005,Estimulantes pendientes de recogida. Recuerda: los efectos secundarios no afectan al cumplimiento de objetivos.,SÍ
+MISS_STIMS_006,"Intervención suspendida. Estimulantes no recogidos. La empresa asume el compromiso de facilitar tu rendimiento, tú solo debes consumirlo.",SÍ
+MISS_STIMS_007,"Antes de comprometer la misión, comprométete a recoger tus estimulantes. Es lo que haría un operario eficiente.",SÍ
+MISS_STIMS_008,Sistema detecta operario subóptimo. Los estimulantes corrigen este problema en un 73% de los casos documentados.,SÍ
+NAVE_PROPAGANDA_001,"En Bioleech.Corp cada intervención es un compromiso con la sostenibilidad. Reducimos el impacto ambiental aplicando procesos industriales de alta precisión, asegurando que cada recurso sea aprovechado… hasta su último margen de beneficio.",NO
+NAVE_PROPAGANDA_002,Recuperar entornos degradados es más que un deber: es una oportunidad. Bioleech.Corp transforma cada planeta en un caso de éxito operativo. Equilibrando la regeneración ecológica con una rentabilidad medible y escalable.,NO
+NAVE_PROPAGANDA_003,"Donde otros ven residuos, Bioleech.Corp identifica activos de valor. A través de intervenciones responsables, garantizamos la optimización de cada elemento, asegurando beneficios sostenibles… para todas las partes relevantes.",NO
+NAVE_PROPAGANDA_004,"La excelencia medioambiental requiere soluciones eficientes. En Bioleech.Corp cada misión responde a este principio: restaurar el entorno, mantener la productividad y preservar la imagen corporativa en un único movimiento.",NO
+NAVE_PROPAGANDA_005,"Nuestro liderazgo en rehabilitación planetaria se basa en una gestión rigurosa de recursos. Aplicamos innovación y disciplina para lograr entornos más estables, económicamente viables y visualmente adecuados para la comunicación institucional.",NO
+NAVE_PROPAGANDA_006,"Sostenibilidad y rendimiento no son opuestos. En Bioleech.Corp los integramos en cada proceso, asegurando un equilibrio funcional que beneficia al planeta… y respeta la eficiencia que nuestros inversores esperan.",NO
+NAVE_PROPAGANDA_007,"Cada operación de Bioleech.Corp es una declaración de intenciones: recuperar lo degradado, maximizar lo productivo y mantener la percepción pública alineada con nuestros objetivos de crecimiento.",NO
+NAVE_PROPAGANDA_008,"Donde otros solo ven limitaciones, BioleechCorp. establece estándares. Aplicamos metodologías precisas que garantizan la recuperación del entorno… y la estabilidad de nuestros márgenes.",NO
+NAVE_PROPAGANDA_009,"Cada planeta es una oportunidad. De restaurar, de revalorizar y de fortalecer la presencia de Bioleech.Corp como referente en rehabilitación de entornos productivos.",NO
+PICK_DAMAGE_001,Nivel de daño incrementado. El sistema espera menos enemigos. Y menos excusas.,SÍ
+PICK_DAMAGE_002,Potencia ofensiva incrementada. Por si la conversación con la fauna no da resultado.,SÍ
+PICK_DAMAGE_003,"Daño aumentado. Tu arma se ha adaptado, sería ideal que tú también.",SÍ
+PICK_CLEANRANGE_001,Potencia de succión incrementada. Ahora puedes limpiar más rápido. El tiempo de descanso no ha variado.,SÍ
+PICK_CLEANRANGE_002,"Potencia de absorción intensificada. Si algo se resiste, aspira con más convicción.",SÍ
+PICK_CLEANRANGE_003,"Succión intensificada. El entorno cederá con menos resistencia. Tú, con la de siempre.",SÍ
+PICK_CHATARRABURN_001,Parámetros del quemador ajustados. Se acabaron las pausas innecesarias.,SÍ
+PICK_CHATARRABURN_002,"Tasa de combustión mejorada. Ya puedes quemar más por minuto, como se te exige.",SÍ
+PICK_CHATARRABURN_003,"Quemador recalibrado. La eficiencia no es negociable, el descanso, tampoco.",SÍ
+MAP_COMPLETED_001,"Las misiones asignadas han sido completadas con eficacia funcional. Procederemos a su reubicación inmediata. No es necesario celebrar, aún hay más.
+",SÍ
+MAP_COMPLETED_002,"Misiones completadas. Disfruta del breve trayecto a su próxima zona de contribución.
+",SÍ
+MAP_COMPLETED_003,"Zona planetaria completada. Bioleech.Corp te ha reasignado automáticamente, el siguiente destino no se rehabilitará solo.
+",SÍ
+MAP_COMPLETED_004,"Las tres misiones de campo han sido completadas. El protocolo de reubicación se ha activado, lo bueno es que no tienes que decidir nada.
+",SÍ
+OUT_PLAYER_001,Tu ubicación actual no coincide con tu función. Bioleech.Corp recuerda que sustituirte siempre es más barato que reubicarte.,SÍ
+OUT_PLAYER_002,Has salido del área designada. Un reemplazo ya está en camino por si decides seguir improvisando.,SÍ
+OUT_PLAYER_003,Advertencia: estás abandonando el entorno supervisado. Bioleech.Corp no cubre accidentes en zonas no presupuestadas.,SÍ
+OUT_PLAYER_004,"El protocolo de autonomía limitada ha sido violado. Si fue un error, retrocede, si no, se corregirá contigo.",SÍ
+OUT_PLAYER_005,"Estás saliendo del área útil, y entrando en el área reemplazable.",SÍ
+OUT_PLAYER_006,"Persistir fuera del perímetro asignado será interpretado como una renuncia implícita, Bioleech.Corp ya está valorando alternativas.",SÍ
+OUT_PLAYER_007,Cada paso fuera del perímetro reduce tu prioridad operativa. El sistema lo agradece: así agiliza el relevo.,SÍ
+NO_PICK_UPGRADE_001,Mejora no instalada. Continuar sin ella excede el margen de riesgo tolerado por Bioleech.Corp.,SÍ
+NO_PICK_UPGRADE_002,Estado sin validar. Despliegue denegado por bajo cumplimiento del estándar operativo.,SÍ
+NO_PICK_UPGRADE_003,Optimización no ejecutada. Continuar así solo es viable bajo protocolo de reemplazo acelerado.,SÍ
+NO_PICK_UPGRADE_004,Mejora no detectada. Afrontar la intervención sin ella se considera innecesariamente valiente.,SÍ
+NO_PICK_UPGRADE_005,Componente no integrado. El protocolo exige al menos aparentar estar preparado.,SÍ
+STEP_TUTORIAL_001,"Soy MAYA, tu asistente cognitiva y apoyo emocional regulado de Bioleech.Corp. Bienvenido al proceso de validación. Tu incorporación fue prioritaria por razones logísticas, no selectivas. Esta simulación de campo garantiza que, al menos sobre el papel, todo está bajo control.",TUTORIAL
+STEP_TUTORIAL_002,"Podrás consultar en el desplegable del casco como realizar cada parte de este proceso de validación... A veces, tener una guía visible mejora la percepción de control, solo a veces.",TUTORIAL
+STEP_TUTORIAL_003,"A continuación se requiere validar tu capacidad de movimiento. Saltos, impulsos y correcciones hasta llegar a la zona designada. Recuerda: en Bioleech.Corp, la eficiencia se mide en trayectorias, y en la facilidad para reemplazar activos que dejan de serlo.
+",TUTORIAL
+STEP_TUTORIAL_004,"Se procederá a una simulación de daño físico. Para mitigar el dolor, cuentas con estimulantes corporativos, para ello la precisión en este proceso determinará el nivel de restauración alcanzado. Una oportunidad perfecta para comprobar tu implicación… contigo mismo.
+
+",TUTORIAL
+STEP_TUTORIAL_005,El siguiente paso requiere la activación de tu sistema de succión para la recolección de residuos. Esta tarea forma parte del compromiso de limpieza operativa.,TUTORIAL
+STEP_TUTORIAL_006,"El postquemador se encarga de convertir los residuos absorbidos en munición. Este se activará automáticamente cuando llegue a su capacidad máxima, o puede ser activado manualmente cuando sea necesario. Deberás accionar correctamente el arma tres veces consecutivas. La herramienta responde, a menudo, así que no falles.",TUTORIAL
+STEP_TUTORIAL_007,"La visibilidad en tu entorno siempre se verá comprometida por factores ambientales ajenos a la compañía. Se recomienda el uso del sónar para localizar posibles amenazas cercanas u objetos de interés, aunque estén ocultos en el terreno.",TUTORIAL
+STEP_TUTORIAL_008,Generando ejemplares aéreos hostiles. Prepárate para suprimir las amenazas mediante acción directa.,TUTORIAL
+STEP_TUTORIAL_009,Generando más ejemplares hostiles. Las emisiones lumínicas del equipamiento proporcionado suelen ser un factor de atracción para todo tipo de ejemplares. Bioleech.Corp agradece tu intervención antes de que el activo se vuelva irreparable.,TUTORIAL
+STEP_TUTORIAL_010,Éxito técnico: Completado. Margen de error: Aceptable. Dirígete a la cápsula para conocer tu siguiente destino.,TUTORIAL
+STEP_TUTORIAL_011,"Finalizando simulación... Bioleech.Corp espera que sobrevivas, por motivos legales.",TUTORIAL
+NO_TASK_COMPLETED_001,"Tienes una tarea corporativa pendiente. No hará que valgas más, pero evitará preguntas.",SÍ
+NO_TASK_COMPLETED_002,Accede al ordenador de a bordo y completa la operación asignada. Nada dice ‘compromiso’ como una tarea sin sentido inmediato.,SÍ
+NO_TASK_COMPLETED_003,El ordenador solicita tu intervención directa. Bioleech.Corp lo interpreta como un gesto de compromiso.,SÍ
+NO_TASK_COMPLETED_004,"Pendiente de ejecutar acción asignada en consola interna. No te hará especial, pero sí operativo.",SÍ
