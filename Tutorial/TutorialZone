@@ -1,3 +1,30 @@
+// ============================================================  
+// Readme of TutorialZone  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script detects when the player enters or stays inside a tutorial area.  
+It notifies the `TutorialGameManager` to handle the tutorial progression and can destroy itself when no longer needed.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Holds a reference to the `TutorialGameManager` to report player interactions.  
+- Detects when the player enters the trigger zone using `OnTriggerEnter`.  
+- Detects when the player stays inside the trigger zone using `OnTriggerStay`.  
+- Calls the `playerEnterZone()` method on the tutorial manager whenever the player is present.  
+- Provides a private method `destroyZone()` to remove the tutorial zone object from the scene.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class TutorialZone : MonoBehaviour {
