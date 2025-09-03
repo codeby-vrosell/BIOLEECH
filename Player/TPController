@@ -1,3 +1,36 @@
+// ============================================================  
+// Readme of TPController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages all aspects of player teleportation between different locations (capsule, mothership, etc.) in the game.  
+It handles teleportation input, countdowns, scanner UI visuals, fade transitions, audio, and teleportation-related restrictions and animations.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Tracks teleportation states such as `inCapsule`, `inMotherShip`, `isTeleporting`, and countdown timers.  
+- Detects interactable teleportation targets using raycasts from the player camera.  
+- Handles teleportation input, including holding a button to initiate teleportation.  
+- Updates the scanner UI fill and animation to reflect teleportation readiness.  
+- Manages fade-in and fade-out effects for the scanner UI using coroutines.  
+- Plays relevant audio clips during teleportation interactions and countdowns.  
+- Controls teleportation animations and glitch effects during transitions.  
+- Provides public coroutines for death teleportation (`capsuleDeathAnimation`) and player spawn animation (`spawnPlayerAnimation`).  
+- Dynamically sets or updates player references using `SetPlayer()`.  
+- Enforces teleportation conditions based on game state, player upgrades, and stimulants collected.  
+- Ensures cooldowns and restrictions to prevent teleportation abuse or unintended behavior.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
