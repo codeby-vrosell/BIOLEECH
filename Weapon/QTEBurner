@@ -13,8 +13,8 @@ public class QTEBurner : MonoBehaviour {
     public GameObject crosshairCanvas;
     public Animator animator;
 
-    private ScrapGunController scrapGunControllerScript;
-    private FPControllerGun fpControllerGunScript;
+    private ScrapWeaponController scrapWeaponControllerScript;
+    private FPControllerWeapon fpControllerWeaponScript;
 
     // ============================================================
     // Hit Zone Configuration
@@ -46,9 +46,9 @@ public class QTEBurner : MonoBehaviour {
 
     void start() {
 
-        scrapGunControllerScript = Object.FindFirstObjectByType<ScrapGunController>();
+        scrapWeaponControllerScript = Object.FindFirstObjectByType<ScrapWeaponController>();
         GameObject playerObj = GameObject.FindWithTag("Player");
-        fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+        fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
         resetIndicators();
 
@@ -58,19 +58,19 @@ public class QTEBurner : MonoBehaviour {
 
         findLights();
 
-        if (fpControllerGunScript == null) {
+        if (fpControllerWeaponScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
             if (playerObj != null) {
 
-                fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+                fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
             }
 
         }
 
-        if (fpControllerGunScript != null && fpControllerGunScript.isInQTE) {
+        if (fpControllerWeaponScript != null && fpControllerWeaponScript.isInQTE) {
 
             rotateIndicator();
             checkSuccess();
@@ -87,18 +87,18 @@ public class QTEBurner : MonoBehaviour {
         crosshairCanvas.SetActive(false);
 
         GameObject playerObj = GameObject.FindWithTag("Player");
-        fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+        fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
-        scrapGunControllerScript = Object.FindFirstObjectByType<ScrapGunController>();
+        scrapWeaponControllerScript = Object.FindFirstObjectByType<ScrapWeaponController>();
 
-        if (scrapGunControllerScript != null) {
+        if (scrapWeaponControllerScript != null) {
 
-            animator = scrapGunControllerScript.GetComponent<Animator>();
+            animator = scrapWeaponControllerScript.GetComponent<Animator>();
 
         }
 
-        fpControllerGunScript.isInQTE = true;
-        fpControllerGunScript.burnButtonPressed = false;
+        fpControllerWeaponScript.isInQTE = true;
+        fpControllerWeaponScript.burnButtonPressed = false;
 
         successCount = 0;
         updateSuccessIndicators();
@@ -108,7 +108,7 @@ public class QTEBurner : MonoBehaviour {
     public void resetQTE() {
 
         crosshairCanvas.SetActive(true);
-        fpControllerGunScript.isInQTE = false;
+        fpControllerWeaponScript.isInQTE = false;
         successCount = 0;
         Invoke("resetIndicators", 1f);
 
@@ -155,9 +155,9 @@ public class QTEBurner : MonoBehaviour {
 
     private void checkSuccess() {
 
-        if (fpControllerGunScript.burnButtonPressed) {
+        if (fpControllerWeaponScript.burnButtonPressed) {
 
-            fpControllerGunScript.burnButtonPressed = false;
+            fpControllerWeaponScript.burnButtonPressed = false;
 
             if (isInHitZone()) {
 
@@ -168,7 +168,7 @@ public class QTEBurner : MonoBehaviour {
                 if (successCount >= 3) {
 
                     resetQTE();
-                    scrapGunControllerScript.winQTE();
+                    scrapWeaponControllerScript.winQTE();
 
                 }
             }
