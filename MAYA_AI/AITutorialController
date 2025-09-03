@@ -1,3 +1,32 @@
+// ============================================================
+// Readme of AITutorialController
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages tutorial dialogue playback for the AI system.  
+It reads predefined tutorial lines from a CSV file, displays them with a typing effect, and synchronizes them with audio playback and UI animations.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Loads tutorial dialogue lines from a CSV file and organizes them by ID.  
+- Plays specific tutorial lines sequentially using a consistent prefix (`STEP_TUTORIAL_`).  
+- Displays text with a typing effect and blinking cursor for immersion.  
+- Controls UI animations for showing and hiding the dialogue frame.  
+- Plays associated audio clips for each tutorial line.  
+- Manages an audio spectrum visualizer that is shown when audio is active.  
+- Ensures clean interruption and stopping of dialogue and animations when needed.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
