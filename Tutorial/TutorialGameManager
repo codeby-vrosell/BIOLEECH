@@ -1,3 +1,38 @@
+// ============================================================  
+// Readme of TutorialGameManager  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages the entire step-by-step tutorial sequence of the game.  
+It coordinates gameplay events, player objectives, barriers, UI instructions, and transitions.  
+The flow is divided into numbered tutorial steps (1–11), each unlocking mechanics progressively.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Controls the overall tutorial flow using coroutines to advance between steps.  
+- Disables/enables player movement and weapon usage depending on the tutorial stage.  
+- Manages barriers (lowering them with sound, vibration, and camera shake).  
+- Updates on-screen mission objectives and control hints dynamically for keyboard/controller.  
+- Handles healing tutorials: opens healing events, forces player damage, and checks QTE success.  
+- Controls scrap suction and burning mechanics, including visual markers and reload QTE.  
+- Manages scanning tutorial (sonar activation, progress bar tracking, and scanner sound loop).  
+- Spawns enemies and tracks kill counts to unlock the next steps.  
+- Integrates glitch animations and fullscreen transitions between tutorial phases.  
+- Coordinates with other systems: AI tutorial dialogues, weapon controller, terrain scanner, stimulants, and health system.  
+- Plays sounds and triggers controller vibration for immersion during key events.  
+- Handles the final fade-to-black transition and scene change to the main level.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 using System.Collections;
 using TMPro;
