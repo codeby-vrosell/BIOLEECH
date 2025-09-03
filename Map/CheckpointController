@@ -1,3 +1,30 @@
+// ============================================================
+// Readme of CheckpointController
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages multiple checkpoints and their restoration process.  
+It ensures that inactive checkpoints respawn their meshes when triggered, typically after player death or reset events.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Holds references to all checkpoints in the scene.  
+- Tracks whether the player is dead to coordinate respawn logic.  
+- Iterates through all checkpoints and restores meshes for those not yet activated.  
+- Provides a central method (`respawnMeshes`) to reset checkpoint visuals and gameplay state.  
+- Logs respawn actions for debugging purposes.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class CheckpointController : MonoBehaviour {
