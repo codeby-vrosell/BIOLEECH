@@ -4,13 +4,13 @@ using System.Linq;
 using System.Collections;
 using UnityEngine.VFX;
 
-public class ShotGunController : MonoBehaviour {
+public class ShotWeaponController : MonoBehaviour {
 
     // ============================================================
     // References
     // ============================================================
 
-    private FPControllerGun fpControllerGunScript;
+    private FPControllerWeapon fpControllerWeaponScript;
     private UpgradesController upgradesControllerScript;
     private CrosshairController crosshairControllerScript;
     private RecoilWeapon recoilWeaponScript;
@@ -57,12 +57,12 @@ public class ShotGunController : MonoBehaviour {
         GameObject playerObj = GameObject.FindWithTag("Player");
 
         upgradesControllerScript = playerObj.GetComponent<UpgradesController>();
-        fpControllerGunScript = Object.FindFirstObjectByType<FPControllerGun>();
+        fpControllerWeaponScript = Object.FindFirstObjectByType<FPControllerWeapon>();
         crosshairControllerScript = Object.FindFirstObjectByType<CrosshairController>();
         recoilWeaponScript = Object.FindFirstObjectByType<RecoilWeapon>();
         tpControllerScript = Object.FindFirstObjectByType<TPController>();
 
-        ignoreLayers = ~(LayerMask.GetMask("Player", "Weapon", "EnemySpawn", "EnemyMark", "ignoreGun"));
+        ignoreLayers = ~(LayerMask.GetMask("Player", "Weapon", "EnemySpawn", "EnemyMark", "ignoreWeapon"));
 
     }
 
@@ -70,11 +70,11 @@ public class ShotGunController : MonoBehaviour {
 
         crosshairControllerScript.checkTarget();
 
-        if (fpControllerGunScript.attackButtonPressed && !fpControllerGunScript.isInQTE && !fpControllerGunScript.isCleaning && (tpControllerScript == null || !tpControllerScript.isTeleporting)) {
+        if (fpControllerWeaponScript.attackButtonPressed && !fpControllerWeaponScript.isInQTE && !fpControllerWeaponScript.isCleaning && (tpControllerScript == null || !tpControllerScript.isTeleporting)) {
 
             if (canShoot) {
 
-                fpControllerGunScript.isShooting = true;
+                fpControllerWeaponScript.isShooting = true;
                 recoilWeaponScript.aiming = true;
                 StartCoroutine(shootRaycast());
 
@@ -83,7 +83,7 @@ public class ShotGunController : MonoBehaviour {
 
         else {
 
-            fpControllerGunScript.isShooting = false;
+            fpControllerWeaponScript.isShooting = false;
             recoilWeaponScript.aiming = false;
 
         }
@@ -110,7 +110,7 @@ public class ShotGunController : MonoBehaviour {
             Vector3 finalDirection = spreadRotation * shootDirection;
 
             // Raycast to detect hit
-            if (Physics.Raycast(firePoint.position, finalDirection, out RaycastHit hit, upgradesControllerScript.gunRange, ignoreLayers)) {
+            if (Physics.Raycast(firePoint.position, finalDirection, out RaycastHit hit, upgradesControllerScript.weaponRange, ignoreLayers)) {
 
                 GameObject vfxPrefab = Instantiate(vfxImpact, hit.point, Quaternion.LookRotation(hit.normal));
                 vfxImpact.GetComponent<VisualEffect>().SetVector3("Orientation", vfxImpact.transform.eulerAngles);
@@ -146,7 +146,7 @@ public class ShotGunController : MonoBehaviour {
 
         else {
 
-            fpControllerGunScript.isShooting = false;
+            fpControllerWeaponScript.isShooting = false;
 
         }
     }
