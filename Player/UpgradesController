@@ -28,7 +28,7 @@ public class UpgradesController : MonoBehaviour {
         cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
         scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
         weaponDamageUpgrade = upgradesManagerScript.dmgUpdate;
-        weaponRangeUpgrade = upgradesManagerScript.gunRange;
+        weaponRangeUpgrade = upgradesManagerScript.weaponRange;
 
     }
 
@@ -41,7 +41,7 @@ public class UpgradesController : MonoBehaviour {
         cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
         scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
         weaponDamageUpgrade = upgradesManagerScript.dmgUpdate;
-        weaponRangeUpgrade = upgradesManagerScript.gunRange;
+        weaponRangeUpgrade = upgradesManagerScript.weaponRange;
 
     }
 }
