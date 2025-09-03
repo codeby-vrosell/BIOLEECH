@@ -1,3 +1,30 @@
+// ============================================================  
+// Readme of DoorsController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages the opening and closing of doors when the player enters or exits the trigger area.  
+It also plays the corresponding door sound effects.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Retrieves references to the door's Animator, the TutorialGameManager, and TPController at startup.  
+- Detects when the player enters the door’s trigger zone and opens the door if conditions allow.  
+- Detects when the player exits the door’s trigger zone and closes the door if conditions allow.  
+- Plays the assigned door AudioClip through the AudioManager when opening or closing.  
+- Checks for player teleporting or tutorial progress to determine whether the door can open or close.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class DoorsController : MonoBehaviour {
