@@ -1,3 +1,33 @@
+// ============================================================
+// Readme of AIController
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages the AI dialogue system, including reading lines from a CSV file, displaying text with a typing effect, playing associated audio, and controlling priority dialogue playback.
+It ensures smooth synchronization between text, audio, and UI animations.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Implements a singleton pattern for global AI dialogue management.  
+- Loads dialogue lines from a CSV file and organizes them into IDs and prefixes.  
+- Plays lines sequentially or randomly, with support for priority-queued dialogue.  
+- Displays text with a typing effect and a blinking cursor for immersion.  
+- Controls UI animations for showing and hiding the dialogue frame.  
+- Plays associated audio clips for spoken lines and manages audio spectrum visualizers.  
+- Provides methods to interrupt, queue, or prioritize AI dialogue playback.  
+- Ensures only one line is active at a time and manages cooldowns between lines.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
