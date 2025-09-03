@@ -17,7 +17,7 @@ Please note that scripts for certain game mechanics are also **not included**, a
 Scripts are grouped by functionality:
 
 - [**Gamepad_Vibrator**](/Gamepad_Vibrator): Handles gamepad vibration effects and haptic feedback throughout the game.  
-- [**MAYA_AI**](/MAYA_AI): Scripts for MAYA, the game AI, including controllers, tutorial-specific logic, text box animations, audio spectrum effects, jokes, and announcement lines.  
+- [**MAYA_AI**](/MAYA_AI): Scripts for MAYA, the game AI, including controllers, tutorial-specific logic, text box animations, audio spectrum effects, jokes, and announcement lines. This folder also includes the **dialogue CSV** (used by Unity and the AI) and a **visual Excel/PDF version** of the dialogues for reference and documentation.
 - [**Map**](/Map): Allows player interaction with the environment (scrap meshes, checkpoints, sky events).  
 - [**Menus**](/Menus): Game UI, including credit screens, main menu, hover animations, fades, and aesthetic element transitions.  
 - [**Player**](/Player): Player-related scripts such as aiming, crosshair control, door controllers, mesh switching, teleportation, and upgrade systems.  
