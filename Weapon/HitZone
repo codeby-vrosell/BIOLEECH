@@ -1,3 +1,27 @@
+// ============================================================  
+// Readme of HitZone  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This class defines an angular range representing a hit zone, typically used for directional targeting, attacks, or detection within specified angles.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Stores a minimum angle (`minAngle`) for the hit zone.  
+- Stores a maximum angle (`maxAngle`) for the hit zone.  
+- Provides a simple data structure for use in systems that require angle-based hit detection or targeting.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 [System.Serializable]
