@@ -1,3 +1,32 @@
+// ============================================================  
+// Readme of FadeManagerTutorial  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages screen fade transitions for scene changes or application exit in the tutorial.  
+It smoothly fades a UI Image in and out to create visual transitions.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- References a UI Image (`fadeImage`) used for the fade effect.  
+- Configures the fade duration through the `fadeDuration` property.  
+- Performs fade-in and fade-out effects using coroutines.  
+- Provides public methods `fadeToScene(string sceneName)` and `fadeAndQuit()` to transition scenes or quit the application.  
+- Adjusts the alpha of `fadeImage` over time to create smooth visual transitions.  
+- Ensures fade-out occurs automatically at startup if `fadeImage` is assigned.  
+- Handles timing internally to synchronize the fade effect with scene loading or application exit.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
