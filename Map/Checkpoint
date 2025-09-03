@@ -1,3 +1,32 @@
+// ============================================================
+// Readme of Checkpoint
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages checkpoint activation and restoration in the game.  
+It detects when the player’s payload reaches a checkpoint, updates state, and restores associated meshes when needed.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Tracks whether a checkpoint has been activated.  
+- Locates and stores the mesh container for each checkpoint.  
+- Detects payload collisions and triggers checkpoint activation.  
+- Provides methods to reset checkpoint state.  
+- Restores checkpoint meshes by destroying and re-instantiating containers.  
+- Updates the `ScrapWeaponController` capacity when checkpoint meshes are restored.  
+- Logs relevant events for debugging purposes.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class Checkpoint : MonoBehaviour {
