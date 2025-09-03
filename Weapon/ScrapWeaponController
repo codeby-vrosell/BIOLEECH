@@ -1,3 +1,37 @@
+// ============================================================  
+// Readme of ScrapWeaponController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages the collection and burning of scrap by the player.  
+It handles suction of scrap objects, storage in the scrap tank, automatic and QTE-based burning, vibration feedback, sound effects, and visual tornado effects.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Detects scrap objects in front of the player using raycasts and collects them when cleaning.  
+- Stores collected scrap in `scrapPercent` up to a maximum capacity.  
+- Burns scrap automatically or via QTE, converting it into bullets.  
+- Interfaces with `FPControllerWeapon` to track cleaning, burning, and QTE input states.  
+- Plays cleaning and suction sounds, looping them when appropriate.  
+- Controls a particle system to visualize scrap collection.  
+- Provides vibration feedback while cleaning, with configurable intensity and interval.  
+- Animates QTE and cleaning states using an Animator component.  
+- Updates a tornado shader effect (`_AlphaTornado`) based on cleaning activity.  
+- Integrates with `TutorialGameManager` to restrict cleaning and burning actions during early tutorial steps.  
+- Allows dynamic registration of new `ScrapMesh` objects to be collected.  
+- Ensures dependencies are dynamically found at runtime if not manually assigned.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using NUnit.Framework.Internal;
 using System.Linq;
 using Unity.VisualScripting;
