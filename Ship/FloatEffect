@@ -1,3 +1,29 @@
+// ============================================================  
+// Readme of FloatEffect  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script creates a smooth vertical floating motion for a GameObject.  
+It moves the object up and down over time using a sine wave function.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Stores the initial position of the GameObject at startup.  
+- Calculates vertical displacement using `Mathf.Sin` and a configurable speed and distance.  
+- Updates the GameObject’s position each frame to achieve a smooth floating effect.  
+- Allows configuration of the float speed (`speed`) and vertical range (`distance`) via the inspector.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class FloatEffect : MonoBehaviour {
