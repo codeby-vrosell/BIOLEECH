@@ -47,7 +47,7 @@ Each script contains inline comments explaining complex parts and an optional **
 
 ## Play & Watch BIOLEECH
 
-**  Try BIOLEECH**, the game is available on:
+**Try BIOLEECH**, the game is available on:
 
 - **Itchio:** *in progress*
 
