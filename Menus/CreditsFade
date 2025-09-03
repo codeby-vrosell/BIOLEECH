@@ -1,3 +1,32 @@
+// ============================================================
+// Readme of CreditsFade
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script handles fading the screen to black when transitioning from the credits scene back to the main menu.  
+It smoothly interpolates the alpha of a UI Image to create a fade effect.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- References a UI Image component to perform the fade.  
+- Configurable fade duration to control the speed of the transition.  
+- Ensures the fade starts fully transparent when the scene begins.  
+- Provides a public method to initiate the fade and load the main menu scene.  
+- Uses a coroutine to interpolate the alpha value of the image over time.  
+- Loads the "Final Initial Menu" scene after the fade completes.  
+- Logs an error if the fade image reference is missing.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
