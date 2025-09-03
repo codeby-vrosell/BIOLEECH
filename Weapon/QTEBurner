@@ -1,3 +1,34 @@
+// ============================================================  
+// Readme of QTEBurner  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages a Quick-Time Event (QTE) for the burn action.  
+It handles indicator rotation, success detection within defined hit zones, visual feedback via lights, and audio cues.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Finds and manages references to the player, weapon controller, and scrap weapon scripts.  
+- Starts and resets the QTE sequence, controlling UI visibility and internal QTE state.  
+- Rotates the QTE indicator continuously during the QTE.  
+- Checks if player input occurs within defined `HitZone`s to determine success.  
+- Updates visual success indicators based on the current success count.  
+- Plays corresponding success audio clips for each successful hit.  
+- Resets success indicators with a smooth visual sequence when the QTE ends or fails.  
+- Handles haptic feedback via vibration on failed attempts.  
+- Ensures safe operation by validating references and finding required GameObjects dynamically.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using System.Collections;
 using System.Linq;
 using UnityEngine;
