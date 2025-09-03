@@ -1,3 +1,29 @@
+// ============================================================
+// Readme of InitialMenuArrow
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script animates an arrow in the initial menu by moving it side to side in a smooth sinusoidal motion.  
+It is typically used to draw attention to the currently selected menu option.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Configurable horizontal movement distance and speed.  
+- Stores the initial local position to use as the base for movement.  
+- Updates the arrow’s position every frame using a sine wave for smooth oscillation.  
+- Provides a visual cue for menu navigation without requiring additional animations.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class InitialMenuArrow : MonoBehaviour {
