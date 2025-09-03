@@ -1,3 +1,33 @@
+// ============================================================
+// Readme of InitialMenu
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages the main menu UI, including button navigation, input detection, and scene transitions.  
+It supports both controller and mouse/keyboard input, allowing smooth selection and activation of menu options.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- References the `FadeManagerTutorial` and Animator for scene transitions and UI animations.  
+- Holds a list of menu buttons and manages selection with controller input.  
+- Detects input devices (controller vs mouse/keyboard) and updates the cursor state accordingly.  
+- Handles vertical navigation and selection delay to prevent overshooting on controllers.  
+- Invokes button click events when the confirm input is pressed.  
+- Provides public methods to start the game, exit the application, and navigate to the credits scene.  
+- Resets button colors to prevent navigation issues.  
+- Locks or unlocks the cursor based on input device usage.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
