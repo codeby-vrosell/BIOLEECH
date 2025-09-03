@@ -25,7 +25,7 @@ public class ScrapMesh : MonoBehaviour {
     // ============================================================
 
     private UpgradesController upgradesControllerScript;
-    private ScrapGunController scrapGunControllerScript;
+    private ScrapWeaponController scrapWeaponControllerScript;
 
     // ============================================================
     // State Tracking
@@ -50,8 +50,8 @@ public class ScrapMesh : MonoBehaviour {
 
     private System.Collections.IEnumerator waitForReferences() {
 
-        // Wait until player and gun controller exist
-        while (upgradesControllerScript == null || scrapGunControllerScript == null) {
+        // Wait until player and Weapon controller exist
+        while (upgradesControllerScript == null || scrapWeaponControllerScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
@@ -61,20 +61,20 @@ public class ScrapMesh : MonoBehaviour {
 
             }
 
-            scrapGunControllerScript = Object.FindFirstObjectByType<ScrapGunController>();
+            scrapWeaponControllerScript = Object.FindFirstObjectByType<ScrapWeaponController>();
 
             yield return null;
 
         }
 
-        // Register this mesh in the gun controller
-        scrapGunControllerScript.registerScrapMesh(this);
+        // Register this mesh in the Weapon controller
+        scrapWeaponControllerScript.registerScrapMesh(this);
 
     }
 
     private void Update() {
 
-        if (!wasSuckedRecently || upgradesControllerScript == null || scrapGunControllerScript == null) {
+        if (!wasSuckedRecently || upgradesControllerScript == null || scrapWeaponControllerScript == null) {
 
             return;
 
@@ -154,7 +154,7 @@ public class ScrapMesh : MonoBehaviour {
     private void settleVertices(float deltaTime) {
 
         bool hasChanges = false;
-        Vector3 aimingPoint = scrapGunControllerScript.getAimingPoint();
+        Vector3 aimingPoint = scrapWeaponControllerScript.getAimingPoint();
 
         for (int i = 0; i < vertices.Length; i++) {
 
@@ -187,14 +187,14 @@ public class ScrapMesh : MonoBehaviour {
 
     public int getSuckedVertices() {
 
-        if (scrapGunController == null || scrapGunController.playerCamera == null) {
+        if (scrapWeaponController == null || scrapWeaponController.playerCamera == null) {
 
             return 0;
 
         }
 
         int count = 0;
-        Vector3 aimingPoint = scrapGunController.getAimingPoint();
+        Vector3 aimingPoint = scrapWeaponController.getAimingPoint();
 
         foreach (Vector3 vertex in vertices) {
 
