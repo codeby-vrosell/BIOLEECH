@@ -1,3 +1,29 @@
+// ============================================================  
+// Readme of StimulantsController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages the player's stimulant resources, updating UI elements and providing methods to increase or decrease the stimulant count.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Tracks the current and maximum number of stimulants the player has.  
+- Finds and updates `TextMeshProUGUI` elements to display the current and maximum stimulant counts.  
+- Initializes stimulant counts based on the tutorial or game phase.  
+- Provides public methods `decreaseStimulant()` and `increaseStimulant()` to modify the current stimulant count safely.  
+- Ensures UI text always reflects the current state of the stimulants.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using TMPro;
 using UnityEngine;
 
