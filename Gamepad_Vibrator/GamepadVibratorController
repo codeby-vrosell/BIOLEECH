@@ -1,3 +1,30 @@
+// ============================================================
+// Readme of GamepadVibratorController
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages vibration feedback for a connected gamepad.  
+It provides a singleton controller that allows starting, updating, and stopping vibrations with configurable intensity and duration.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Implements a singleton pattern to ensure only one instance persists across scenes.  
+- Defines a vibration data structure with intensity and duration.  
+- Manages a list of active vibrations and their lifetimes using coroutines.  
+- Updates the gamepad motors to apply the strongest active vibration.  
+- Provides methods to start new vibrations and stop all ongoing vibrations.  
+
+// ============================================================
+// End of readme
+// ============================================================
+
+
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections;
