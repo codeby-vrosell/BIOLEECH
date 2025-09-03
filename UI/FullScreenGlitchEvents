@@ -1,3 +1,30 @@
+// ============================================================  
+// Readme of FullScreenGlitchEvents  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script handles events related to full-screen glitch animations.  
+It tracks the completion of the animation and can reset its state.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Holds a reference to the `Animator` component controlling the glitch animations.  
+- Tracks whether the glitch animation has ended using the `animationEnded` boolean.  
+- Provides a method `glitchAnimationEnded()` that marks the animation as finished and plays the "Idle" animation.  
+- Provides a method `setAnimationEndedFalse()` to reset the `animationEnded` flag.  
+- Logs a message to the console when the glitch animation finishes for debugging purposes.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class FullScreenGlitchEvents : MonoBehaviour {
