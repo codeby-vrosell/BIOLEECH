@@ -1,3 +1,30 @@
+// ============================================================  
+// Readme of TutorialMoveIndicator  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script animates a UI element to indicate movement in tutorial sequences.  
+It makes the element oscillate horizontally using a sine wave for visual guidance.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- References the element's `RectTransform` to control its position.  
+- Stores the initial anchored position to use as the base for movement.  
+- Configures horizontal movement through `distance` and `speed` properties.  
+- Updates the element's position every frame to create a smooth oscillating motion.  
+- Calculates displacement using a sine function to create back-and-forth movement.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class TutorialMoveIndicator : MonoBehaviour {
