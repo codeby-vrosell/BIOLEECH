@@ -1,3 +1,30 @@
+// ============================================================
+// Readme of MegaphoneGenerator
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages periodic megaphone announcements in space.  
+It waits for a set amount of time before triggering a random propaganda line from the AI dialogue system.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Holds a configurable wait time before each announcement.  
+- References the `GameManager` to check if the player is currently in space.  
+- Starts and manages a coroutine to handle timed announcements.  
+- Calls the AI controller to play a random propaganda line.  
+- Ensures announcements do not overlap by tracking state with a waiting flag.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using System.Collections;
 
