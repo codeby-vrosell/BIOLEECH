@@ -1,3 +1,31 @@
+// ============================================================  
+// Readme of IKFootPlacement  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script handles the inverse kinematics (IK) for a character’s feet to ensure proper placement on uneven terrain.  
+It adjusts foot positions and rotations dynamically while walking to align with the ground.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- References the character’s `Animator` and `FPS_Controller` to drive IK and walking state.  
+- Uses raycasting to detect the ground beneath each foot and calculates correct IK positions and rotations.  
+- Sets IK weights for both left and right feet to ensure smooth foot placement.  
+- Updates the `isWalking` animator parameter based on the player’s movement state.  
+- Ensures feet are positioned slightly above the detected ground using the configurable `distanceToGround`.  
+- Restricts IK placement to objects on the specified `groundLayerMask`.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class IKFootPlacement : MonoBehaviour {
