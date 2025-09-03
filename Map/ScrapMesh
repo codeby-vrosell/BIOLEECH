@@ -1,3 +1,31 @@
+// ============================================================
+// Readme of ScrapMesh
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages individual scrap meshes that can be cleaned by the player’s Scrap Gun.  
+It handles vertex sinking and settling to simulate cleaning and suction effects in a visually responsive way.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Initializes mesh vertices and collider references.  
+- Waits for player and ScrapWeaponController references before registration.  
+- Handles suction of vertices based on the aiming point and clean range.  
+- Applies vertex sinking and settling to create smooth cleaning animations.  
+- Updates mesh and collider data after vertices are modified.  
+- Provides a utility to calculate the number of vertices currently being sucked for gameplay logic.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using System.Linq;
 using UnityEngine;
 
