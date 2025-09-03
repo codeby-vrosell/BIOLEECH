@@ -1,3 +1,29 @@
+// ============================================================  
+// Readme of FPControllerWeapon  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script handles the player’s weapon-related input actions, tracking the state of various buttons and control flags for cleaning, interacting, burning, and attacking.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Tracks whether weapon-related buttons are pressed: clean, interact, burn, and attack.  
+- Provides input callbacks compatible with the Unity Input System: `onClean()`, `onInteract()`, `onBurn()`, and `onAttack()`.  
+- Updates boolean flags reflecting the current state of each button.  
+- Manages control states for the player, including `isInQTE`, `isShooting`, and `isCleaning`.  
+- Ensures accurate state changes on both performed and canceled input events.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
