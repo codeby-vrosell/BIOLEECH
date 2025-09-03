@@ -1,3 +1,33 @@
+// ============================================================  
+// Readme of WeaponSway  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script applies dynamic sway and bobbing effects to a weapon based on player input and movement.  
+It simulates realistic weapon motion for first-person gameplay, enhancing immersion during walking, looking around, and other player actions.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Tracks player movement and camera input using the `PlayerInput` component.  
+- Applies positional sway based on mouse or stick look input (`swayStep`, `maxSwayDistance`).  
+- Applies rotational sway based on look input (`swayRotationStep`, `maxSwayRotation`).  
+- Implements bobbing effects while the player moves, considering grounded state and exaggeration factor (`bobSpeedCurve`, `bobExaggeration`).  
+- Combines sway and bobbing effects for both position and rotation to create smooth composite weapon motion.  
+- Smoothly interpolates final position and rotation using `Vector3.Lerp` and `Quaternion.Slerp` for natural movement.  
+- Prevents sway and bobbing effects during teleportation via `TPController`.  
+- Automatically assigns input actions (`moveInput`, `lookInput`) and updates each frame in `Update()`.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
