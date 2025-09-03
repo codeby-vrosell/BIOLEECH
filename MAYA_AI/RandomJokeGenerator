@@ -1,3 +1,30 @@
+// ============================================================
+// Readme of RandomJokeGenerator
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages the random generation of AI-driven jokes during gameplay.  
+It ensures jokes are only played under specific conditions, such as when the player is not seated and not in space, and coordinates timing with other AI dialogue.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Stores a configurable wait time between jokes.  
+- References the player’s `FPS_Controller` and the `GameManager`.  
+- Waits for valid conditions (player not seated, not in space, AI not already talking).  
+- Uses coroutines to manage joke timing and avoid overlap with other dialogue.  
+- Plays random joke lines from the AI dialogue system using a predefined prefix.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using System.Collections;
 
