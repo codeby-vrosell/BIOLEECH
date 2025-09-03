@@ -1,3 +1,30 @@
+// ============================================================  
+// Readme of AutoGlitchAnimator  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script automatically triggers a glitch animation on a GameObject at fixed intervals.  
+It also allows switching to an idle animation manually via a public method.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Holds a reference to the `Animator` component to control animations.  
+- Stores the name of the glitch animation and the interval between triggers.  
+- Automatically plays the glitch animation every `interval` seconds during `Update()`.  
+- Provides a public method `idleAnim()` to manually switch the animation to "Idle".  
+- Ensures safe operation by checking if the animator reference exists before playing animations.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class AutoGlitchAnimator : MonoBehaviour {
