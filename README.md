@@ -40,7 +40,7 @@ Each script contains inline comments explaining complex parts and an optional **
 
 ## Notes & Recommendations
 
-- Some scripts assume specific GameObject names in the scene (e.g., `"Player"`, `"RenderArma"`, `"NumStimsText"`).  
+- Some scripts assume specific GameObject names in the scene (e.g., `"Player"`, `"RenderWeapon"`, `"NumStimsText"`, etc).  
 - Scripts are primarily designed for **Unity 6 HDRP** projects but can be adapted to other pipelines.  
 - This repository focuses on gameplay scripting and does not include 3D models, textures, audio files, or scenes.  
 - Some scripts may require other scripts not included here, as they were not authored by the repository owner.
