@@ -1,3 +1,33 @@
+// ============================================================  
+// Readme of RecoilWeapon  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script handles the positional and rotational recoil behavior of a weapon.  
+It simulates realistic recoil effects for both hip-fire and aiming states, smoothly returning the weapon to its original position and rotation.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Maintains references to the recoil position and rotation points of the weapon.  
+- Applies positional and rotational recoil when the weapon is fired.  
+- Differentiates between hip-fire and aiming recoil, adjusting intensity and direction accordingly.  
+- Smoothly interpolates recoil back to zero using configurable return speeds.  
+- Uses `Vector3.Lerp` and `Vector3.Slerp` for smooth, frame-independent motion.  
+- Supports randomization in horizontal and roll recoil for a natural feel.  
+- Updates the weapon’s local position and rotation each physics frame in `FixedUpdate`.  
+- Allows toggling of aiming state to modify recoil behavior dynamically.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
