@@ -1,3 +1,32 @@
+// ============================================================  
+// Readme of WeaponFOV  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script dynamically adjusts the field of view (FOV) of the player's main camera and weapon render camera based on player actions, such as shooting or cleaning.  
+It provides a smooth transition between default, shooting, and cleaning FOV states to enhance visual feedback during gameplay.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Exposes configurable FOV values for shooting (`fovShooting`) and cleaning (`fovCleaning`).  
+- Tracks the duration the player holds shooting or cleaning actions to determine when to transition FOV.  
+- Uses `CinemachineCamera` for the main camera and a separate weapon render camera to synchronize FOV changes.  
+- Smoothly interpolates the FOV using `Mathf.Lerp` with a configurable transition speed (`fovTransitionSpeed`).  
+- Maintains the default FOV when the player is not performing shooting or cleaning actions.  
+- Automatically finds and assigns required player scripts and cameras at runtime to prevent null references.  
+- Ensures the weapon render camera always matches the main camera's FOV for consistent visuals.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 using Unity.Cinemachine;
 using System.Linq;
