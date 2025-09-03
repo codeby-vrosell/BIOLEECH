@@ -1,3 +1,33 @@
+// ============================================================  
+// Readme of ShipScreensGlitchController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script controls a glitch animation on the ship’s screen material by cycling through a set of textures at defined intervals.  
+It randomly delays between glitch sequences to create an irregular visual effect.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Stores an array of textures (`textures`) used for the glitch effect.  
+- References the Renderer and Material of the object to update its visual appearance.  
+- Configures glitch playback with `changeInterval`, `minimumDelay`, and `maximumDelay`.  
+- Manages a timer to cycle through textures during a glitch sequence.  
+- Applies textures to both the base and emissive maps of the material for proper visual display.  
+- Randomizes delay between glitch sequences to make the effect appear sporadic.  
+- Handles initialization to ensure the first texture is applied correctly.  
+- Starts and stops the glitch animation based on timing logic.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class ShipScreensGlitchController : MonoBehaviour {
