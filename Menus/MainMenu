@@ -1,3 +1,33 @@
+// ============================================================
+// Readme of MainMenu
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages the main menu interface, supporting both gamepad and mouse/keyboard input.  
+It handles menu navigation, selection, and transitions to other scenes such as the tutorial or credits.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Holds references to the `FadeManagerTutorial`, Animator, and menu buttons.  
+- Tracks the currently selected button and enforces a delay between selection changes.  
+- Detects input device type and updates cursor visibility accordingly.  
+- Supports vertical navigation and selection using a gamepad.  
+- Invokes the corresponding button’s `onClick` event when confirm input is pressed.  
+- Provides public methods to play the game, exit the application, or go to the credits scene.  
+- Resets button colors to prevent navigation issues.  
+- Locks or unlocks the cursor based on input device usage.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
