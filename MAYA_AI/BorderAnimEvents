@@ -1,3 +1,28 @@
+// ============================================================
+// Readme of BorderAnimEvents
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script handles animation events related to the AI dialogue system.  
+It decides whether to trigger the normal AI controller or the tutorial AI controller when showing the audio spectrum.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Stores references to the main AI controller and the tutorial AI controller.  
+- Responds to animation events for spectrum display.  
+- Calls the appropriate controller (`AIController` or `AITutorialController`) depending on which one is active.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class BorderAnimEvents : MonoBehaviour {
