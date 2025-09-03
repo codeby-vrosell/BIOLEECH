@@ -1,3 +1,33 @@
+// ============================================================
+// Readme of MenuButtonHoverTMP
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages the visual feedback for a TextMeshPro button in a menu.  
+It handles hover, selection, deselection, and click effects, including color changes, arrow indicators, and optional blinking.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- References the `TextMeshProUGUI` component and optional arrow indicator GameObject.  
+- Sets default and hover colors for the button text.  
+- Activates visual feedback on pointer hover, selection, or pointer click.  
+- Deactivates visual feedback when pointer exits or button is deselected.  
+- Provides an optional blinking effect when the button is clicked.  
+- Supports configuration of the number of blinks and blink speed.  
+- Disables blinking when `disableBlink` is set to true.  
+- Ensures arrow indicator visibility is synced with hover/selection state.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
