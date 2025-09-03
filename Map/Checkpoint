@@ -14,7 +14,7 @@ public class Checkpoint : MonoBehaviour {
 
     private GameObject checkpointMeshContainer;
     public GameObject checkpointPrefab;
-    private ScrapGunController scrapGunControllerScript;
+    private ScrapWeaponController scrapWeaponControllerScript;
 
     // ============================================================
     // Unity Lifecycle
@@ -82,16 +82,16 @@ public class Checkpoint : MonoBehaviour {
             checkpointMeshContainer = Instantiate(checkpointPrefab, originalPosition, originalRotation, transform);
             checkpointMeshContainer.name = "MallasCheckPoint" + gameObject.name.Replace("Checkpoint", "").Trim();
 
-            // Update ScrapGunController capacity
-            scrapGunControllerScript = FindAnyObjectByType<ScrapGunController>();
+            // Update ScrapWeaponController capacity
+            scrapWeaponControllerScript = FindAnyObjectByType<ScrapWeaponController>();
 
-            if (gunController != null) {
+            if (WeaponController != null) {
 
-                scrapGunControllerScript.checkScrapCapacity();
+                scrapWeaponControllerScript.checkScrapCapacity();
 
             }
 
-            Debug.Log("Checkpoint " + gameObject.name + " restored and registered in ScrapGunController.");
+            Debug.Log("Checkpoint " + gameObject.name + " restored and registered in ScrapWeaponController.");
 
         }
 
