@@ -12,7 +12,7 @@ public class TPController : MonoBehaviour {
     public stimsController stimsControllerScript;
     private GameManager gameManagerScript;
     private FPS_Controller fpsControllerScript;
-    private FPControllerGun fpControllerGunScript;
+    private FPControllerWeapon fpControllerWeaponScript;
     private HealthSystem healthSystemScript;
     private UpgradesManager upgradesManagerScript;
     private HideMisions hideMissionsScript;
@@ -127,7 +127,7 @@ public class TPController : MonoBehaviour {
         playerTransform = playerObj.transform;
         playerCamera = GameObject.Find("Main Camera");
         fpsControllerScript = playerObj.GetComponent<FPS_Controller>();
-        fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+        fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
         gameManagerScript = FindFirstObjectByType<GameManager>();
         hideMissionsScript = FindFirstObjectByType<HideMisions>();
@@ -237,14 +237,14 @@ public class TPController : MonoBehaviour {
             }
         }
 
-        if (fpControllerGunScript == null) {
+        if (fpControllerWeaponScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
-            fpControllerGunScript = playerObj.GetComponent<FPControllerGun>();
+            fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
         }
 
-        if (fpControllerGunScript.interactButtonPressed && hitValidTarget) {
+        if (fpControllerWeaponScript.interactButtonPressed && hitValidTarget) {
 
             handleTeleportConditions(destination);
 
@@ -337,7 +337,7 @@ public class TPController : MonoBehaviour {
 
             bool isScanning = fillAmount > 0f && fillAmount < 1f;
 
-            if (fpControllerGunScript.interactButtonPressed && isScanning) {
+            if (fpControllerWeaponScript.interactButtonPressed && isScanning) {
 
                 if (!scannerLineTransform.gameObject.activeSelf) {
 
@@ -475,6 +475,6 @@ public void SetPlayer(GameObject newPlayer) {
 
     playerTransform = newPlayer.transform;
     fpsControllerScript = newPlayer.GetComponent<FPS_Controller>();
-    fpControllerGunScript = newPlayer.GetComponent<FPControllerGun>();
+    fpControllerWeaponScript = newPlayer.GetComponent<FPControllerWeapon>();
 
 }
