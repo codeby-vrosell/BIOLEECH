@@ -1,3 +1,35 @@
+// ============================================================  
+// Readme of ShotWeaponController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script handles the first-person shooting mechanics, including raycast detection, bullet management, visual and sound effects, recoil, and controller feedback.  
+It manages interactions with enemies, visual trails, and the firing cadence of the weapon.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- References essential player and weapon scripts: `FPControllerWeapon`, `UpgradesController`, `CrosshairController`, `RecoilWeapon`, `CinemachineImpulseSource`, and `TPController`.  
+- Controls weapon firing, checking for button input while ensuring the player is not performing other actions (e.g., cleaning, teleporting, or in QTE).  
+- Implements shooting logic using `Raycast`, applying weapon spread via random rotation offsets.  
+- Instantiates visual effects for bullet trails (`VisualEffect`) and impact (`vfxImpact`) on hit.  
+- Applies damage to enemies by detecting their layer and calling `EnemyHealth2.takeDMG()`.  
+- Manages bullet count, decrements on each shot, and handles shooting cadence via a coroutine.  
+- Triggers recoil effects and camera impulse using `RecoilWeapon` and `CinemachineImpulseSource`.  
+- Provides haptic feedback to controllers via `GamepadVibratorController`.  
+- Excludes collisions with specified layers using `ignoreLayers` mask.  
+- Dynamically finds required scripts and player references at runtime to avoid null references.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 using Unity.Cinemachine;
 using System.Linq;
