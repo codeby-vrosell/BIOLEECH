@@ -1,3 +1,32 @@
+// ============================================================
+// Readme of CrosshairController
+// ============================================================ 
+
+// ============================================================
+// Description 
+// ============================================================ 
+
+This script manages the player’s crosshair behavior, including visibility, color changes, and interaction with targets.  
+It supports both standard gameplay and tutorial-specific behavior.  
+
+// ============================================================
+// Responsibilities
+// ============================================================  
+
+- Holds references to crosshair GameObjects, player camera, and related controllers (FPS, TP, Upgrades, GameManager, TutorialGameManager).  
+- Updates crosshair position and visibility each frame.  
+- Detects interactable objects via raycasting and changes crosshair color when targeting enemies.  
+- Plays appropriate crosshair animations for targeting or idle states.  
+- Supports conversion from screen-space crosshair to world-space coordinates.  
+- Manages crosshair visibility and restrictions depending on the player’s state (seated, teleporting, in space).  
+- Differentiates between normal gameplay crosshair behavior and tutorial-specific crosshair behavior.  
+
+// ============================================================
+// End of readme
+// ============================================================  
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 
