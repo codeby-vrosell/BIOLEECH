@@ -1,3 +1,32 @@
+// ============================================================  
+// Readme of ShipScreensController  
+// ============================================================  
+
+// ============================================================  
+// Description  
+// ============================================================  
+
+This script manages the dynamic display of textures on a ship’s screen material.  
+It cycles through a set of textures over time, applying each to the screen material with an emissive effect.  
+
+// ============================================================  
+// Responsibilities  
+// ============================================================  
+
+- Stores an array of textures (`textures`) to display on the ship’s screens.  
+- References the Renderer and Material of the object to update its visual appearance.  
+- Configures the interval (`changeInterval`) at which textures are swapped.  
+- Cycles forward and backward through the texture array to create a looping effect.  
+- Applies the selected texture to both the base and emissive maps of the material.  
+- Enables emission on the material for proper visual display.  
+- Handles initialization to ensure the first texture is applied correctly.  
+
+// ============================================================  
+// End of readme  
+// ============================================================  
+
+
+
 using UnityEngine;
 
 public class ShipScreensController : MonoBehaviour {
