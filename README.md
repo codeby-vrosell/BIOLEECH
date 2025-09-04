@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains all the custom C# scripts developed by the author for **BIOLEECH**.
+This repository contains all the custom C# scripts developed by the author for **BIOLEECH**.    
 These scripts cover gameplay mechanics, weapon systems, UI updates, visual effects, QTEs, player interactions, and other core functionalities.
 
 ## Important Disclaimer
