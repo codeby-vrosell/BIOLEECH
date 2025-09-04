@@ -10,14 +10,14 @@ These scripts cover gameplay mechanics, weapon systems, UI updates, visual effec
 This repository does **NOT** contain the complete game project.  
 Assets, scenes, and other game elements are **not included**. Only the scripts developed by the author are present.
 
-Please note that scripts for certain game mechanics are also **not included**, as they were created by other developers and are outside the scope of this repository.
+**Please note:** Scripts for certain game mechanics are also **not included**, as they were created by other developers and are outside the scope of this repository.
 
 ## Scripts Organization
 
 Scripts are grouped by functionality:
 
 - [**Gamepad_Vibrator**](/Gamepad_Vibrator): Handles gamepad vibration effects and haptic feedback throughout the game.  
-- [**MAYA_AI**](/MAYA_AI): Scripts for MAYA, the game AI, including controllers, tutorial-specific logic, text box animations, audio spectrum effects, jokes, and announcement lines. This folder also includes the **dialogue CSV** (used by Unity and the AI) and a **visual Excel/PDF version** of the dialogues for reference and documentation.
+- [**MAYA_AI**](/MAYA_AI): Scripts for MAYA, the game AI, including controllers, tutorial logic, text box animations, audio spectrum effects, jokes, and announcements. Includes the dialogue CSV (used in Unity) and a visual Excel/PDF for reference.
 - [**Map**](/Map): Allows player interaction with the environment (scrap meshes, checkpoints, sky events).  
 - [**Menus**](/Menus): Game UI, including credit screens, main menu, hover animations, fades, and aesthetic element transitions.  
 - [**Player**](/Player): Player-related scripts such as aiming, crosshair control, door controllers, mesh switching, teleportation, and upgrade systems.  
@@ -41,9 +41,9 @@ Each script contains inline comments explaining complex parts and an optional **
 ## Notes & Recommendations
 
 - Some scripts assume specific GameObject names in the scene (e.g., `"Player"`, `"RenderWeapon"`, `"NumStimsText"`).  
-- Scripts are primarily designed for **Unity 6 HDRP** projects but can be adapted to other pipelines.  
+- Scripts have been tested on Unity 6 (6000.0.34f1) with HDRP. Adaptation may be required for URP, Built-in pipeline, or other Unity versions.
 - This repository focuses on gameplay scripting and does not include 3D models, textures, audio files, or scenes.  
-- Some scripts may require other scripts not included here, as they were not authored by the repository owner.
+- Some mechanics rely on external scripts not included in this repository.
 
 ## Play & Watch BIOLEECH
 
