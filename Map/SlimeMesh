@@ -1,12 +1,12 @@
 // ============================================================
-// Readme of ScrapMesh
+// Readme of SlimeMesh
 // ============================================================ 
 
 // ============================================================
 // Description 
 // ============================================================ 
 
-This script manages individual scrap meshes that can be cleaned by the player’s Scrap Gun.  
+This script manages individual slime meshes that can be cleaned by the player’s Slime Gun.  
 It handles vertex sinking and settling to simulate cleaning and suction effects in a visually responsive way.  
 
 // ============================================================
@@ -14,7 +14,7 @@ It handles vertex sinking and settling to simulate cleaning and suction effects 
 // ============================================================  
 
 - Initializes mesh vertices and collider references.  
-- Waits for player and ScrapWeaponController references before registration.  
+- Waits for player and SlimeWeaponController references before registration.  
 - Handles suction of vertices based on the aiming point and clean range.  
 - Applies vertex sinking and settling to create smooth cleaning animations.  
 - Updates mesh and collider data after vertices are modified.  
@@ -29,7 +29,7 @@ It handles vertex sinking and settling to simulate cleaning and suction effects 
 using System.Linq;
 using UnityEngine;
 
-public class ScrapMesh : MonoBehaviour {
+public class SlimeMesh : MonoBehaviour {
 
     // ============================================================
     // Mesh Configuration
@@ -53,7 +53,7 @@ public class ScrapMesh : MonoBehaviour {
     // ============================================================
 
     private UpgradesController upgradesControllerScript;
-    private ScrapWeaponController scrapWeaponControllerScript;
+    private SlimeWeaponController slimeWeaponControllerScript;
 
     // ============================================================
     // State Tracking
@@ -79,7 +79,7 @@ public class ScrapMesh : MonoBehaviour {
     private System.Collections.IEnumerator waitForReferences() {
 
         // Wait until player and Weapon controller exist
-        while (upgradesControllerScript == null || scrapWeaponControllerScript == null) {
+        while (upgradesControllerScript == null || slimeWeaponControllerScript == null) {
 
             GameObject playerObj = GameObject.FindWithTag("Player");
 
@@ -89,20 +89,20 @@ public class ScrapMesh : MonoBehaviour {
 
             }
 
-            scrapWeaponControllerScript = Object.FindFirstObjectByType<ScrapWeaponController>();
+            slimeWeaponControllerScript = Object.FindFirstObjectByType<SlimeWeaponController>();
 
             yield return null;
 
         }
 
         // Register this mesh in the Weapon controller
-        scrapWeaponControllerScript.registerScrapMesh(this);
+        slimeWeaponControllerScript.registerSlimeMesh(this);
 
     }
 
     private void Update() {
 
-        if (!wasSuckedRecently || upgradesControllerScript == null || scrapWeaponControllerScript == null) {
+        if (!wasSuckedRecently || upgradesControllerScript == null || slimeWeaponControllerScript == null) {
 
             return;
 
@@ -182,7 +182,7 @@ public class ScrapMesh : MonoBehaviour {
     private void settleVertices(float deltaTime) {
 
         bool hasChanges = false;
-        Vector3 aimingPoint = scrapWeaponControllerScript.getAimingPoint();
+        Vector3 aimingPoint = slimeWeaponControllerScript.getAimingPoint();
 
         for (int i = 0; i < vertices.Length; i++) {
 
@@ -215,14 +215,14 @@ public class ScrapMesh : MonoBehaviour {
 
     public int getSuckedVertices() {
 
-        if (scrapWeaponController == null || scrapWeaponController.playerCamera == null) {
+        if (slimeWeaponController == null || slimeWeaponController.playerCamera == null) {
 
             return 0;
 
         }
 
         int count = 0;
-        Vector3 aimingPoint = scrapWeaponController.getAimingPoint();
+        Vector3 aimingPoint = slimeWeaponController.getAimingPoint();
 
         foreach (Vector3 vertex in vertices) {
 
