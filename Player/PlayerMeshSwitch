@@ -47,7 +47,7 @@ public class PlayerMeshSwitch : MonoBehaviour {
         fpsControllerScript = Object.FindFirstObjectByType<FPS_Controller>();
         tpControllerScript = Object.FindFirstObjectByType<TPController>();
 
-        Transform meshTransform = transform.Find("ScrapMesh");
+        Transform meshTransform = transform.Find("SlimeMesh");
         playerMesh = meshTransform.gameObject;
 
         tutorialGameManagerScript = Object.FindFirstObjectByType<TutorialGameManager>();
