@@ -18,7 +18,7 @@ It detects when the player’s payload reaches a checkpoint, updates state, and 
 - Detects payload collisions and triggers checkpoint activation.  
 - Provides methods to reset checkpoint state.  
 - Restores checkpoint meshes by destroying and re-instantiating containers.  
-- Updates the `ScrapWeaponController` capacity when checkpoint meshes are restored.  
+- Updates the `SlimeWeaponController` capacity when checkpoint meshes are restored.  
 - Logs relevant events for debugging purposes.  
 
 // ============================================================
@@ -43,7 +43,7 @@ public class Checkpoint : MonoBehaviour {
 
     private GameObject checkpointMeshContainer;
     public GameObject checkpointPrefab;
-    private ScrapWeaponController scrapWeaponControllerScript;
+    private SlimeWeaponController slimeWeaponControllerScript;
 
     // ============================================================
     // Unity Lifecycle
@@ -111,16 +111,16 @@ public class Checkpoint : MonoBehaviour {
             checkpointMeshContainer = Instantiate(checkpointPrefab, originalPosition, originalRotation, transform);
             checkpointMeshContainer.name = "MallasCheckPoint" + gameObject.name.Replace("Checkpoint", "").Trim();
 
-            // Update ScrapWeaponController capacity
-            scrapWeaponControllerScript = FindAnyObjectByType<ScrapWeaponController>();
+            // Update SlimeWeaponController capacity
+            slimeWeaponControllerScript = FindAnyObjectByType<SlimeWeaponController>();
 
             if (WeaponController != null) {
 
-                scrapWeaponControllerScript.checkScrapCapacity();
+                slimeWeaponControllerScript.checkSlimeCapacity();
 
             }
 
-            Debug.Log("Checkpoint " + gameObject.name + " restored and registered in ScrapWeaponController.");
+            Debug.Log("Checkpoint " + gameObject.name + " restored and registered in SlimeWeaponController.");
 
         }
 
