@@ -19,7 +19,7 @@ The flow is divided into numbered tutorial steps (1–11), each unlocking mechan
 - Manages barriers (lowering them with sound, vibration, and camera shake).  
 - Updates on-screen mission objectives and control hints dynamically for keyboard/controller.  
 - Handles healing tutorials: opens healing events, forces player damage, and checks QTE success.  
-- Controls scrap suction and burning mechanics, including visual markers and reload QTE.  
+- Controls slime suction and burning mechanics, including visual markers and reload QTE.  
 - Manages scanning tutorial (sonar activation, progress bar tracking, and scanner sound loop).  
 - Spawns enemies and tracks kill counts to unlock the next steps.  
 - Integrates glitch animations and fullscreen transitions between tutorial phases.  
@@ -61,7 +61,7 @@ public class TutorialGameManager : MonoBehaviour {
     private AITutorialController aiTutorialControllerScript;
     private FPS_Controller fpsControllerScript;
     private FPControllerWeapon fpControllerWeaponScript;
-    private ScrapWeaponController scrapWeaponControllerScript;
+    private SlimeWeaponController slimeWeaponControllerScript;
 
     [SerializeField] private GameObject weaponObject;
     [SerializeField] private GameObject tutorialIndicator;
@@ -114,7 +114,7 @@ public class TutorialGameManager : MonoBehaviour {
     public bool inStep5_1 = false;
     [SerializeField] private Transform playerHead;
     [SerializeField] private GameObject suctionZone;
-    [SerializeField] private GameObject[] tutorialScrapMarkers;
+    [SerializeField] private GameObject[] tutorialSlimeMarkers;
 
     private bool firstSuctionCompleted = false;
     private bool suctionObjectiveCompleted = false;
@@ -246,9 +246,9 @@ public class TutorialGameManager : MonoBehaviour {
 
             checkSuctionObjectives();
 
-            if (scrapWeaponControllerScript != null && scrapWeaponControllerScript.scrapPercent > 0) {
+            if (slimeWeaponControllerScript != null && slimeWeaponControllerScript.slimePercent > 0) {
 
-                toggleScrapMarkers(false);
+                toggleSlimeMarkers(false);
 
             }
         }
@@ -298,7 +298,7 @@ public class TutorialGameManager : MonoBehaviour {
             }
         }
 
-        updateScrapText();
+        updateSlimeText();
 
     }
 
@@ -398,11 +398,11 @@ public class TutorialGameManager : MonoBehaviour {
         weaponObject.SetActive(true);
         inStep5_1 = true;
 
-        yield return new WaitUntil(() => FindAnyObjectByType<ScrapWeaponController>() != null);
-        scrapWeaponControllerScript = FindAnyObjectByType<ScrapWeaponController>();
+        yield return new WaitUntil(() => FindAnyObjectByType<SlimeWeaponController>() != null);
+        slimeWeaponControllerScript = FindAnyObjectByType<SlimeWeaponController>();
 
         setNewMissionPanelText("missionSuction");
-        toggleScrapMarkers(true);
+        toggleSlimeMarkers(true);
 
     }
 
@@ -594,15 +594,15 @@ public class TutorialGameManager : MonoBehaviour {
 
             case "missionSuction":
 
-                if (isControllerConnected) { text = "Approach a scrap pile and suction it.\n\n" + "Suction -> LT"; }
-                else { text = "Approach a scrap pile and suction it.\n\n" + "Suction -> Right Click"; }
+                if (isControllerConnected) { text = "Approach a slime pile and suction it.\n\n" + "Suction -> LT"; }
+                else { text = "Approach a slime pile and suction it.\n\n" + "Suction -> Right Click"; }
 
                 break;
 
             case "missionQTE":
 
-                if (isControllerConnected) { text = "Burn scrap manually to generate ammo.\n\n" + "Reload -> X\n" + "Action -> X"; }
-                else { text = "Burn scrap manually to generate ammo.\n\n" + "Reload -> R\n" + "Action -> R"; }
+                if (isControllerConnected) { text = "Burn slime manually to generate ammo.\n\n" + "Reload -> X\n" + "Action -> X"; }
+                else { text = "Burn slime manually to generate ammo.\n\n" + "Reload -> R\n" + "Action -> R"; }
 
                 break;
 
