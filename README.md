@@ -18,14 +18,14 @@ Scripts are grouped by functionality:
 
 - [**Gamepad_Vibrator**](/Gamepad_Vibrator): Handles gamepad vibration effects and haptic feedback throughout the game.  
 - [**MAYA_AI**](/MAYA_AI): Scripts for MAYA, the game AI, including controllers, tutorial logic, text box animations, audio spectrum effects, jokes, and announcements. Includes the dialogue CSV (used in Unity) and a visual Excel/PDF for reference.
-- [**Map**](/Map): Allows player interaction with the environment (scrap meshes, checkpoints, sky events).  
+- [**Map**](/Map): Allows player interaction with the environment (slime meshes, checkpoints, sky events).  
 - [**Menus**](/Menus): Game UI, including credit screens, main menu, hover animations, fades, and aesthetic element transitions.  
 - [**Player**](/Player): Player-related scripts such as aiming, crosshair control, door controllers, mesh switching, teleportation, and upgrade systems.  
 - [**Procedural_Animation**](/Procedural_Animation): Procedural adjustments like aligning character’s feet to terrain.  
 - [**Ship**](/Ship): Ship-related scripts, including in-game computer text effects, floating effects, and screen controllers.  
 - [**Tutorial**](/Tutorial): Scripts for tutorials: animations, visual effects, tutorial zone indicators, and step-by-step tutorial manager.  
 - [**UI**](/UI): In-game UI control, including full-screen glitch effects, glitch animator control, and player stimulants display.  
-- [**Weapon**](/Weapon): Weapon-related scripts including main weapon controller, QTE burner mechanics, hit zone management, scrap suction, ammo/tank UI, shooting logic, and additional effects like FOV changes, weapon sway, and recoil.
+- [**Weapon**](/Weapon): Weapon-related scripts including main weapon controller, QTE burner mechanics, hit zone management, slime suction, ammo/tank UI, shooting logic, and additional effects like FOV changes, weapon sway, and recoil.
 
 Each script contains inline comments explaining complex parts and an optional **header README** describing its functionality and responsibilities.
 
@@ -35,7 +35,7 @@ Each script contains inline comments explaining complex parts and an optional **
 1. Add the scripts to your Unity project under `Assets/Scripts/`.  
 2. Assign required references (e.g., `Camera`, `Animator`, `TextMeshProUGUI`, `ParticleSystem`) in the Inspector.  
 3. Configure public settings for gameplay mechanics (speeds, ranges, durations, etc.).  
-4. Ensure that dependent scripts (e.g., `FPControllerWeapon`, `ScrapWeaponController`) are present in the scene.  
+4. Ensure that dependent scripts (e.g., `FPControllerWeapon`, `SlimeWeaponController`) are present in the scene.  
 5. Review script-specific READMEs (if available) for detailed usage notes.
 
 ## Notes & Recommendations
