@@ -1,29 +1,29 @@
 // ============================================================  
-// Readme of ScrapWeaponController  
+// Readme of SlimeWeaponController  
 // ============================================================  
 
 // ============================================================  
 // Description  
 // ============================================================  
 
-This script manages the collection and burning of scrap by the player.  
-It handles suction of scrap objects, storage in the scrap tank, automatic and QTE-based burning, vibration feedback, sound effects, and visual tornado effects.  
+This script manages the collection and burning of slime by the player.  
+It handles suction of slime objects, storage in the slime tank, automatic and QTE-based burning, vibration feedback, sound effects, and visual tornado effects.  
 
 // ============================================================  
 // Responsibilities  
 // ============================================================  
 
-- Detects scrap objects in front of the player using raycasts and collects them when cleaning.  
-- Stores collected scrap in `scrapPercent` up to a maximum capacity.  
-- Burns scrap automatically or via QTE, converting it into bullets.  
+- Detects slime objects in front of the player using raycasts and collects them when cleaning.  
+- Stores collected slime in `slimePercent` up to a maximum capacity.  
+- Burns slime automatically or via QTE, converting it into bullets.  
 - Interfaces with `FPControllerWeapon` to track cleaning, burning, and QTE input states.  
 - Plays cleaning and suction sounds, looping them when appropriate.  
-- Controls a particle system to visualize scrap collection.  
+- Controls a particle system to visualize slime collection.  
 - Provides vibration feedback while cleaning, with configurable intensity and interval.  
 - Animates QTE and cleaning states using an Animator component.  
 - Updates a tornado shader effect (`_AlphaTornado`) based on cleaning activity.  
 - Integrates with `TutorialGameManager` to restrict cleaning and burning actions during early tutorial steps.  
-- Allows dynamic registration of new `ScrapMesh` objects to be collected.  
+- Allows dynamic registration of new `SlimeMesh` objects to be collected.  
 - Ensures dependencies are dynamically found at runtime if not manually assigned.  
 
 // ============================================================  
@@ -39,26 +39,26 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
-public class ScrapWeaponController : MonoBehaviour {
+public class SlimeWeaponController : MonoBehaviour {
 
     // ============================================================
-    // Scrap Storage and Burning
+    // Slime Storage and Burning
     // ============================================================
 
-    private float maxScrap = 100f;
-    public float scrapPercent = 0f;
+    private float maxSlime = 100f;
+    public float slimePercent = 0f;
     private float burnTimer = 0f;
     public float burnerCooldown;
 
     public bool isCleaning = false;
-    public bool isCleaningScrap = false;
+    public bool isCleaningSlime = false;
 
     // ============================================================
     // References
     // ============================================================
 
-    private ScrapMesh[] scrapMeshesScript;
-    private ScrapMesh currentScrapMeshScript;
+    private SlimeMesh[] slimeMeshesScript;
+    private SlimeMesh currentSlimeMeshScript;
 
     public Camera playerCamera;
     private UpgradesController upgradesControllerScript;
@@ -69,7 +69,7 @@ public class ScrapWeaponController : MonoBehaviour {
     private TutorialGameManager tutorialGameManagerScript;
 
     // ============================================================
-    // Cleaning & Scrap Suction
+    // Cleaning & Slime Suction
     // ============================================================
 
     [SerializeField] private float vertexMultiplier;
@@ -77,7 +77,7 @@ public class ScrapWeaponController : MonoBehaviour {
     private float suctionCooldown = 0f;
     private Coroutine suctionCoroutine;
 
-    [SerializeField] private ParticleSystem scrapParticle;
+    [SerializeField] private ParticleSystem slimeParticle;
 
     // ============================================================
     // Vibration Control
@@ -94,7 +94,7 @@ public class ScrapWeaponController : MonoBehaviour {
 
     [Header("Sounds")]
     public AudioClip cleanSound;
-    public AudioClip cleanScrapSound;
+    public AudioClip cleanSlimeSound;
 
     // ============================================================
     // Tornado Effect
@@ -109,7 +109,7 @@ public class ScrapWeaponController : MonoBehaviour {
     // Layer Masks
     // ============================================================
 
-    public LayerMask scrapLayerMask;
+    public LayerMask slimeLayerMask;
 
     // ============================================================
     // Unity Lifecycle
@@ -121,7 +121,7 @@ public class ScrapWeaponController : MonoBehaviour {
         shotWeaponControllerScript = Object.FindFirstObjectByType<ShotWeaponController>();
         tutorialGameManagerScript = FindFirstObjectByType<TutorialGameManager>();
 
-        scrapMeshesScript = new ScrapMesh[0];
+        slimeMeshesScript = new SlimeMesh[0];
         animator = GetComponent<Animator>();
         animator.enabled = false;
 
@@ -163,8 +163,8 @@ public class ScrapWeaponController : MonoBehaviour {
         }
 
         handleSuction();
-        checkScrapCapacity();
-        checkScrapReload();
+        checkSlimeCapacity();
+        checkSlimeReload();
         handleVibration();
         tornadoManager();
         handleSounds();
@@ -172,28 +172,28 @@ public class ScrapWeaponController : MonoBehaviour {
     }
 
     // ============================================================
-    // Scrap Suction & Burning
+    // Slime Suction & Burning
     // ============================================================
 
     private void handleSuction() {
 
-        ScrapMesh detectedMesh = detectScrapMeshToSuck();
+        SlimeMesh detectedMesh = detectSlimeMeshToSuck();
 
-        if (isCleaning && detectedMesh != null && scrapPercent < maxScrap) {
+        if (isCleaning && detectedMesh != null && slimePercent < maxSlime) {
 
-            float currentRate = calculateScrapPercent(detectedMesh) * vertexMultiplier;
+            float currentRate = calculateSlimePercent(detectedMesh) * vertexMultiplier;
             float amountToStore = Time.deltaTime * currentRate;
 
-            isCleaningScrap = currentRate > 0;
+            isCleaningSlime = currentRate > 0;
 
             // Only allow suction during early tutorial steps if below 75%
             if (tutorialGameManagerScript != null && tutorialGameManagerScript.tutorialStep <= 6) {
 
-                if (scrapPercent < 75f) {
+                if (slimePercent < 75f) {
 
                     Vector3 aimingPoint = getAimingPoint();
                     detectedMesh.cleanMesh(aimingPoint, Time.deltaTime);
-                    storeScrap(amountToStore);
+                    storeSlime(amountToStore);
 
                 }
             }
@@ -202,14 +202,14 @@ public class ScrapWeaponController : MonoBehaviour {
 
                 Vector3 aimingPoint = getAimingPoint();
                 detectedMesh.cleanMesh(aimingPoint, Time.deltaTime);
-                storeScrap(amountToStore);
+                storeSlime(amountToStore);
 
             }
         }
 
         else {
 
-            isCleaningScrap = false;
+            isCleaningSlime = false;
 
         }
 
@@ -220,22 +220,22 @@ public class ScrapWeaponController : MonoBehaviour {
 
             if (tutorialGameManagerScript == null || tutorialGameManagerScript.tutorialStep > 6) {
 
-                burnScrap(upgradesControllerScript.scrapDestroyedUpgrade);
+                burnSlime(upgradesControllerScript.slimeDestroyedUpgrade);
                 burnTimer = 0f;
 
             }
         }
     }
 
-    private ScrapMesh detectScrapMeshToSuck() {
+    private SlimeMesh detectSlimeMeshToSuck() {
 
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
         float range = upgradesControllerScript.cleanRangeUpgrade;
 
-        if (Physics.Raycast(ray, out hit, range, scrapLayerMask)) {
+        if (Physics.Raycast(ray, out hit, range, slimeLayerMask)) {
 
-            return hit.collider.GetComponent<ScrapMesh>();
+            return hit.collider.GetComponent<SlimeMesh>();
 
         }
 
@@ -243,9 +243,9 @@ public class ScrapWeaponController : MonoBehaviour {
 
     }
 
-    private void checkScrapReload() {
+    private void checkSlimeReload() {
 
-        if (scrapPercent > 1 && fpControllerWeaponScript.burnButtonPressed) {
+        if (slimePercent > 1 && fpControllerWeaponScript.burnButtonPressed) {
 
             // Allow reload only during tutorial step 6 or later
             if (tutorialGameManagerScript == null || tutorialGameManagerScript.inStep6) {
@@ -258,26 +258,26 @@ public class ScrapWeaponController : MonoBehaviour {
         }
     }
 
-    private void storeScrap(float amount) {
+    private void storeSlime(float amount) {
 
-        scrapPercent = scrapPercent + amount;
-        scrapPercent = Mathf.Clamp(scrapPercent, 0, maxScrap);
+        slimePercent = slimePercent + amount;
+        slimePercent = Mathf.Clamp(slimePercent, 0, maxSlime);
 
     }
 
-    private void burnScrap(float amount) {
+    private void burnSlime(float amount) {
 
-        if (!fpControllerWeaponScript.isInQTE && scrapPercent > 0f) {
+        if (!fpControllerWeaponScript.isInQTE && slimePercent > 0f) {
 
-            float usedScrap = Mathf.Min(amount, scrapPercent);
-            int bulletsGenerated = Mathf.FloorToInt(usedScrap);
+            float usedSlime = Mathf.Min(amount, slimePercent);
+            int bulletsGenerated = Mathf.FloorToInt(usedSlime);
             shotWeaponControllerScript.bullets = Mathf.Min(shotWeaponControllerScript.bullets + bulletsGenerated, 100);
-            scrapPercent = scrapPercent - usedScrap;
+            slimePercent = slimePercent - usedSlime;
 
         }
     }
 
-    private float calculateScrapPercent(ScrapMesh mesh) {
+    private float calculateSlimePercent(SlimeMesh mesh) {
 
         if (mesh != null) {
 
@@ -289,14 +289,14 @@ public class ScrapWeaponController : MonoBehaviour {
 
     }
 
-    public void checkScrapCapacity() {
+    public void checkSlimeCapacity() {
 
-        if (scrapPercent >= 100f) {
+        if (slimePercent >= 100f) {
 
             isCleaning = false;
             animator.enabled = true;
             animator.Play("OnQTE");
-            Debug.Log("Scrap tank is at 100% capacity.");
+            Debug.Log("Slime tank is at 100% capacity.");
 
         }
 
@@ -315,9 +315,9 @@ public class ScrapWeaponController : MonoBehaviour {
         animator.enabled = true;
         animator.Play("OffQTE");
 
-        int bulletsGained = Mathf.Clamp((int)scrapPercent, 0, 100);
+        int bulletsGained = Mathf.Clamp((int)slimePercent, 0, 100);
         shotWeaponControllerScript.bullets = Mathf.Min(shotWeaponControllerScript.bullets + bulletsGained, 100);
-        scrapPercent = 0f;
+        slimePercent = 0f;
 
     }
 
@@ -337,7 +337,7 @@ public class ScrapWeaponController : MonoBehaviour {
         RaycastHit hit;
         float range = upgradesControllerScript.cleanRangeUpgrade;
 
-        if (Physics.Raycast(ray, out hit, range, scrapLayerMask)) {
+        if (Physics.Raycast(ray, out hit, range, slimeLayerMask)) {
 
             return hit.point;
 
@@ -359,11 +359,11 @@ public class ScrapWeaponController : MonoBehaviour {
 
     }
 
-    public void registerScrapMesh(ScrapMesh newMesh) {
+    public void registerSlimeMesh(SlimeMesh newMesh) {
 
-        var list = scrapMeshesScript.ToList();
+        var list = slimeMeshesScript.ToList();
         list.Add(newMesh);
-        scrapMeshes = list.ToArray();
+        slimeMeshes = list.ToArray();
 
     }
 
@@ -453,11 +453,11 @@ public class ScrapWeaponController : MonoBehaviour {
 
         if (isCleaning) {
 
-            if (isCleaningScrap) {
+            if (isCleaningSlime) {
 
                 if (suctionCoroutine == null) {
 
-                    suctionCoroutine = StartCoroutine(loopCleaningSound(cleanScrapSound));
+                    suctionCoroutine = StartCoroutine(loopCleaningSound(cleanSlimeSound));
 
                 }
 
@@ -498,15 +498,15 @@ public class ScrapWeaponController : MonoBehaviour {
 
         }
 
-        if (isCleaningScrap) {
+        if (isCleaningSlime) {
 
-            scrapParticle.Play();
+            slimeParticle.Play();
 
         }
 
         else {
 
-            scrapParticle.Stop();
+            slimeParticle.Stop();
 
         }
     }
