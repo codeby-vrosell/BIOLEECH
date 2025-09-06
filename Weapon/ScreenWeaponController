@@ -6,17 +6,17 @@
 // Description  
 // ============================================================  
 
-This script manages the weapon display screen, showing the player's bullet count and scrap percentage.  
+This script manages the weapon display screen, showing the player's bullet count and slime percentage.  
 It also provides a visual blink effect when the bullets are depleted.  
 
 // ============================================================  
 // Responsibilities  
 // ============================================================  
 
-- References `FPControllerWeapon`, `ScrapWeaponController`, and `ShotWeaponController` to retrieve relevant data.  
-- Displays bullets and scrap percentage on a `TextMeshProUGUI` screen.  
+- References `FPControllerWeapon`, `SlimeWeaponController`, and `ShotWeaponController` to retrieve relevant data.  
+- Displays bullets and slime percentage on a `TextMeshProUGUI` screen.  
 - Applies a blinking effect to the bullet count when it reaches zero, using alpha modulation.  
-- Updates the screen text each frame to reflect current bullets and scrap.  
+- Updates the screen text each frame to reflect current bullets and slime.  
 - Dynamically finds and assigns the player script if not manually set.  
 - Exposes a public method `retrievePlayerScript()` to refresh the player reference at runtime.  
 - Ensures updates occur only when necessary references are assigned, avoiding null errors.  
@@ -37,7 +37,7 @@ public class ScreenWeaponController : MonoBehaviour {
     // ============================================================
 
     private FPControllerWeapon fpControllerWeaponScript;
-    private ScrapWeaponController scrapWeaponControllerScript;
+    private SlimeWeaponController slimeWeaponControllerScript;
     private ShotWeaponController shotWeaponControllerScript;
 
     [SerializeField] private TextMeshProUGUI screenText;
@@ -54,7 +54,7 @@ public class ScreenWeaponController : MonoBehaviour {
 
     void start() {
 
-        scrapWeaponControllerScript = GetComponent<ScrapWeaponController>();
+        slimeWeaponControllerScript = GetComponent<SlimeWeaponController>();
         shotWeaponControllerScript = GetComponent<ShotWeaponController>();
 
     }
@@ -79,7 +79,7 @@ public class ScreenWeaponController : MonoBehaviour {
 
         }
 
-        if (shotWeaponControllerScript != null && scrapWeaponControllerScript != null) {
+        if (shotWeaponControllerScript != null && slimeWeaponControllerScript != null) {
 
             string bulletText;
 
@@ -100,8 +100,8 @@ public class ScreenWeaponController : MonoBehaviour {
 
             }
 
-            // Update screen text with bullets and scrap percentage
-            screenText.text = bulletText + "\n" + scrapWeaponControllerScript.scrapPercent.ToString("F0") + "%";
+            // Update screen text with bullets and slime percentage
+            screenText.text = bulletText + "\n" + slimeWeaponControllerScript.slimePercent.ToString("F0") + "%";
 
         }
     }
