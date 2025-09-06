@@ -13,7 +13,7 @@ It handles indicator rotation, success detection within defined hit zones, visua
 // Responsibilities  
 // ============================================================  
 
-- Finds and manages references to the player, weapon controller, and scrap weapon scripts.  
+- Finds and manages references to the player, weapon controller, and slime weapon scripts.  
 - Starts and resets the QTE sequence, controlling UI visibility and internal QTE state.  
 - Rotates the QTE indicator continuously during the QTE.  
 - Checks if player input occurs within defined `HitZone`s to determine success.  
@@ -44,7 +44,7 @@ public class QTEBurner : MonoBehaviour {
     public GameObject crosshairCanvas;
     public Animator animator;
 
-    private ScrapWeaponController scrapWeaponControllerScript;
+    private SlimeWeaponController slimeWeaponControllerScript;
     private FPControllerWeapon fpControllerWeaponScript;
 
     // ============================================================
@@ -77,7 +77,7 @@ public class QTEBurner : MonoBehaviour {
 
     void start() {
 
-        scrapWeaponControllerScript = Object.FindFirstObjectByType<ScrapWeaponController>();
+        slimeWeaponControllerScript = Object.FindFirstObjectByType<SlimeWeaponController>();
         GameObject playerObj = GameObject.FindWithTag("Player");
         fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
@@ -120,11 +120,11 @@ public class QTEBurner : MonoBehaviour {
         GameObject playerObj = GameObject.FindWithTag("Player");
         fpControllerWeaponScript = playerObj.GetComponent<FPControllerWeapon>();
 
-        scrapWeaponControllerScript = Object.FindFirstObjectByType<ScrapWeaponController>();
+        slimeWeaponControllerScript = Object.FindFirstObjectByType<SlimeWeaponController>();
 
-        if (scrapWeaponControllerScript != null) {
+        if (slimeWeaponControllerScript != null) {
 
-            animator = scrapWeaponControllerScript.GetComponent<Animator>();
+            animator = slimeWeaponControllerScript.GetComponent<Animator>();
 
         }
 
@@ -199,7 +199,7 @@ public class QTEBurner : MonoBehaviour {
                 if (successCount >= 3) {
 
                     resetQTE();
-                    scrapWeaponControllerScript.winQTE();
+                    slimeWeaponControllerScript.winQTE();
 
                 }
             }
