@@ -7,14 +7,14 @@
 // ============================================================  
 
 This script manages and exposes the player’s upgrade stats by referencing the global `UpgradesManager`.  
-It provides easy access to upgraded values such as weapon stats and scrap interaction parameters.  
+It provides easy access to upgraded values such as weapon stats and slime interaction parameters.  
 
 // ============================================================  
 // Responsibilities  
 // ============================================================  
 
 - Finds the `UpgradesManager` instance at startup to retrieve current upgrade values.  
-- Stores and exposes player upgrade stats: `cleanRangeUpgrade`, `scrapDestroyedUpgrade`, `weaponDamageUpgrade`, and `weaponRangeUpgrade`.  
+- Stores and exposes player upgrade stats: `cleanRangeUpgrade`, `slimeDestroyedUpgrade`, `weaponDamageUpgrade`, and `weaponRangeUpgrade`.  
 - Provides a public method `updateStats()` to refresh upgrade values when the `UpgradesManager` is updated.  
 - Ensures that the player’s local upgrade stats stay synchronized with the global upgrade system.  
 
@@ -38,8 +38,8 @@ public class UpgradesController : MonoBehaviour {
     // Upgrade Stats
     // ============================================================
 
-    public float cleanRangeUpgrade;        // Increases scrap absorption range.
-    public float scrapDestroyedUpgrade;    // Increases the amount of scrap destroyed per burn.
+    public float cleanRangeUpgrade;        // Increases slime absorption range.
+    public float slimeDestroyedUpgrade;    // Increases the amount of slime destroyed per burn.
     public float weaponDamageUpgrade;      // Increases weapon damage.
     public float weaponRangeUpgrade;       // Increases weapon range.
 
@@ -52,7 +52,7 @@ public class UpgradesController : MonoBehaviour {
         upgradesManagerScript = FindFirstObjectByType<UpgradesManager>();
 
         cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
-        scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
+        slimeDestroyedUpgrade = upgradesManagerScript.slimeDestroyedUpgrade;
         weaponDamageUpgrade = upgradesManagerScript.dmgUpdate;
         weaponRangeUpgrade = upgradesManagerScript.weaponRange;
 
@@ -65,7 +65,7 @@ public class UpgradesController : MonoBehaviour {
     public void updateStats() {
 
         cleanRangeUpgrade = upgradesManagerScript.cleanRangeUpgrade;
-        scrapDestroyedUpgrade = upgradesManagerScript.scrapDestroyedUpgrade;
+        slimeDestroyedUpgrade = upgradesManagerScript.slimeDestroyedUpgrade;
         weaponDamageUpgrade = upgradesManagerScript.dmgUpdate;
         weaponRangeUpgrade = upgradesManagerScript.weaponRange;
 
