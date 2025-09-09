@@ -60,7 +60,7 @@ Watch the official trailer:
 **Author:** Víctor Rosell Gascó
 
 - **Gmail:** codeby.vrosell@gmail.com  
-- **Portfolio:** *in progress*  
+- **Portfolio:** [codebyvrosell.com](https://x.com/codeby-vrosell)   
 - **Twitter:** [@codeby_vrosell](https://x.com/codeby-vrosell)  
 - **GitHub:** [@codeby-vrosell](https://github.com/codeby-vrosell)  
 - **LinkedIn:** [in/v-rosell](https://linkedin.com/in/v-rosell)
