@@ -62,8 +62,8 @@ Watch the official trailer:
 - **Gmail:** codeby.vrosell@gmail.com  
 - **Portfolio:** *in progress*  
 - **Twitter:** [@codeby_vrosell](https://x.com/codeby-vrosell)  
-- **GitHub:** [codeby-vrosell](https://github.com/codeby-vrosell)  
-- **LinkedIn:** [V. Rosell](https://linkedin.com/in/v-rosell)
+- **GitHub:** [@codeby-vrosell](https://github.com/codeby-vrosell)  
+- **LinkedIn:** [in/v-rosell](https://linkedin.com/in/v-rosell)
 
 ## License
 
