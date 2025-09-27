@@ -49,7 +49,7 @@ Each script contains inline comments explaining complex parts and an optional **
 
 **Try BIOLEECH**, the game is available on:
 
-- **Itchio:** *in progress*
+- **Itchio:** [BIOLEECH Page](https://desalichaostudio.itch.io/bioleech)
 
 Watch the official trailer:
 
