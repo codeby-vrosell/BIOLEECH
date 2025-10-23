@@ -45,15 +45,11 @@ Each script contains inline comments explaining complex parts and an optional **
 - This repository focuses on gameplay scripting and does not include 3D models, textures, audio files, or scenes.  
 - Some mechanics rely on external scripts not included in this repository.
 
-## Play & Watch BIOLEECH
+## Play BIOLEECH
 
 **Try BIOLEECH**, the game is available on:
 
 - **Itchio:** [BIOLEECH Page](https://desalichaostudio.itch.io/bioleech)
-
-Watch the official trailer:
-
-- **YouTube:** [BIOLEECH Trailer](https://www.youtube.com/watch?v=nHOf3z3SQaQ)
 
 ## Author & Contact
 
