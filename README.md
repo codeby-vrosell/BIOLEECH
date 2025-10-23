@@ -44,6 +44,16 @@ Each script contains inline comments explaining complex parts and an optional **
 - Scripts have been tested on Unity 6 (6000.0.34f1) with HDRP. Adaptation may be required for URP, Built-in pipeline, or other Unity versions.
 - This repository focuses on gameplay scripting and does not include 3D models, textures, audio files, or scenes.  
 - Some mechanics rely on external scripts not included in this repository.
+  
+## Watch BIOLEECH
+
+Here are some in-game screenshots showcasing **BIOLEECH** in action:
+
+<p align="center">
+  <img src="BIOLEECH/IMG/IMG1.png" alt="BIOLEECH Screenshot 1" width="30%"/>
+  <img src="BIOLEECH/IMG/IMG2.png" alt="BIOLEECH Screenshot 2" width="30%"/>
+  <img src="BIOLEECH/IMG/IMG3.png" alt="BIOLEECH Screenshot 3" width="30%"/>
+</p>
 
 ## Play BIOLEECH
 
