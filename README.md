@@ -51,8 +51,8 @@ Here are some in-game screenshots showcasing **BIOLEECH** in action:
 
 <p align="center">
   <img src="BIOLEECH/IMG/IMG1.png" alt="BIOLEECH Screenshot 1" width="30%"/>
-  <img src="BIOLEECH/IMG/IMG2.png" alt="BIOLEECH Screenshot 2" width="30%"/>
-  <img src="BIOLEECH/IMG/IMG3.png" alt="BIOLEECH Screenshot 3" width="30%"/>
+  <img src="BIOLEECH/IMG/IMG2.jpeg" alt="BIOLEECH Screenshot 2" width="30%"/>
+  <img src="BIOLEECH/IMG/IMG3.jpeg" alt="BIOLEECH Screenshot 3" width="30%"/>
 </p>
 
 ## Play BIOLEECH
