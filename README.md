@@ -47,19 +47,32 @@ Each script contains inline comments explaining complex parts and an optional **
   
 ## Watch BIOLEECH
 
-Here are some in-game screenshots showcasing **BIOLEECH** in action:
+The following screenshots display BIOLEECH gameplay and environments:
 
 <p align="center">
-  <img src="BIOLEECH/IMG/IMG1.png" alt="BIOLEECH Screenshot 1" width="30%"/>
-  <img src="BIOLEECH/IMG/IMG2.jpeg" alt="BIOLEECH Screenshot 2" width="30%"/>
-  <img src="BIOLEECH/IMG/IMG3.jpeg" alt="BIOLEECH Screenshot 3" width="30%"/>
+  <img src="IMG/IMG1.png" alt="BIOLEECH Screenshot 1" width="30%"/>
+  <img src="/IMG/IMG2.jpeg" alt="BIOLEECH Screenshot 2" width="30%"/>
+  <img src="/IMG/IMG3.jpeg" alt="BIOLEECH Screenshot 3" width="30%"/>
+
+The official BIOLEECH trailer is available on:
+
+- **Youtube:** [BIOLEECH Trailer](https://www.youtube.com/watch?v=nHOf3z3SQaQ)
+
 </p>
 
 ## Play BIOLEECH
 
-**Try BIOLEECH**, the game is available on:
+BIOLEECH is available for download and play on the following platform:
 
 - **Itchio:** [BIOLEECH Page](https://desalichaostudio.itch.io/bioleech)
+
+## Collaborators
+
+While this repository contains only the scripts developed by the author, BIOLEECH is a collaborative project with contributions from other developers, artists, and designers.  
+
+For more information and links to the team, visit the official Desalichao Studio Linktree:
+
+- **Linktree:** [Desalichao Studio](https://linktr.ee/desalichaostudio)
 
 ## Author & Contact
 
