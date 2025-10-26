@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="IMG/banner.jpg" alt="BIOLEECH Banner" />
+</p>
+
 # BIOLEECH – General Project Readme
 
 ## Project Overview
@@ -62,7 +66,7 @@ The official BIOLEECH trailer is available on:
 
 ## Play BIOLEECH
 
-BIOLEECH is available for download and play on the following platform:
+BIOLEECH is available for download on the following platform:
 
 - **Itchio:** [BIOLEECH Page](https://desalichaostudio.itch.io/bioleech)
 
