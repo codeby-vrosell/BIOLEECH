@@ -2,7 +2,7 @@
   <img src="IMG/banner.jpg" alt="BIOLEECH Banner" />
 </p>
 
-# BIOLEECH – General Project Readme
+# BIOLEECH
 
 ## Project Overview
 
